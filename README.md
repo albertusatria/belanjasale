@@ -1,2 +1,2 @@
-belanjasale
+belanjasale init
 ===========
