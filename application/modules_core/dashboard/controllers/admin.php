@@ -23,7 +23,7 @@ class Admin extends Admin_base {
 		//$data['layout'] = "dashboard/dashboard";
 
 		// load template
-		$data['title'] = 'Manage Users, Role, and Permission | Pinaple SAS';
+		$data['title'] = 'Manage Users, Role, and Permission | Pinaple SI';
 		$data['main_content'] = 'admin/dashboard';
 		$this->load->view('admin/template', $data);
 	}

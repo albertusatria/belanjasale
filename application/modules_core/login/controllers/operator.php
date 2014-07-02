@@ -19,7 +19,7 @@ class Operator extends Operatorlogin_base {
 		}
 		// load layout
 		$data['form_action'] = 'login/operator/login_validation';
-		$data['title'] = 'BU | Pinaple SAS';
+		$data['title'] = 'BU | Pinaple SI';
 		// $data['layout']	= "login/home";
 		$this->load->view('operatorlogin', $data);
 	}

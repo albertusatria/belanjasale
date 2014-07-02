@@ -26,7 +26,7 @@ class Menu extends Admin_base {
 		// get portal list
 		$data['rs_portal']			= $this->m_portal->get_all_portal();
 		// load template
-		$data['title']	= "Setting Menu Pinaple Sas";
+		$data['title']	= "Setting Menu Pinaple SI";
 		$data['main_content'] = "setting/menu/list";
 		$this->load->view('dashboard/admin/template', $data);
 	}
@@ -53,7 +53,7 @@ class Menu extends Admin_base {
 		$data['message'] = $this->session->flashdata('message');
 
 		// load template
-		$data['title']	= "Setting Menu Pinaple Sas";
+		$data['title']	= "Setting Menu Pinaple SI";
 		$data['main_content'] = "setting/menu/list_menu";
 		$this->load->view('dashboard/admin/template', $data);
 	}
@@ -75,7 +75,7 @@ class Menu extends Admin_base {
 		// get all menu
 		$data['rs_menu']			= $this->m_menu->get_all_menu($data['portal']['portal_id']);
 		// load template
-		$data['title']	= "Setting Menu Pinaple Sas";
+		$data['title']	= "Setting Menu Pinaple SI";
 		$data['main_content'] = "setting/menu/add";
 		$this->load->view('dashboard/admin/template', $data);
 	}
@@ -136,7 +136,7 @@ class Menu extends Admin_base {
 		// get menu detail
 		$data['result']				= $this->m_menu->get_menu_by_slug($menu_slug);
 		// load template
-		$data['title']	= "Setting Menu Pinaple Sas";
+		$data['title']	= "Setting Menu Pinaple SI";
 		$data['main_content']				= "setting/menu/edit";
 		$this->load->view('dashboard/admin/template', $data);
 	}
@@ -198,7 +198,7 @@ class Menu extends Admin_base {
 		// get menu detail
 		$data['result']				= $this->m_menu->get_menu_by_slug($menu_slug);
 		// load template
-		$data['title']	= "Setting Menu Pinaple Sas";
+		$data['title']	= "Setting Menu Pinaple SI";
 		$data['main_content'] = "setting/menu/delete";
 		$this->load->view('dashboard/admin/template', $data);
 	}

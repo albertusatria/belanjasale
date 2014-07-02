@@ -2,7 +2,7 @@
   <div class="leftpanel">
     
     <div class="logopanel">
-        <h1><span>[</span> pinaple sas <span>]</span></h1>
+        <h1><span>[</span> pinaple SI <span>]</span></h1>
     </div><!-- logopanel -->
         
     <div class="leftpanelinner">    

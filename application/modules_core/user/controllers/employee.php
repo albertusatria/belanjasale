@@ -14,7 +14,7 @@ class Employee extends CI_Controller {
 */
 
 	public function index(){
-		$data['title'] = 'Manage Employee | Pinaple SAS';
+		$data['title'] = 'Manage Employee | Pinaple SI';
 		$data['main_content'] = 'employee';
 		$this->load->view('main/template', $data);
 	}	

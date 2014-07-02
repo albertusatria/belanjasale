@@ -7,7 +7,7 @@
   <meta name="author" content="">
   <link rel="shortcut icon" href="<?php echo base_url();?>bracket/images/favicon.png" type="image/png">
 
-  <title>Pinaple SAS 404</title>
+  <title>Pinaple SI 404</title>
 
   <link href="<?php echo base_url();?>bracket/css/style.default.css" rel="stylesheet">
 

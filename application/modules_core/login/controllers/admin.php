@@ -43,7 +43,7 @@ class Admin extends Adminlogin_base {
 		}
 
 		$data['form_action'] = 'login/admin';
-		$data['title'] = 'BU | Pinaple SAS';
+		$data['title'] = 'BU | Pinaple SI';
 		// $data['layout']	= "login/home";
 		$this->load->view('adminlogin', $data);
 

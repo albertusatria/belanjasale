@@ -35,7 +35,7 @@
                 
                 <div class="signin-info">
                     <div class="logopanel">
-                        <h1><span>[</span> Pinaple SAS <span>]</span></h1>
+                        <h1><span>[</span> Pinaple SI <span>]</span></h1>
                     </div><!-- logopanel -->
                 
                     <div class="mb20"></div>

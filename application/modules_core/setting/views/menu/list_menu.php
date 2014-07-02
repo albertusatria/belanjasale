@@ -3,7 +3,7 @@
       <div class="breadcrumb-wrapper">
         <span class="label">You are here:</span>
         <ol class="breadcrumb">
-          <li><a href="<?php echo base_url();?>dashboard">Pinaple SAS</a></li>
+          <li><a href="<?php echo base_url();?>dashboard">Pinaple SI</a></li>
           <li><a href="<?php echo base_url();?>setting/menu">Manage Menu</a></li>
           <li class="active">Manage Menu : <?= $portal['portal_name']; ?></li>
         </ol>

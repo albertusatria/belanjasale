@@ -6,8 +6,10 @@ jQuery(window).load(function() {
       jQuery('body').delay(350).css({'overflow':'visible'});
    });
 });
+
 jQuery(document).ready(function() {
     jQuery('#preloader').css({'display' : 'none'});
+    
    // Toggle Left Menu
    jQuery('.nav-parent > a').click(function() {
       
@@ -31,6 +33,13 @@ jQuery(document).ready(function() {
          }
       }
       return false;
+   });
+   
+   jQuery('#leftsidePanel li a').click(function(){
+	  jQuery('#status').fadeOut();
+	  jQuery('#preloader').delay(800).fadeOut(function(){
+	      jQuery('body').delay(800).css({'overflow':'visible'});
+	   });	   
    });
    
    function closeVisibleSubMenu() {

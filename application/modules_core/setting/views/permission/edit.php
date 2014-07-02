@@ -3,7 +3,7 @@
       <div class="breadcrumb-wrapper">
         <span class="label">You are here:</span>
         <ol class="breadcrumb">
-          <li><a href="<?php echo base_url();?>dashboard">Pinaple SAS</a></li>
+          <li><a href="<?php echo base_url();?>dashboard">Pinaple SI</a></li>
           <li><a href="<?php echo base_url();?>setting/permission">Manage Permission</a></li>
           <li class="active">Edit Permission</li>
         </ol>

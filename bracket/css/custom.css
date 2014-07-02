@@ -3,37 +3,51 @@
 	clear: both;
 	margin: 30px 0;
 }
-/* Registration */
-#validationWizard .tab-content{
-	padding: 35px 15px 15px 15px;
+/* table */
+.table{
+	float: left;
 }
-.tambah-wali{
-	margin-bottom: 30px;
+/* Page Header */
+.pageheader h2{
+	max-width: 300px;
+	margin-left: 50px;
 }
-/* payment page */
-.payment .dataTables_filter input{
-	width: 650px !important;
+.pageheader h2 i{
+	margin-left: -50px;
 }
-.payment tbody tr td:hover{
-	cursor: pointer;
-}
-.payment-details .pay-fines{
-	padding: 5px !important;
-}
-.payment-details td.totals, .payment-details td.price, .payment-details .right, .float-right{
+/* -- breadcrumb */
+.pageheader .breadcrumb-wrapper{
+	max-width: 500px;
 	text-align: right;
 }
-.payment-details td.totals, .payment-details td.totals-value{
-	font-weight: bold;
-	color: #000;
+.pageheader .breadcrumb-wrapper .label{
+	padding: 0;
 }
-.float-right{
-	float: right;
+/* end breadcrumb */
+/* end Page Header */
+
+/* panel heading with button add */
+.panel-default > .panel-heading{
+	min-height: 90px;
 }
-.center-panel{
-	margin: 0 auto;
+.menu-head-info, .button-head{
+	float: left;
 }
-.select-bank{
-	margin-top: 10px;
+.menu-head-info{
+	width: 700px;
 }
-/* end payment page */
+.button-head{
+	width: 180px;
+	margin: 5px 0;
+}
+button .fa-plus{
+	margin: 0 5px;
+}
+/* end panel heading with button add */
+
+/* add member */
+@media only screen and (min-width:960px){
+	#addMember .modal-dialog{
+		width: 800px;
+	}
+}

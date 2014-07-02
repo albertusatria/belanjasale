@@ -14,7 +14,7 @@ class Superadmin extends CI_Controller {
 */
 	
 	public function index(){
-		$data['title'] = 'Manage Super Admin | Pinaple SAS';
+		$data['title'] = 'Manage Super Admin | Pinaple SI';
 		$data['main_content'] = 'superadmin';
 		$this->load->view('main/template', $data);
 	}
