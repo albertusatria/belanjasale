@@ -168,7 +168,11 @@
             <div class="form-group">
               <label class="col-sm-2 control-label">Sales <span class="asterisk">*</span></label>
               <div class="col-sm-5">
-                <input type="email" name="salesID" class="form-control" placeholder="Masukkan salesID..." required="">
+				<select id="salesID" class="form-control input-sm" required="">
+                  <option value="Bimo">Bimo</option>
+                  <option value="Bimo">Simon</option>
+                  <option value="Bimo">Albert</option>                                    
+                </select>
               </div>
             </div>                        	
       </div>
@@ -201,6 +205,10 @@
     jQuery('#memberList').dataTable({
       "sPaginationType": "full_numbers"
     });
+    
+	// Chosen Select
+	jQuery("#salesID").chosen({'width':'100%','white-space':'nowrap'});
+      
     
     // Chosen Select
     jQuery(".table-responsive select").chosen({
