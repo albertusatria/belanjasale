@@ -9,6 +9,8 @@ class Member extends Admin_base {
 		$this->load->model('m_role');
 		$this->load->model('m_menu');	
 		$this->load->model('m_permission');
+		//$this->load->model('m_daerah');
+		
 		// load permission
 		$this->load->helper('text');
 		// page title
@@ -30,29 +32,8 @@ class Member extends Admin_base {
 		// get permission list
 		$data['rs_permission'] = $this->m_permission->get_all_permission();
 		// load template
-		$data['title']	= "Manage Students PinapleSAS";
+		$data['title']	= "Manage Member Pinaple SI";
 		$data['main_content'] = "setting/member/list";
-		$this->load->view('dashboard/admin/template', $data);
-	}
-	
-	public function details($id)
-	{
-		// user_auth
-		$this->check_auth('R');
-
-		$data['message'] = $this->session->flashdata('message');
-		// menu
-		
-		// user detail
-		$data['user'] = $this->user;
-		// get role list
-		$data['rs_role'] = $this->m_role->get_all_role();
-		// get permission list
-		$data['rs_permission'] = $this->m_permission->get_all_permission();
-		$data['id_students'] = $id;
-		// load template
-		$data['title']	= "Detail Payment Transactions PinapleSAS";
-		$data['main_content'] = "setting/payment/details";
 		$this->load->view('dashboard/admin/template', $data);
 	}
 
