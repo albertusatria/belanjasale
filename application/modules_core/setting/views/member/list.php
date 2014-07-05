@@ -112,24 +112,36 @@
             </div>
 
 			<div class="form-group">
-              <label class="col-sm-2 control-label">Provinsi <span class="asterisk">*</span></label>
+              <label class="col-sm-2 control-label">Daerah <span class="asterisk">*</span></label>
               <div class="col-sm-2">
-                <select id="provinsi" class="form-control input-sm" required="">
-                  <option value="-1">Provinsi</option>
-                </select>
-                <label class="error" for="provinsi"></label>
+                <select id="prop" name="prop" class="form-control input-sm" required="" onchange="ajaxkota(this.value)">
+					<option value="">Provinsi</option>
+					<?php 
+					$queryProvinsi=mysql_query("SELECT * FROM inf_lokasi where lokasi_kabupatenkota=0 and lokasi_kecamatan=0 and lokasi_kelurahan=0 order by lokasi_nama");
+					while ($dataProvinsi=mysql_fetch_array($queryProvinsi)){
+						echo '<option value="'.$dataProvinsi['lokasi_propinsi'].'">'.$dataProvinsi['lokasi_nama'].'</option>';
+					}
+					?>
+                </select>               
+                <label class="error" for="prop"></label>
               </div>
               <div class="col-sm-2">
-                <select id="kecamatan" class="form-control input-sm" required="">
-                  <option value="-1">Kecamatan</option>
+                <select id="kota" name="kota" class="form-control input-sm" required="" onchange="ajaxkec(this.value)">
+                  <option value="">Kota</option>
                 </select>
-                <label class="error" for="kecamatan"></label>
+                <label class="error" for="kota"></label>
+              </div>               
+              <div class="col-sm-2">
+                <select id="kec" name="kec" class="form-control input-sm" required="" onchange="ajaxkel(this.value)">
+                  <option value="">Kecamatan</option>
+                </select>
+                <label class="error" for="kec"></label>
               </div>    
               <div class="col-sm-2">
-                <select id="kelurahan" class="form-control input-sm" required="">
-                  <option value="-1">Kelurahan</option>
+                <select id="kel" name="kel" class="form-control input-sm" required="">
+                  <option value="">Kelurahan/Desa</option>
                 </select>
-                <label class="error" for="kelurahan"></label>
+                <label class="error" for="kel"></label>
               </div>                        
             </div>
             
@@ -231,80 +243,89 @@
   });
 </script>
 
-<script type="text/javascript">
-$( document ).ready(function() {
-    var modelProvinsi = {"modelMakeTable" : 
-        [
-                {"modelMakeID" : "1","modelMake" : "DIY"},
-                {"modelMakeID" : "2","modelMake" : "Jakarta"},
-        ]};
-        
-var modelKecamatan = {"DIY" : 
-        [
-                {"modelTypeID" : "1","modelType" : "Depok"},
-                {"modelTypeID" : "1","modelType" : "Berbah"}                
-        ],
-        "Jakarta" : 
-        [
-                {"modelTypeID" : "1","modelType" : "Kecamatan Jkt1"}
-        ]
-					};
-					
-var modelKelurahan = {"Depok" : 
-        [
-                {"modelTypeID" : "1","modelType" : "Caturtunggal"}
-        ],
-        "Berbah" : 
-        [
-                {"modelTypeID" : "1","modelType" : "Kelurahan (Berbah)1"}
-        ],        
-        "Kecamatan Jkt1" : 
-        [
-                {"modelTypeID" : "1","modelType" : "Kelurahan Jkt1"}
-        ]
-					};					
+<script>
+var ajaxku;
+function ajaxkota(id){
+    ajaxku = buatajax();
+    var url="select_daerah.php";
+    url=url+"?q="+id;
+    url=url+"&sid="+Math.random();
+    ajaxku.onreadystatechange=stateChanged;
+    ajaxku.open("GET",url,true);
+    ajaxku.send(null);
+}
 
+function ajaxkec(id){
+    ajaxku = buatajax();
+    var url="select_daerah.php";
+    url=url+"?kec="+id;
+    url=url+"&sid="+Math.random();
+    ajaxku.onreadystatechange=stateChangedKec;
+    ajaxku.open("GET",url,true);
+    ajaxku.send(null);
+}
 
-      var ModelListItems= "";
-      for (var i = 0; i < modelProvinsi.modelMakeTable.length; i++){
-        ModelListItems+= "<option value='" + modelProvinsi.modelMakeTable[i].modelMakeID + "'>" + modelProvinsi.modelMakeTable[i].modelMake + "</option>";
-      }
-      $("#provinsi").html(ModelListItems);
-    
-    /* function update kecamatan from changed provinsi */
-    var updateSelectProvinsiBox = function(make) {
-        console.log('updating with',make);
-        var listItems= "";
-        for (var i = 0; i < modelKecamatan[make].length; i++){
-            listItems+= "<option value='" + modelKecamatan[make][i].modelTypeID + "'>" + modelKecamatan[make][i].modelType + "</option>";
-        }
-        $("select#kecamatan").html(listItems);
+function ajaxkel(id){
+    ajaxku = buatajax();
+    var url="select_daerah.php";
+    url=url+"?kel="+id;
+    url=url+"&sid="+Math.random();
+    ajaxku.onreadystatechange=stateChangedKel;
+    ajaxku.open("GET",url,true);
+    ajaxku.send(null);
+}
+
+function buatajax(){
+    if (window.XMLHttpRequest){
+    	return new XMLHttpRequest();
     }
-   
-    /* function update kelurahan from changed kecamatan */
-    var updateSelectKecamatanBox = function(maked) {
-        console.log('updating with',maked);
-        var listItems= "";
-        for (var i = 0; i < modelKelurahan[maked].length; i++){
-            listItems+= "<option value='" + modelKelurahan[maked][i].modelTypeID + "'>" + modelKelurahan[maked][i].modelType + "</option>";
-        }
-        $("select#kelurahan").html(listItems);
-    }   
-   
-	/* on change provinsi */
-    $("select#provinsi").on('change',function(){
-        var selectedMake = $('#provinsi option:selected').text();
-        updateSelectProvinsiBox(selectedMake);
-    });
+    if (window.ActiveXObject){
+   		return new ActiveXObject("Microsoft.XMLHTTP");
+    }
     
-    /* on change kecamatan */
-    $("select#kecamatan").on('change',function(){
-        var selectedMake = $('#kecamatan option:selected').text();
-        console.log(selectedMake);
-        updateSelectKecamatanBox(selectedMake);
-    });
-            		
-});
+    return null;
+}
+function stateChanged(){
+    var data;
+    if (ajaxku.readyState==4){
+    
+    	data=ajaxku.responseText;
+    	
+	    if(data.length>=0){
+	    	document.getElementById("kota").innerHTML = data
+	    }else{
+	    	document.getElementById("kota").value = "<option selected>Kota/Kab</option>";
+	    }
+    }
+}
+
+function stateChangedKec(){
+    var data;
+    if (ajaxku.readyState==4){
+    
+	    data=ajaxku.responseText;
+	    
+	    if(data.length>=0){
+	    	document.getElementById("kec").innerHTML = data
+	    }else{
+		    document.getElementById("kec").value = "<option selected>Kecamatan</option>";
+	    }
+    }
+}
+
+function stateChangedKel(){
+    var data;
+    if (ajaxku.readyState==4){
+    
+	    data=ajaxku.responseText;
+	    
+	    if(data.length>=0){
+	    	document.getElementById("kel").innerHTML = data
+	    }else{
+		    document.getElementById("kel").value = "<option selected>Kelurahan/Desa</option>";
+	    }
+    }
+}             		
 </script>
 
 <script>  
