@@ -40,14 +40,13 @@
                 
                     <div class="mb20"></div>
                 
-                    <h5><strong>Registered for Budi Utama Yogyakarta</strong></h5>
+                    <h5><strong>Registered for Belanjasale - Yogyakarta</strong></h5>
                     <ul>
-                        <li><i class="fa fa-arrow-circle-o-right mr5"></i> Jl. Wijaya Kusuma No. 121 B Yogyakarta</li>
+                        <li><i class="fa fa-arrow-circle-o-right mr5"></i> Jl. ... Yogyakarta</li>
                         <li><i class="fa fa-arrow-circle-o-right mr5"></i> 0274 xxx xxx</li>
-                        <li><i class="fa fa-arrow-circle-o-right mr5"></i> www.budiutama.com</li>
+                        <li><i class="fa fa-arrow-circle-o-right mr5"></i> www.belanjasale.com</li>
                     </ul>
                     <div class="mb20"></div>
-                    <strong>Not a member? <a href="signup.html">Sign Up</a></strong>
                 </div><!-- signin0-info -->
             
             </div><!-- col-sm-7 -->
