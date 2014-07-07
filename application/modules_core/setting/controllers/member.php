@@ -8,6 +8,8 @@ class Member extends Admin_base {
 		// load model
 		$this->load->model('m_menu');	
 		$this->load->model('m_wilayah');
+		$this->load->model('m_member');
+		$this->load->model('m_karyawan');
 		
 		// load permission
 		$this->load->helper('text');
@@ -27,10 +29,37 @@ class Member extends Admin_base {
 		$data['user'] = $this->user;
 		// load template
 		$data['provinsis'] = $this->m_wilayah->get_propinsi();
+		$data['members'] = $this->m_member->get_members();
+		$data['saless'] = $this->m_karyawan->get_sales();
 		$data['title']	= "Manage Member Pinaple SI";
 		$data['main_content'] = "setting/member/list";
 		$this->load->view('dashboard/admin/template', $data);
 	}
+
+	public function delete_member() {
+		$id = '';
+		foreach ($_POST as $value) {
+			$id = $value['pelanggan_id'];
+		}
+		$data = $this->m_member->delete_member($id);
+		header('Content-Type: application/json');
+	    echo json_encode($data);			
+	}
+
+	public function add_member() {
+		$id = '';
+		foreach ($_POST as $value) {
+			//add here
+			$input = array(
+				$id => $value['pelanggan_id'];
+				//etc add here first
+				);
+		}
+		$data = $this->m_member->add_member($input);
+		header('Content-Type: application/json');
+	    echo json_encode($data);			
+	}
+
 
 	// page title
 	public function page_title() {
