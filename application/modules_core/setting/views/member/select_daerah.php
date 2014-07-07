@@ -1,13 +1,13 @@
 <?php
+
 if (!empty($_GET['q'])){
 	if (ctype_digit($_GET['q'])) {
-		$query = mysql_query("SELECT * FROM inf_lokasi where lokasi_propinsi=$_GET[q] and lokasi_kecamatan=0 and lokasi_kelurahan=0 and lokasi_kabupatenkota!=0 order by lokasi_nama");
+		echo "bangsat";die;
+		$query = mysql_query("SELECT * FROM wil_kabupaten where id_prov=$_GET[q] order by nama");
 		echo"<option selected value=''>Pilih Kota/Kab</option>";
 		while($d = mysql_fetch_array($query)){
-			echo "<option value='$d[lokasi_kabupatenkota]&prop=$_GET[q]'>$d[lokasi_nama]</option>";
+			echo "<option value='$d[id]'>$d[nama]</option>";
 		}
-
-
 	}
 }
 

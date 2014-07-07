@@ -6,10 +6,8 @@ class Member extends Admin_base {
 		// call the controller construct
 		parent::__construct();
 		// load model
-		$this->load->model('m_role');
 		$this->load->model('m_menu');	
-		$this->load->model('m_permission');
-		//$this->load->model('m_daerah');
+		$this->load->model('m_wilayah');
 		
 		// load permission
 		$this->load->helper('text');
@@ -27,11 +25,8 @@ class Member extends Admin_base {
 		$data['menu'] = $this->menu();
 		// user detail
 		$data['user'] = $this->user;
-		// get role list
-		$data['rs_role'] = $this->m_role->get_all_role();
-		// get permission list
-		$data['rs_permission'] = $this->m_permission->get_all_permission();
 		// load template
+		$data['provinsis'] = $this->m_wilayah->get_propinsi();
 		$data['title']	= "Manage Member Pinaple SI";
 		$data['main_content'] = "setting/member/list";
 		$this->load->view('dashboard/admin/template', $data);

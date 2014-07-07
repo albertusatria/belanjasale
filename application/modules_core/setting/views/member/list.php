@@ -115,31 +115,28 @@
 			<div class="form-group">
               <label class="col-sm-2 control-label">Daerah <span class="asterisk">*</span></label>
               <div class="col-sm-2">
-                <select id="prop" name="prop" class="form-control input-sm" required="" onchange="ajaxkota(this.value)">
-					<option value="">Provinsi</option>
-					<?php 
-					$queryProvinsi=mysql_query("SELECT * FROM inf_lokasi where lokasi_kabupatenkota=0 and lokasi_kecamatan=0 and lokasi_kelurahan=0 order by lokasi_nama");
-					while ($dataProvinsi=mysql_fetch_array($queryProvinsi)){
-						echo '<option value="'.$dataProvinsi['lokasi_propinsi'].'">'.$dataProvinsi['lokasi_nama'].'</option>';
-					}
-					?>
+                <select id="addprop" name="prop" class="form-control input-sm" required="" onchange="ajaxkota(this.value)">
+      					<option value="">-- Select Provinsi -- </option>
+                <?php foreach ($provinsis as $provinsi) : ?>
+                  <option value="<?php echo $provinsi->id ?>"> <?php echo $provinsi->nama?> </option>
+                <?php endforeach; ?>
                 </select>               
                 <label class="error" for="prop"></label>
               </div>
               <div class="col-sm-2">
-                <select id="kota" name="kota" class="form-control input-sm" required="" onchange="ajaxkec(this.value)">
+                <select id="addkota" name="kota" class="form-control input-sm" required="" onchange="ajaxkec(this.value)">
                   <option value="">Kota</option>
                 </select>
                 <label class="error" for="kota"></label>
               </div>               
               <div class="col-sm-2">
-                <select id="kec" name="kec" class="form-control input-sm" required="" onchange="ajaxkel(this.value)">
+                <select id="addkec" name="kec" class="form-control input-sm" required="" onchange="ajaxkel(this.value)">
                   <option value="">Kecamatan</option>
                 </select>
                 <label class="error" for="kec"></label>
               </div>    
               <div class="col-sm-2">
-                <select id="kel" name="kel" class="form-control input-sm" required="">
+                <select id="addkel" name="kel" class="form-control input-sm" required="">
                   <option value="">Kelurahan/Desa</option>
                 </select>
                 <label class="error" for="kel"></label>
@@ -229,23 +226,20 @@
               </div>
             </div>
 
+
 			<div class="form-group">
+
               <label class="col-sm-2 control-label">Daerah <span class="asterisk">*</span></label>
+
               <div class="col-sm-2">
                 <select id="prop" name="prop" class="form-control input-sm" required="" onchange="ajaxkota(this.value)">
-					<option value="">Provinsi</option>
-					<?php 
-					$queryProvinsi=mysql_query("SELECT * FROM inf_lokasi where lokasi_kabupatenkota=0 and lokasi_kecamatan=0 and lokasi_kelurahan=0 order by lokasi_nama");
-					while ($dataProvinsi=mysql_fetch_array($queryProvinsi)){
-						echo '<option value="'.$dataProvinsi['lokasi_propinsi'].'">'.$dataProvinsi['lokasi_nama'].'</option>';
-					}
-					?>
+      					<option value="">Provinsi</option>
                 </select>               
                 <label class="error" for="prop"></label>
               </div>
               <div class="col-sm-2">
                 <select id="kota" name="kota" class="form-control input-sm" required="" onchange="ajaxkec(this.value)">
-                  <option value="">Kota</option>
+                  <option value="">Kabupaten/Kota</option>
                 </select>
                 <label class="error" for="kota"></label>
               </div>               
@@ -262,7 +256,6 @@
                 <label class="error" for="kel"></label>
               </div>                        
             </div>
-            
             
             <div class="form-group">
               <label class="col-sm-2 control-label">Kode Pos <span class="asterisk">*</span></label>
@@ -329,6 +322,11 @@
 <script src="<?php echo base_url()?>bracket/js/chosen.jquery.min.js"></script>
 <script src="<?php echo base_url()?>bracket/js/jquery.validate.min.js"></script>
 <script src="<?php echo base_url();?>bracket/js/custom.js"></script>
+
+<script type="text/javascript">
+        CI_ROOT = "<?=base_url() ?>";
+</script>
+
 <script>
   jQuery(document).ready(function() {
     
@@ -355,7 +353,6 @@
         jQuery(this).closest('tr').fadeOut(function(){
           jQuery(this).remove();
         });
-        
         return false;
     });
     
@@ -423,34 +420,97 @@
 
 <script>
 var ajaxku;
+
 function ajaxkota(id){
+
     ajaxku = buatajax();
-    var url="select_daerah.php";
-    url=url+"?q="+id;
-    url=url+"&sid="+Math.random();
-    ajaxku.onreadystatechange=stateChanged;
-    ajaxku.open("GET",url,true);
-    ajaxku.send(null);
+
+    var item = {};
+    var number = 1;
+    item[number] = {};
+    item[number]['id_prov'] = id;
+    console.log(id);
+    console.log(item[1]['id_prov']);
+      $.ajax({
+        type: "POST",
+        url: CI_ROOT+"setting/wilayah/get_kota",
+        data: item,
+         success: function(data)
+         {
+            $('#addkota').find("option").remove();
+            for (index = 0; index < data.length; ++index) {
+                id = data[index]['id'];
+                nama = data[index]['nama'];
+                $('#addkota').append('<option value="'+id+'">'+nama+'</option>');
+            } 
+            $('#addkec').find("option").remove();
+            $('#addkec').append('<option value="">- Kecamatan - </option>');
+            $('#addkel').find("option").remove();
+            $('#addkel').append('<option value="">- Kelurahan/Desa - </option>');
+
+         },
+         error: function (data)
+         {
+            console.log('gagal');
+         }
+      });   
 }
 
 function ajaxkec(id){
-    ajaxku = buatajax();
-    var url="select_daerah.php";
-    url=url+"?kec="+id;
-    url=url+"&sid="+Math.random();
-    ajaxku.onreadystatechange=stateChangedKec;
-    ajaxku.open("GET",url,true);
-    ajaxku.send(null);
+    var item = {};
+    var number = 1;
+    item[number] = {};
+    item[number]['id_kabupaten'] = id;
+    console.log(id);
+    console.log(item[1]['id_kabupaten']);
+      $.ajax({
+        type: "POST",
+        url: CI_ROOT+"setting/wilayah/get_kecamatan",
+        data: item,
+         success: function(data)
+         {
+            $('#addkec').find("option").remove();
+            for (index = 0; index < data.length; ++index) {
+                id = data[index]['id'];
+                nama = data[index]['nama'];
+                $('#addkec').append('<option value="'+id+'">'+nama+'</option>');
+            } 
+            $('#addkel').find("option").remove();
+            $('#addkel').append('<option value="">- Kelurahan/Desa - </option>');
+         },
+
+         error: function (data)
+         {
+            console.log('gagal');
+         }
+      });   
 }
 
 function ajaxkel(id){
-    ajaxku = buatajax();
-    var url="select_daerah.php";
-    url=url+"?kel="+id;
-    url=url+"&sid="+Math.random();
-    ajaxku.onreadystatechange=stateChangedKel;
-    ajaxku.open("GET",url,true);
-    ajaxku.send(null);
+    var item = {};
+    var number = 1;
+    item[number] = {};
+    item[number]['id_kecamatan'] = id;
+    console.log(id);
+    console.log(item[1]['id_kecamatan']);
+      $.ajax({
+        type: "POST",
+        url: CI_ROOT+"setting/wilayah/get_desa",
+        data: item,
+         success: function(data)
+         {
+            $('#addkel').find("option").remove();
+            for (index = 0; index < data.length; ++index) {
+                id = data[index]['id'];
+                nama = data[index]['nama'];
+                $('#addkel').append('<option value="'+id+'">'+nama+'</option>');
+            } 
+         },
+         error: function (data)
+         {
+            console.log('gagal');
+         }
+      });   
 }
 
 function buatajax(){
