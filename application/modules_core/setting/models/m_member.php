@@ -31,4 +31,15 @@ class m_member extends CI_Model {
             return false;
         }
     }
+
+    function add_member($input) {
+        $insert = $this->db->insert('crm_pelanggan',$input);
+        if ($insert) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 }

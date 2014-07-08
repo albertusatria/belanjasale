@@ -78,6 +78,9 @@
   <div class="modal-dialog">
     <div class="modal-content">
 	<form id="regisMember" action="" class="form-horizontal" novalidate="novalidate">
+
+     <input type="hidden" id="adduserid" name="user_id" value="<?php echo $user['user_id'] ?>">
+
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h4 class="modal-title" id="myModalLabel">Add Member Registration Form</h4>
@@ -635,7 +638,7 @@ function stateChangedKel(){
      var valid = $('#regisMember').valid();
       if(valid)
       { 
-
+        var userid = document.getElementById("adduserid").value;
         var id = document.getElementById("addid").value;
         var nama = document.getElementById("addname").value;
         var alamat = document.getElementById("addalamat").value;
@@ -670,10 +673,10 @@ function stateChangedKel(){
         item[number]['email'] = email;
         item[number]['salesid'] = salesid;
         item[number]['salesname'] = salesname;
-
- 
-        console.log(id + ' '+nama+' '+alamat+' '+prov+' '+kota+' '+kec+' '+kel+' '+kdpos+' '+telp_rmh+' '+telp_hp+' '+fax+' '+email+' '+salesid);
-        console.log('berhasil');
+        item[number]['petugas_id'] = userid;        
+         
+        // console.log(id + ' '+nama+' '+alamat+' '+prov+' '+kota+' '+kec+' '+kel+' '+kdpos+' '+telp_rmh+' '+telp_hp+' '+fax+' '+email+' '+salesid);
+        // console.log('berhasil');
         //append tr
 
           $.ajax({
@@ -682,7 +685,6 @@ function stateChangedKel(){
             data: item,
              success: function(data)
              {
-
                 $('#memberList > tbody:first').append(
                     '<tr>'+
                     '<td>'+id+'</td>'+
@@ -696,9 +698,12 @@ function stateChangedKel(){
                     '</td>'+
                     '</tr>');       
     
+                $('#addMember').modal('hide');
+
                 jQuery('#pesan').removeClass('alert-danger').addClass('alert-success');            
                 jQuery('#pesan').find('strong').text('Data berhasil ditambah');              
                 jQuery('#pesan').show();
+
 
              },
              error: function (data)

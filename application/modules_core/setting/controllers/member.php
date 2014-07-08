@@ -47,17 +47,36 @@ class Member extends Admin_base {
 	}
 
 	public function add_member() {
-		$id = '';
+
+        $this->load->helper('date');
+        $datestring = '%Y-%m-%d %h:%i:%a';
+        $time = time();
+        $now = mdate($datestring, $time);
+
 		foreach ($_POST as $value) {
 			//add here
 			$input = array(
-				$id => $value['pelanggan_id'];
-				//etc add here first
+				'pelanggan_id' => $value['id'],
+				'nama_lengkap' => $value['nama'],
+				'alamat' => $value['alamat'],
+				'propinsi_id' => $value['prov'],
+				'kota_id' => $value['kota'],
+				'kecamatan_id' => $value['kec'],
+				'desa_id' => $value['kel'],
+				'kodepos' => $value['kdpos'],
+				'telp_rumah' => $value['telp_rmh'],
+				'telp_hp' => $value['telp_hp'],
+				'fax' => $value['fax'],
+				'email' => $value['email'],
+				'sales_id' => $value['salesid'],
+				'petugas_id' => $value['petugas_id'],
+				'dc' => $now
 				);
 		}
+		// echo '<pre>'; print_r($input); die;
 		$data = $this->m_member->add_member($input);
 		header('Content-Type: application/json');
-	    echo json_encode($data);			
+	    // echo json_encode($data);			
 	}
 
 
