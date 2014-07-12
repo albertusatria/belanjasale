@@ -13,8 +13,9 @@
         	<div class="menu-head-barcode">
 				<div class="input-group col-sm9">
                   <span class="input-group-addon"><i class="fa fa-barcode"></i></span>
-                  <input type="text" placeholder="barcode input.." class="add-product form-control">
+                  <input type="text" placeholder="barcode input.." name="product_id" class="add-product form-control">
                 </div>	  
+                <label for="product_id" name="productid" class="error">Product not found!</label>
         	</div>
 			<div class="total-amount pull-right">
 				<h4 class="text-warning">Grand Total</h4>
@@ -32,6 +33,7 @@
 		                <th colspan="2">Product</th>
 		                <th>ID</th>
 		                <th>Qty</th>
+		                <th>Store in</th>		                
 		                <th class="text-right">Price</th>
 		                <th class="text-right">Subtotal</th>
 		                <th></th>
@@ -43,12 +45,19 @@
 			                <img src="<?php echo base_url()?>bracket/images/photos/media3.png" alt="">
 		                </td>
 		                <td><label for="product-name">Product Name #1</label></td>
-		                <td>1132123123</td>
+		                <td>1232123123</td>
 		                <td>
 		                	<span for="qty" class="amount">1</span>
 		                	<input data-i-zero="deny" type="text" value="1" class="edit-amount qty" />
 		                </td>
-		                <td class="text-right">
+		                <td>
+		                	<span for="store-place" class="store-label">Pallate A2</span>
+							<select class="form-control input-sm mb15 store-select">
+			                  <option>Pallete A1</option>
+			                  <option>Pallete A2</option>
+			                  <option>Rak</option>
+			                </select>
+		                </td>		                		                <td class="text-right">
 		                	<span class="amount product-price">20000</span>
 		                	<input type="text" class="edit-amount price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>
 		                </td>
@@ -70,6 +79,14 @@
 		                	<span for="qty" class="amount">1</span>
 		                	<input data-l-zero="deny" type="text" value="1" class="edit-amount qty" />
 		                </td>
+		                <td>
+		                	<span for="store-place" class="store-label">Pallate A1</span>
+							<select class="form-control input-sm mb15 store-select">
+			                  <option>Pallete A1</option>
+			                  <option>Pallete A2</option>
+			                  <option>Rak</option>
+			                </select>
+		                </td>		                
 		                <td class="text-right">
 		                	<span class="amount product-price">20000</span>
 		                	<input type="text" class="edit-amount price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>
@@ -123,7 +140,7 @@
 <script type="text/javascript">
 var $j = jQuery.noConflict(); 
 jQuery(document).ready(function() {
-	
+	alert('Input : 000 ke barcode --> test style u/ product jika tidak ketemu\nInput : 11xxxx ke barcode --> store di Pallete A1\nInput : 12xxxx ke barcode --> store di Pallete A2\nInput : 01xxxx ke barcode --> store di Rak\nInput : lainnya selain 00 ke barcode --> store di Pallete B');
 	initBasket();
 	$j('.add-product').blur(function() {
 		$j(this).numeric();
@@ -217,7 +234,18 @@ jQuery(document).ready(function() {
 	    });
     });
 
-    
+	$j('#basket-buy').on('click','tbody tr td span.store-label',function () {
+    	$j(this).hide();
+        var editStore = $j(this).next();
+		editStore.show().focus();
+		
+		editStore.blur(function(){
+			var newEditStore = $j(this).closest('td').find('.store-select option:selected').text();
+	        $j(this).attr("value",newEditStore).hide();
+	        $j(this).prev().text(newEditStore).show();						
+		});
+
+	});
     // Delete row in a table
     $j('#basket-buy').on('click','.delete-row',function(){
 
@@ -247,43 +275,81 @@ jQuery(document).ready(function() {
 function addProduct() {
 
 	var idProd = $j('.add-product').val();
-	$j('#basket-buy > tbody:first').append(
-	        '<tr class="products">'+
-	            '<td>'+
-	            	'<img src="<?php echo base_url()?>bracket/images/photos/media3.png" alt="">'+
-	            '</td>'+
-	            '<td>'+
-					'<label for="product-name">Product Name #1</label>'+
-				'</td>'+
-				'<td>'+idProd+'</td>'+
-	            '<td>'+
-	            	'<span for="qty" class="amount">1</span>'+
-	            	'<input data-l-zero="deny" type="text" value="1" class="edit-amount qty" />'+
-	            '</td>'+
-				'<td class="text-right">'+
-	            	'<span class="amount product-price">20000</span>'+
-	            	'<input type="text" class="edit-amount price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
-	            '</td>'+
-	            '<td class="text-right">'+
-	            	'<span class="amount subtotal-price">20000</span>'+
-					'<input type="text" class="edit-amount subtotal-price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
-	            '</td>'+
-	            '<td class="table-action">'+
-	              '<a href="#" class="delete-row"><i class="fa fa-times"></i></a>'+
-	            '</td>'+
-			'</tr>'
-	);
-
-	$j('.add-product').val('');
-	initBasket();
-	findSubTotals2();
-
+	var checkUnit = idProd.substr(0, 2);
+	var store = "";
+	if(idProd == "0000")
+	{
+		$j('label[name=productid]').show();
+		$j('.add-product').closest('div').addClass('has-error');
+	}
+	else
+	{
+		if(checkUnit == "01")
+		{
+			store = "Rak";
+		}
+		else if(checkUnit == "11")
+		{
+			store = "Pallete A1";
+		}
+		else if(checkUnit == "12")
+		{
+			store = "Pallete A2";
+		}
+		else{
+			store = "Pallete B";
+		}
+		$j('label[name=product_id]').hide();			
+		$j('.add-product').closest('div').removeClass('has-error');
+		$j('#basket-buy > tbody:first').append(
+		        '<tr class="products">'+
+		            '<td>'+
+		            	'<img src="<?php echo base_url()?>bracket/images/photos/media3.png" alt="">'+
+		            '</td>'+
+		            '<td>'+
+						'<label for="product-name">Product Name #1</label>'+
+					'</td>'+
+					'<td>'+idProd+'</td>'+
+		            '<td>'+
+		            	'<span for="qty" class="amount">1</span>'+
+		            	'<input data-l-zero="deny" type="text" value="1" class="edit-amount qty" />'+
+		            '</td>'+
+	                '<td>'+
+	                	'<span for="store-place" class="store-label">'+store+'</span>'+
+						'<select class="form-control input-sm mb15 store-select">'+
+		                  '<option>Pallete A1</option>'+
+		                  '<option>Pallete A2</option>'+
+		                  '<option>Rak</option>'+
+		                '</select>'+
+	                '</td>'+
+					'<td class="text-right">'+
+		            	'<span class="amount product-price">20000</span>'+
+		            	'<input type="text" class="edit-amount price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
+		            '</td>'+
+		            '<td class="text-right">'+
+		            	'<span class="amount subtotal-price">20000</span>'+
+						'<input type="text" class="edit-amount subtotal-price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
+		            '</td>'+
+		            '<td class="table-action">'+
+		              '<a href="#" class="delete-row"><i class="fa fa-times"></i></a>'+
+		            '</td>'+
+				'</tr>'
+		);
+	
+	
+		$j('.add-product').val('');
+		initBasket();
+		findSubTotals2();
+	}
+	
 	return false;
 }
 
 function initBasket(){
+	$j('label[name=productid]').hide();
 	$j('input.price').hide();
 	$j('input.qty').hide();	
+	$j('select.store-select').hide();	
 	$j('input.subtotal-price').hide();		
 	$j('input.grandtotal-price').hide();	
 
