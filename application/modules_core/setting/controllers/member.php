@@ -36,6 +36,13 @@ class Member extends Admin_base {
 		$this->load->view('dashboard/admin/template', $data);
 	}
 
+	public function get_members() {
+		$this->load->library('datatables');	
+		$result = $this->datatables->getData('v_pelanggan', array('','pelanggan_id', 'nama_lengkap', 'nama_kota', 'telp_rumah', 'telp_hp',  'username'), 'pelanggan_id', true);
+		
+		echo $result;
+	}
+
 	public function delete_member() {
 		$id = '';
 		foreach ($_POST as $value) {

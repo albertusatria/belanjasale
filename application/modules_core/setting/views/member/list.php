@@ -33,37 +33,20 @@
 				<table class="table mb30" id="memberList">
 		            <thead>
 		              <tr>
-		                <th>#</th>
-		                <th>Nama</th>
-		                <th>Kota</th>
-		                <th>Kontak</th>
-                    <th>Sales</th>
-		                <th></th>
+		                <th style="width:5%">#</th>
+                    <th style="width:10%">Identitas</th>
+		                <th style="width:25%">Nama</th>
+		                <th style="width:15%">Kota</th>
+		                <th style="width:10%">Telp Rumah</th>
+                    <th style="width:10%">Telp HP</th>
+                    <th style="width:10%">Sales</th>
+		                <th style="width:5%"></th>
 		              </tr>
 		            </thead>
 		            <tbody>
-                  <?php foreach($members as $member) : ?>
-                  <tr>
-                    <td><?php echo $member->pelanggan_id ?></td>
-                    <td><?php echo $member->nama_lengkap ?></td>
-                    <td><?php echo $member->nama ?></td>
-                    <td>
-                      <?php if($member->telp_rumah != NULL OR $member->telp_rumah != '') : ?>
-                        <?php echo $member->telp_rumah ?>
-                        <?php if($member->telp_hp != NULL OR $member->telp_hp != '') : ?>                
-                          / <?php echo $member->telp_hp ?>
-                        <?php endif ?>
-                      <?php else : ?>
-                          <?php echo $member->telp_hp ?>
-                      <?php endif; ?>
-                    </td>
-                    <td><?php echo $member->username ?></td>
-                    <td class="table-action">
-                      <a href="#" data-toggle="modal" data-target="#editMember"><i class="fa fa-pencil"></i></a>
-                      <a href="#" class="delete-row" id="<?php echo $member->pelanggan_id ?>"><i class="fa fa-trash-o"></i></a>
-                    </td>
-                  </tr>
-                  <?php endforeach; ?>
+              <tr>
+                <td colspan="6" class="dataTables_empty">Loading data...</td>
+              </tr>
 		            </tbody>
 		          </table>            
             </div><!-- table-responsive -->
@@ -321,13 +304,47 @@
         CI_ROOT = "<?=base_url() ?>";
 </script>
 
+
+
 <script>
   jQuery(document).ready(function() {
+
+  // Initialize jQuery buttons
+  $("button").button();
     
-    //data table
-    jQuery('#memberList').dataTable({
-      "sPaginationType": "full_numbers"
-    });
+  // Show List of Products
+  var productTable = $('#memberList').dataTable({
+    "sPaginationType": "full_numbers",
+    // "pagingType": "scrolling",
+    "bJQueryUI": false,
+    "bSortClasses": false,
+    "bProcessing": false,
+    "bServerSide": true,
+    "sAjaxSource": CI_ROOT+"setting/member/get_members",
+    "aaSorting": [[1, "asc"]], // Set default sort by "code" column
+    "aoColumns": [
+      { "sClass": "member_id", "mData": 0, "bSortable": false, "bSearchable": false, "sWidth": "50px" },
+      { "sClass": "pelanggan_id", "mData": 1, "sWidth": "150px" },
+      { "sClass": "nama_lengkap", "mData": 2, "sWidth": "250px" },
+      { "sClass": "kota_id", "mData": 3 },
+      { "sClass": "telp_rmh", "mData": 4 },
+      { "sClass": "telp_hp", "mData": 5 },
+      { "sClass": "sales_id", "mData": 6 },
+      { "sClass": "center", "mData": "DT_RowId", "bSortable": false, "bSearchable": false, "sWidth": "70px", 
+        "mRender": function(data, type, full) {
+          //return "<a href='#' class='delete-row' id='"+data+"'><i class='fa fa-trash-o'></i></a>";
+          return "<button class='delete-row' id='" + data + "'>Delete</button>";
+        }
+      }
+    ],
+    "fnDrawCallback": function(oSettings) {
+      // Initialize delete buttons
+      $("button.delete-row").button({
+        icons: { primary: "fa fa-trash-o" }, text: false
+      });
+    }
+  });
+
     
 	// Chosen Select
 	jQuery("#salesID").chosen({'width':'100%','white-space':'nowrap'});
@@ -341,9 +358,9 @@
     });
       
     // Delete row in a table
-    jQuery('.delete-row').click(function(){
+    jQuery('button.delete-row').live("click", function(e){
       // console.log(jQuery(this).attr("id")) ;
-      jQuery(this).addClass('clicked');
+      // jQuery(this).addClass('clicked');
 
 
       var c = confirm("Continue delete?");
@@ -361,11 +378,11 @@
         data: item,
          success: function(data)
          {
-
-            jQuery('.clicked').closest('tr').fadeOut(function(){
-                 jQuery(this).remove();
-            });
-            jQuery('.delete-row').removeClass('clicked');
+            productTable.fnDraw(true);
+            // jQuery('.clicked').closest('tr').fadeOut(function(){
+            //      jQuery(this).remove();
+            // });
+            // jQuery('.delete-row').removeClass('clicked');
             jQuery('#pesan').removeClass('alert-danger').addClass('alert-success');            
             jQuery('#pesan').find('strong').text('Berhasil dihapus');              
             jQuery('#pesan').show();
@@ -386,10 +403,9 @@
         jQuery('#pesan').show();
 
       }
-
-
-
     });
+
+
     
   // Basic Form
   jQuery("#regisMember").validate({
@@ -634,116 +650,5 @@ function stateChangedKel(){
       }  
   });
 
-    $('#regisMember').on('click', '#saveMember', function(){
-     var valid = $('#regisMember').valid();
-      if(valid)
-      { 
-        var userid = document.getElementById("adduserid").value;
-        var id = document.getElementById("addid").value;
-        var nama = document.getElementById("addname").value;
-        var alamat = document.getElementById("addalamat").value;
-        var prov = document.getElementById("addprop").value;
-        var kota = document.getElementById("addkota").value;
-        var kotaname = $("#addkota option:selected").text();
-        var kec = document.getElementById("addkec").value;
-        var kel = document.getElementById("addkel").value;
-        var kdpos = document.getElementById("addkdpos").value;
-        var telp_rmh = document.getElementById("addrmh").value;
-        var telp_hp = document.getElementById("addhp").value;
-        var fax = document.getElementById("addfax").value;
-        var email = document.getElementById("addemail").value;
-        var salesid = document.getElementById("addsales").value;
-        var salesname = $("#addsales option:selected").text();
 
-        var item = {};
-        var number = 1;
-        item[number] = {};
-        item[number]['id'] = id;
-        item[number]['nama'] = nama;
-        item[number]['alamat'] = alamat;
-        item[number]['prov'] = prov;
-        item[number]['kota'] = kota;
-        item[number]['kotaname'] = kotaname;
-        item[number]['kec'] = kec;
-        item[number]['kel'] = kel;
-        item[number]['kdpos'] = kdpos;
-        item[number]['telp_rmh'] = telp_rmh;
-        item[number]['telp_hp'] = telp_hp;
-        item[number]['fax'] = fax;
-        item[number]['email'] = email;
-        item[number]['salesid'] = salesid;
-        item[number]['salesname'] = salesname;
-        item[number]['petugas_id'] = userid;        
-         
-        // console.log(id + ' '+nama+' '+alamat+' '+prov+' '+kota+' '+kec+' '+kel+' '+kdpos+' '+telp_rmh+' '+telp_hp+' '+fax+' '+email+' '+salesid);
-        // console.log('berhasil');
-        //append tr
-
-          $.ajax({
-            type: "POST",
-            url: CI_ROOT+"setting/member/add_member",
-            data: item,
-             success: function(data)
-             {
-                $('#memberList > tbody:first').append(
-                    '<tr>'+
-                    '<td>'+id+'</td>'+
-                    '<td>'+nama+'</td>'+
-                    '<td>'+kotaname+'</td>'+
-                    '<td>'+telp_rmh+' / '+telp_hp+'</td>'+
-                    '<td>'+salesname+'</td>'+
-                    '<td class="table-action">'+
-                    '<a href="#" data-toggle="modal" data-target="#editMember"><i class="fa fa-pencil"></i></a>'+
-                    '<a href="#" class="delete-row" id="'+id+'"><i class="fa fa-trash-o"></i></a>'+
-                    '</td>'+
-                    '</tr>');       
-    
-                $('#addMember').modal('hide');
-
-                jQuery('#pesan').removeClass('alert-danger').addClass('alert-success');            
-                jQuery('#pesan').find('strong').text('Data berhasil ditambah');              
-                jQuery('#pesan').show();
-
-
-             },
-             error: function (data)
-             {
-
-                jQuery('#pesan').removeClass('alert-success').addClass('alert-danger');            
-                jQuery('#pesan').find('strong').text('Oops ada yang error');              
-                jQuery('#pesan').show();
-
-
-             }
-          });   
-
-
-
-        //give message 
-
-      }
-      else 
-      {
-        var id = document.getElementById("addid").value
-        var nama = document.getElementById("addname").value;
-        var alamat = document.getElementById("addalamat").value;
-        var prov = document.getElementById("addprop").value;
-        var kota = document.getElementById("addkota").value;
-        var kotaname = $("#addkota option:selected").text();
-        var kec = document.getElementById("addkec").value;
-        var kel = document.getElementById("addkel").value;
-        var kdpos = document.getElementById("addkdpos").value;
-        var telp_rmh = document.getElementById("addrmh").value;
-        var telp_hp = document.getElementById("addhp").value;
-        var fax = document.getElementById("addfax").value;
-        var email = document.getElementById("addemail").value;
-        var sales = document.getElementById("addsales").value;
-        var salesname = $("#addsales option:selected").text();
-        console.log(id + ' '+nama+' '+alamat+' '+prov+' '+kota+' '+kec+' '+kel+' '+kdpos+' '+telp_rmh+' '+telp_hp+' '+fax+' '+email+' '+sales);
-        console.log('belum valid');
-
-      }
-      return false;
-
-  });
 </script>
