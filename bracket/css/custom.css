@@ -3,10 +3,16 @@
 	clear: both;
 	margin: 30px 0;
 }
-/* table */
-.table{
+.text-right{
+	text-align: right;
+}
+.text-center{
+	text-align: center;
+}
+.table, .menu-head-info, .button-head, .total-amount, .menu-head-barcode{
 	float: left;
 }
+
 /* Page Header */
 .pageheader h2{
 	max-width: 300px;
@@ -30,9 +36,6 @@
 .panel-default > .panel-heading{
 	min-height: 90px;
 }
-.menu-head-info, .button-head{
-	float: left;
-}
 .menu-head-info{
 	width: 700px;
 }
@@ -44,6 +47,60 @@ button .fa-plus{
 	margin: 0 5px;
 }
 /* end panel heading with button add */
+
+
+/* POS */
+.panel-body.pos{
+	background: #fff;
+}
+.menu-head-barcode h2{
+	margin: 0;
+}
+.menu-head-barcode .col-sm-12{
+	padding: 0;
+}
+#posBeli > .panel-heading{
+	min-height: 120px;
+}
+.menu-head-barcode{
+	width: 300px;
+	margin: 35px 0;
+}
+.total-amount{
+	width: 450px;
+	text-align: right;
+}
+.total-amount h1, .total-amount h4{
+	margin: 0 0 10px;
+}
+.total-amount h4{
+	text-transform: uppercase;
+}
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, 
+.table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
+	vertical-align: middle;
+	border-top: none;
+	border-color: transparent;
+	background: #fff;
+}
+.pos table tr td:nth-child(1){
+	width: 80px;
+}
+.pos table tr{
+	border-bottom: 1px dashed #ccc;
+}
+.pos table tr:last-child{
+	border-bottom: none;
+}
+.pos table tr td img{
+	max-width: 80px;
+	max-height: 80px;
+}
+.pos table .delete-row i{
+	color: #c7254e;
+}
+/* end POS */
+
 
 /* add member and edit member */
 @media only screen and (min-width:960px){
