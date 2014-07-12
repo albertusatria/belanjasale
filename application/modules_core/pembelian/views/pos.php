@@ -13,7 +13,7 @@
         	<div class="menu-head-barcode">
 				<div class="input-group col-sm9">
                   <span class="input-group-addon"><i class="fa fa-barcode"></i></span>
-                  <input type="text" placeholder="barcode input.." class="form-control">
+                  <input type="text" placeholder="barcode input.." class="add-product form-control">
                 </div>	  
         	</div>
 			<div class="total-amount pull-right">
@@ -68,7 +68,7 @@
 		                <td>1132123123</td>
 		                <td>
 		                	<span for="qty" class="amount">1</span>
-		                	<input data-i-zero="deny" type="text" value="1" class="edit-amount qty" />
+		                	<input data-l-zero="deny" type="text" value="1" class="edit-amount qty" />
 		                </td>
 		                <td class="text-right">
 		                	<span class="amount product-price">20000</span>
@@ -114,27 +114,46 @@
 <script src="<?php echo base_url();?>bracket/js/jquery.formatCurrency-1.4.0.min.js"></script>
 <script src="<?php echo base_url();?>bracket/js/jquery.formatCurrency.id-ID.js"></script>
 <script src="<?php echo base_url();?>bracket/js/autoNumeric.js"></script>
+<script src="<?php echo base_url();?>bracket/js/jquery.numeric.js"></script>
 <script src="<?php echo base_url();?>bracket/js/custom.js"></script>
 
 <script type="text/javascript">
         CI_ROOT = "<?=base_url() ?>";
 </script>
 <script type="text/javascript">
-
-
-
-
-  jQuery(document).ready(function() {
-	var $j = jQuery.noConflict(); 
+var $j = jQuery.noConflict(); 
+jQuery(document).ready(function() {
+	
+	initBasket();
+	$j('.add-product').blur(function() {
+		$j(this).numeric();
+	})
+	.keyup(function(e) {
+	var e = window.event || e;
+	var keyUnicode = e.charCode || e.keyCode;
+	if (e !== undefined) {
+		switch (keyUnicode) {
+			case 16: break; // Shift
+			case 17: break; // Ctrl
+			case 18: break; // Alt
+			case 27: this.value = ''; break; // Esc: clear entry
+			case 35: break; // End
+			case 36: break; // Home
+			case 37: break; // cursor left
+			case 38: break; // cursor up
+			case 39: break; // cursor right
+			case 40: break; // cursor down
+			case 78: break; // N (Opera 9.63+ maps the "." from the number key section to the "N" key too!) (See: http://unixpapa.com/js/key.html search for ". Del")
+			case 110: break; // . number block (Opera 9.63+ maps the "." from the number block to the "N" key (78) !!!)
+			case 190: break; // .
+			case 13: addProduct(); // Enter			
+			default: $j(this).numeric();
+		}
+	}
+	
+	});	
+	
 	findSubTotals();
-
-	$j('input.price').hide();
-	$j('input.qty').hide();	
-	$j('input.subtotal-price').hide();		
-	$j('input.grandtotal-price').hide();	
-
-	//format price on init
-	$j('.product-price').formatCurrency({region: 'id-ID'});
 
 	//format numeric on edit
 	$j('.edit-amount').blur(function() {
@@ -165,7 +184,7 @@
 	});
 
 	
-    $j('tbody tr td span.amount').click(function () {
+    $j('#basket-buy').on('click','tbody tr td span.amount',function () {
 
     	$j(this).hide();
         var editAmount = $j(this).next();
@@ -181,78 +200,141 @@
 	        {
 	        	$j(this).formatCurrency({region: 'id-ID'});
 			}
+	        $j(this).autoNumeric('init');
 	        
 	        $j(this).attr("value",$j(this).autoNumeric('get')).hide();
 	        $j(this).prev().text(valueAmount).show();
-  			// console.log("edit amount : " + valueAmount);	        			
 
 			qty = Number($j(this).closest("tr").find("td input.qty").val());
 			price = Number($j(this).closest("tr").find("td input.price").val());
-			console.log(qty);
-			console.log(price);
+
 			Subtotal = qty * price;
 	        $j(this).closest("tr").find("td span.subtotal-price").text(Subtotal).formatCurrency({region: 'id-ID'});
 	        $j(this).closest("tr").find("td input.subtotal-price").val(Subtotal);
-
+			$j('#basket-buy tbody td .product-price').formatCurrency({region: 'id-ID'});
+			
 			findSubTotals2();
 	    });
     });
 
-	function findSubTotals() {
-
-        var Subtotal = 0; 
-        var qty = 0; 
-        var price = 0;
-        var grandTotal = 0;
-
-	    $j("tbody tr").each(function() {
-			/* get Qty and EA Price */
-			qty = Number($j(this).closest("tr").find("td input.qty").val());
-			price = Number($j(this).closest("tr").find("td input.price").val());
-			 // count subtotal per row 
-	        Subtotal = qty * price;
-	        $j(this).find("td span.subtotal-price").text(Subtotal).formatCurrency({region: 'id-ID'});
-	        $j(this).find("td input.subtotal-price").val(Subtotal);
-
-	        $j("td input.subtotal-price",this).each(function() {
-	           grandTotal += Number($j(this).val());
-	        }); 
-	        
-	        $j("h1 span.grandtotal-price").text(grandTotal).formatCurrency({region: 'id-ID'});
-	        $j(".grandtotal-price",this).val(grandTotal);		
-	    });
-		
-	}
-    
-	function findSubTotals2() {
-
-        var Subtotal = 0; 
-        var qty = 0; 
-        var price = 0;
-        var grandTotal = 0;
-
-	    $j("tbody tr").each(function() {
-
-
-	        $j("td input.subtotal-price",this).each(function() {
-	           grandTotal += Number($j(this).val());
-	        }); 
-	        
-	        $j("h1 span.grandtotal-price").text(grandTotal).formatCurrency({region: 'id-ID'});
-	        $j(".grandtotal-price",this).val(grandTotal);		
-	    });
-		
-	}
-
     
     // Delete row in a table
-    jQuery('.delete-row').click(function(){
+    $j('#basket-buy').on('click','.delete-row',function(){
+
       var c = confirm("Continue delete this product from Cart?");
       if(c)
-        jQuery(this).closest('tr').fadeOut(function(){
+        $j(this).closest('tr').fadeOut(function(){
           jQuery(this).remove();
+		  var checkTR = $j("#basket-buy .products").length > 0;
+		  if(checkTR)
+		  {
+			  findSubTotals2();  
+		  }
+		  else
+		  {
+	        $j("h1 span.grandtotal-price").text(0).formatCurrency({region: 'id-ID'});
+	        $j(".grandtotal-price",this).val(0);					  
+		  }
+		  
         });
         return false;
     });
+    
 });
+</script>
+<script type="text/javascript">
+
+function addProduct() {
+
+	var idProd = $j('.add-product').val();
+	$j('#basket-buy > tbody:first').append(
+	        '<tr class="products">'+
+	            '<td>'+
+	            	'<img src="<?php echo base_url()?>bracket/images/photos/media3.png" alt="">'+
+	            '</td>'+
+	            '<td>'+
+					'<label for="product-name">Product Name #1</label>'+
+				'</td>'+
+				'<td>'+idProd+'</td>'+
+	            '<td>'+
+	            	'<span for="qty" class="amount">1</span>'+
+	            	'<input data-l-zero="deny" type="text" value="1" class="edit-amount qty" />'+
+	            '</td>'+
+				'<td class="text-right">'+
+	            	'<span class="amount product-price">20000</span>'+
+	            	'<input type="text" class="edit-amount price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
+	            '</td>'+
+	            '<td class="text-right">'+
+	            	'<span class="amount subtotal-price">20000</span>'+
+					'<input type="text" class="edit-amount subtotal-price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
+	            '</td>'+
+	            '<td class="table-action">'+
+	              '<a href="#" class="delete-row"><i class="fa fa-times"></i></a>'+
+	            '</td>'+
+			'</tr>'
+	);
+
+	$j('.add-product').val('');
+	initBasket();
+	findSubTotals2();
+
+	return false;
+}
+
+function initBasket(){
+	$j('input.price').hide();
+	$j('input.qty').hide();	
+	$j('input.subtotal-price').hide();		
+	$j('input.grandtotal-price').hide();	
+
+	//format price on init
+	$j('span.subtotal-price').formatCurrency({region: 'id-ID'});		
+	$j('span.product-price').formatCurrency({region: 'id-ID'});		
+}
+
+function findSubTotals() {
+
+    var Subtotal = 0; 
+    var qty = 0; 
+    var price = 0;
+    var grandTotal = 0;
+
+
+    $j("tbody tr").each(function() {
+		/* get Qty and EA Price */
+		qty = Number($j(this).closest("tr").find("td input.qty").val());
+		price = Number($j(this).closest("tr").find("td input.price").val());
+		 // count subtotal per row 
+        Subtotal = qty * price;
+        $j(this).find("td span.subtotal-price").text(Subtotal).formatCurrency({region: 'id-ID'});
+        $j(this).find("td input.subtotal-price").val(Subtotal);
+
+        $j("td input.subtotal-price",this).each(function() {
+           grandTotal += Number($j(this).val());
+        }); 
+        
+        $j("h1 span.grandtotal-price").text(grandTotal).formatCurrency({region: 'id-ID'});
+        $j(".grandtotal-price",this).val(grandTotal);		
+    });
+	
+}
+
+function findSubTotals2() {
+
+    var Subtotal = 0; 
+    var qty = 0; 
+    var price = 0;
+    var grandTotal = 0;
+
+    $j("tbody tr").each(function() {
+
+        $j("td input.subtotal-price",this).each(function() {
+           grandTotal += Number($j(this).val());
+        }); 
+
+        $j("h1 span.grandtotal-price").text(grandTotal).formatCurrency({region: 'id-ID'});
+        $j(".grandtotal-price",this).val(grandTotal);		
+    });
+	
+}
 </script>
