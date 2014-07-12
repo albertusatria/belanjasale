@@ -120,10 +120,14 @@
         CI_ROOT = "<?=base_url() ?>";
 </script>
 <script type="text/javascript">
+
+
+
+
   jQuery(document).ready(function() {
 	var $j = jQuery.noConflict(); 
 	findSubTotals();
-	
+
 	$j('input.price').hide();
 	$j('input.qty').hide();	
 	$j('input.subtotal-price').hide();		
@@ -162,10 +166,10 @@
 
 	
     $j('tbody tr td span.amount').click(function () {
+
     	$j(this).hide();
         var editAmount = $j(this).next();
 		editAmount.show().focus();
-		
 	    $j(editAmount).focusout(function() {
 			var valueAmount = $j(this).val();
 
@@ -180,27 +184,55 @@
 	        
 	        $j(this).attr("value",$j(this).autoNumeric('get')).hide();
 	        $j(this).prev().text(valueAmount).show();
-	        			
-			findSubTotals();
+  			// console.log("edit amount : " + valueAmount);	        			
+
+			qty = Number($j(this).closest("tr").find("td input.qty").val());
+			price = Number($j(this).closest("tr").find("td input.price").val());
+			console.log(qty);
+			console.log(price);
+			Subtotal = qty * price;
+	        $j(this).closest("tr").find("td span.subtotal-price").text(Subtotal).formatCurrency({region: 'id-ID'});
+	        $j(this).closest("tr").find("td input.subtotal-price").val(Subtotal);
+
+			findSubTotals2();
 	    });
     });
-    
+
 	function findSubTotals() {
+
         var Subtotal = 0; 
         var qty = 0; 
         var price = 0;
         var grandTotal = 0;
+
 	    $j("tbody tr").each(function() {
-			
 			/* get Qty and EA Price */
-			qty = Number($j("td input.qty").val());
-			price = Number($j("td input.price").val());
-			console.log(qty);
-			console.log(price);
-			/* count subtotal per row */
+			qty = Number($j(this).closest("tr").find("td input.qty").val());
+			price = Number($j(this).closest("tr").find("td input.price").val());
+			 // count subtotal per row 
 	        Subtotal = qty * price;
 	        $j(this).find("td span.subtotal-price").text(Subtotal).formatCurrency({region: 'id-ID'});
 	        $j(this).find("td input.subtotal-price").val(Subtotal);
+
+	        $j("td input.subtotal-price",this).each(function() {
+	           grandTotal += Number($j(this).val());
+	        }); 
+	        
+	        $j("h1 span.grandtotal-price").text(grandTotal).formatCurrency({region: 'id-ID'});
+	        $j(".grandtotal-price",this).val(grandTotal);		
+	    });
+		
+	}
+    
+	function findSubTotals2() {
+
+        var Subtotal = 0; 
+        var qty = 0; 
+        var price = 0;
+        var grandTotal = 0;
+
+	    $j("tbody tr").each(function() {
+
 
 	        $j("td input.subtotal-price",this).each(function() {
 	           grandTotal += Number($j(this).val());
