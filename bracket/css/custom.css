@@ -9,7 +9,7 @@
 .text-center{
 	text-align: center;
 }
-.table, .menu-head-info, .button-head, .total-amount, .menu-head-barcode{
+.table, .menu-head-info, .button-head, .total-amount, .menu-head, .menu-search-product{
 	float: left;
 }
 
@@ -49,22 +49,31 @@ button .fa-plus{
 /* end panel heading with button add */
 
 
-/* POS */
+/* POS Inventory*/
 .panel-body.pos{
 	background: #fff;
 }
-.menu-head-barcode h2{
+.menu-head h2{
 	margin: 0;
 }
-.menu-head-barcode .col-sm-12{
+.menu-head .col-sm-12{
 	padding: 0;
 }
 #posBeli > .panel-heading{
 	min-height: 120px;
 }
-.menu-head-barcode{
+.menu-head{
 	width: 300px;
-	margin: 35px 0;
+	margin: 35px 0;	
+}
+.menu-search-product{
+	margin: 35px 10px;
+	min-height: 30px;
+	width: 50px;
+}
+.menu-search-product button{
+	font-size: 18px;
+	padding: 10px 12px;
 }
 .total-amount{
 	width: 450px;
@@ -99,7 +108,29 @@ button .fa-plus{
 .pos table .delete-row i{
 	color: #c7254e;
 }
-/* end POS */
+/* end POS Inventory */
+
+
+
+/* POS Sales */
+#posJual > .panel-heading{
+	min-height: 210px;
+}
+.menu-head.pos-sales{
+	margin: 0;
+	width: 500px;
+}
+.menu-head.pos-sales div{
+	margin-bottom: 10px;
+}
+.menu-head.pos-sales .nota-id, .menu-head.pos-sales .customer-id {
+	float: left;
+}
+.menu-head.pos-sales .nota-id{
+	margin-right: 25px;
+	margin-bottom: 40px;
+}
+/* end POS Sales */
 
 
 /* add member and edit member */
