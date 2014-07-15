@@ -8,7 +8,7 @@
         </div>
       <?php endif ; ?>     
       
-      <div class="panel panel-default" id="posBeli">
+      <div class="panel panel-default" id="barangInventoryPlus">
         <div class="panel-heading">
         	<div class="menu-head">
 				<div class="input-group col-sm-12">
@@ -34,7 +34,8 @@
 		                <th colspan="2">Product</th>
 		                <th>ID</th>
 		                <th>Qty</th>
-		                <th>Store in</th>		                
+		                <th>Store in</th>
+		                <th>Product Type</th>		                
 		                <th class="text-right">Price</th>
 		                <th class="text-right">Subtotal</th>
 		                <th></th>
@@ -60,14 +61,17 @@
 			                  <option>Rak</option>
 			                </select>
 -->
+		                </td>
+		                <td>
+		                	<span for="product-type" class="store-label">Bonus</span>
 		                </td>		                		                
 		                <td class="text-right">
-		                	<span class="amount product-price">20000</span>
-		                	<input type="text" class="edit-amount price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>
+		                	<span class="amount product-price">0</span>
+		                	<input type="text" class="edit-amount price" value="0" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>
 		                </td>
 		                <td class="text-right">
-		                	<span class="amount subtotal-price">20000</span>
-							<input type="text" class="edit-amount subtotal-price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>
+		                	<span class="amount subtotal-price">0</span>
+							<input type="text" class="edit-amount subtotal-price" value="0" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>
 		                </td>		                		                
 		                <td class="table-action">
 		                  <a href="#" class="delete-row"><i class="fa fa-times"></i></a>
@@ -92,14 +96,17 @@
 			                  <option>Rak</option>
 			                </select>
 -->
-		                </td>		                
+		                </td>
+		                <td>
+		                	<span for="product-type" class="store-label">Bonus</span>
+		                </td>		                     
 		                <td class="text-right">
-		                	<span class="amount product-price">20000</span>
-		                	<input type="text" class="edit-amount price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>
+		                	<span class="amount product-price">0</span>
+		                	<input type="text" class="edit-amount price" value="0" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>
 		                </td>
 		                <td class="text-right">
-		                	<span class="amount subtotal-price">20000</span>
-							<input type="text" class="edit-amount subtotal-price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>
+		                	<span class="amount subtotal-price">0</span>
+							<input type="text" class="edit-amount subtotal-price" value="0" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>
 		                </td>		                		                
 		                <td class="table-action">
 		                  <a href="#" class="delete-row"><i class="fa fa-times"></i></a>
@@ -354,13 +361,16 @@ function addProduct(id) {
 	                '<td>'+
 	                	'<span for="store-place" class="store-label">'+store+'</span>'+
 	                '</td>'+
+	                '<td>'+
+	                	'<span for="product-type" class="store-label">Bonus</span>'+
+	                '</td>'+
 					'<td class="text-right">'+
-		            	'<span class="amount product-price">20000</span>'+
-		            	'<input type="text" class="edit-amount price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
+		            	'<span class="amount product-price">0</span>'+
+		            	'<input type="text" class="edit-amount price" value="0" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
 		            '</td>'+
 		            '<td class="text-right">'+
-		            	'<span class="amount subtotal-price">20000</span>'+
-						'<input type="text" class="edit-amount subtotal-price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
+		            	'<span class="amount subtotal-price">0</span>'+
+						'<input type="text" class="edit-amount subtotal-price" value="0" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
 		            '</td>'+
 		            '<td class="table-action">'+
 		              '<a href="#" class="delete-row"><i class="fa fa-times"></i></a>'+
