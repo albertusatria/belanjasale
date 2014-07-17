@@ -19,14 +19,14 @@
       <div class="panel panel-default" id="studentPay">
         <div class="panel-heading">
         	<div class="menu-head-info">
-				<h3 class="panel-title">Member List and Setup</h3>
+				  <h3 class="panel-title">Member List and Setup</h3>
 			  	<p class="text-muted">Lorem Ipsum dolor sit amet....</p>		  
         	</div>
-			<div class="button-head pull-right">
-				<button class="btn btn-info" data-toggle="modal" data-target="#addMember">
-					<span class="fa fa-plus"></span>Add New Member
-				</button>
-			</div>        	
+    			<div class="button-head pull-right">
+    				<button class="btn btn-info" data-toggle="modal" data-target="#addMember">
+    					<span class="fa fa-plus"></span>Add New Member
+    				</button>
+    			</div>        	
         </div>
         <div class="panel-body">
             <div class="table-responsive">
