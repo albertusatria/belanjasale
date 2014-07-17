@@ -267,7 +267,6 @@ jQuery(document).ready(function() {
 	
 	});
   	
-  	
     $j('#discountedProduct').on('click','tbody tr td span.amount',function () {
     	$j(this).hide();
         var editAmount = $j(this).next();

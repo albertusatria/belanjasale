@@ -333,15 +333,17 @@
       { "sClass": "center", "mData": "DT_RowId", "bSortable": false, "bSearchable": false, "sWidth": "70px", 
         "mRender": function(data, type, full) {
           //return "<a href='#' class='delete-row' id='"+data+"'><i class='fa fa-trash-o'></i></a>";
-          return "<button class='delete-row' id='" + data + "'>Delete</button>";
+          return "<a href='"+CI_ROOT+"setting/member/detail/"+data+"'><i class='fa fa-pencil'></i></a>"+
+          "&nbsp;&nbsp;&nbsp;"+
+          "<a href='#' class='delete-row' id='" + data + "'><i class='fa fa-trash-o'></i></a>";
         }
       }
     ],
     "fnDrawCallback": function(oSettings) {
       // Initialize delete buttons
-      $("button.delete-row").button({
-        icons: { primary: "fa fa-trash-o" }, text: false
-      });
+      // $("button.delete-row").button({
+      //   icons: { primary: "fa fa-trash-o" }, text: false
+      // });
     }
   });
 

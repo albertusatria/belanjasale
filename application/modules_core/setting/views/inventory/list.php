@@ -11,6 +11,14 @@
         
     <div class="contentpanel">
 
+     <?php if ($message != null ) : ?>
+      <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <strong>Well done!</strong> <?php echo $message; ?>
+        </div>
+      <?php endif ; ?>
+      
+
       <div id="pesan" class="alert alert-success" style="display:none">
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
           <strong>Well done!</strong>
@@ -132,7 +140,7 @@
       { "sClass": "center", "mData": "DT_RowId", "bSortable": false, "bSearchable": false, "sWidth": "70px", 
         "mRender": function(data, type, full) {
           //return "<a href='#' class='delete-row' id='"+data+"'><i class='fa fa-trash-o'></i></a>";          
-          return "<a href='"+CI_ROOT+"setting/inventory/detail/"+<?php echo $barang->barcode; ?>+"'><i class='fa fa-pencil'></i></a>"+
+          return "<a href='"+CI_ROOT+"setting/inventory/detail/"+data+"'><i class='fa fa-pencil'></i></a>"+
           "&nbsp;&nbsp;&nbsp;"+
           "<a href='#' class='delete-row' id='" + data + "'><i class='fa fa-trash-o'></i></a>";
         }
