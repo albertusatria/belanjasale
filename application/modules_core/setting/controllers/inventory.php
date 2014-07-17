@@ -48,6 +48,23 @@ class Inventory extends Admin_base {
 		$this->load->view('dashboard/admin/template', $data);		
 	}
 
+	public function detail($barcode = "") {
+		// user_auth
+		$this->check_auth('U');
+		// menu
+		$data['menu'] = $this->menu();
+		// user detail
+		$data['user'] = $this->user;
+		// load template
+		$data['barang'] = $this->m_inventory->get_inventory($barcode);
+		$data['barang_parent'] = $this->m_inventory->get_inventory($data['barang']->barcode_parent);
+		$data['raks'] = $this->m_rak->get_rak();		
+		$data['message'] = $this->session->flashdata('message');
+		$data['title']		  = "Edit Member Pinaple SI";
+		$data['main_content'] = "setting/inventory/edit";
+		$this->load->view('dashboard/admin/template', $data);		
+	}
+
 	public function save_barcode() {
 
 		$now = date('Y-m-d');
@@ -95,6 +112,48 @@ class Inventory extends Admin_base {
 	    // echo json_encode($data);			
 	}	
 
+	public function update_barcode() {
+
+		$now = date('Y-m-d');
+
+		foreach ($_POST as $value) {
+			$barcode = $value['barcode'];
+
+			if ($value['barcode_parent'] == null || $value['barcode_parent'] == '')
+			{
+				//jika parent
+				$input = array(
+					'nama_barang' 	=> $value['nama_barang'],
+					'buffer_stok'	=> $value['buffer_stok'],
+					'satuan'		=> $value['satuan'],
+					'harga_jual'	=> $value['harga_jual'],
+					'berat'			=> $value['berat'],
+					'petugas_id'	=> $value['petugas_id'],
+					'du'			=> $now
+					);
+			}
+			else {
+				//jika anak
+				$input = array(
+					'nama_barang' 	=> $value['nama_barang'],
+					'buffer_stok'	=> $value['buffer_stok'],
+					'satuan'		=> $value['satuan'],
+					'harga_jual'	=> $value['harga_jual'],
+					'kode_rak'		=> $value['kode_rak'],
+					'berat'			=> $value['berat'],
+					'barcode_parent'=> $value['barcode_parent'],
+					'petugas_id'	=> $value['petugas_id'],
+					'du'			=> $now
+					);				
+			}
+		}
+		//jika
+		$data = $this->m_inventory->update_barcode($barcode,$input);
+		$this->session->set_flashdata('message', 'Data berhasil diubah');
+		// header('Content-Type: application/json');
+	    // echo json_encode($data);			
+	}	
+
 	public function get_barcode() {
 		$this->load->library('datatables');	
 		$result = $this->datatables->getData('inv_barang', array('','barcode', 
@@ -126,7 +185,7 @@ class Inventory extends Admin_base {
 
 	// page title
 	public function page_title() {
-		$data['page_title'] = 'Member';
+		$data['page_title'] = 'Inventory';
 		$this->session->set_userdata($data);
 	}
 }
