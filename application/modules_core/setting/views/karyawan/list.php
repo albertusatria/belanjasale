@@ -1,10 +1,10 @@
     <div class="pageheader">
-      <h2><i class="fa fa-users"></i>Members</h2>
+      <h2><i class="fa fa-users"></i>Karyawan</h2>
       <div class="breadcrumb-wrapper">
         <span class="label">You are here:</span>
         <ol class="breadcrumb">
           <li><a href="<?php echo base_url();?>dashboard">Pinaple SI</a></li>
-          <li class="active">Members</li>
+          <li class="active">Karyawan</li>
         </ol>
       </div>
     </div>
@@ -19,12 +19,12 @@
       <div class="panel panel-default" id="studentPay">
         <div class="panel-heading">
         	<div class="menu-head-info">
-				  <h3 class="panel-title">Member List and Setup</h3>
+				  <h3 class="panel-title">Daftar Karyawan</h3>
 			  	<p class="text-muted">Lorem Ipsum dolor sit amet....</p>		  
         	</div>
     			<div class="button-head pull-right">
     				<a href="<?php echo base_url()?>setting/member/add" class="btn btn-danger">
-    					&nbsp; <span class="fa fa-users"></span>&nbsp; Tambah Member &nbsp;
+    					&nbsp; <span class="fa fa-users"></span>&nbsp; Tambah Karyawan &nbsp;
     				</a>
     			</div>        	
         </div>
@@ -35,12 +35,9 @@
 		              <tr>
 		                <th style="width:5%">#</th>
                     <th style="width:10%">Identitas</th>
-		                <th style="width:25%">Nama</th>
-		                <th style="width:15%">Kota</th>
-		                <th style="width:10%">Telp Rumah</th>
-                    <th style="width:10%">Telp HP</th>
-                    <th style="width:10%">Sales</th>
-                    <th style="width:10%">Status</th>
+		                <th style="width:25%">Username</th>
+		                <th style="width:15%">Nama lengkap</th>
+		                <th style="width:10%">Status</th>
 		                <th style="width:5%"></th>
 		              </tr>
 		            </thead>

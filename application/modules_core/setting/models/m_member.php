@@ -21,6 +21,20 @@ class m_member extends CI_Model {
     	}
     }
 
+    function get_member($id) {
+        $this->db->select('*');
+        $this->db->where('pelanggan_id',$id);
+        $this->db->from('crm_pelanggan');
+        $query = $this->db->get();
+        // echo '<pre>'; print_r($query->result());die;
+        if ($query->num_rows > 0) {
+            return $query->row();
+        } else {
+            return array();
+        }
+    }
+
+
     function delete_member($id) {
         $this->db->where('pelanggan_id',$id);
         $delete = $this->db->delete('crm_pelanggan');
@@ -35,7 +49,18 @@ class m_member extends CI_Model {
     function add_member($input) {
         $insert = $this->db->insert('crm_pelanggan',$input);
         if ($insert) {
-            return true;
+            return $this->db->insert_id();
+        }
+        else {
+            return false;
+        }
+    }
+
+    function update_member($id,$input) {
+        $this->db->where('member_id',$id);
+        $update = $this->db->update('crm_pelanggan',$input);
+        if ($update) {
+            return $this->db->insert_id();
         }
         else {
             return false;
