@@ -175,6 +175,8 @@
 
       var c = confirm("Continue delete?");
       if(c) {
+        console.log("delete");
+        return false;
         var item = {};
         var number = 1;
         item[number] = {};
