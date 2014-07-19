@@ -8,14 +8,29 @@ class m_diskon extends CI_Model {
     }
 
     function get_daftar_barang_harga_khusus($id) {
-        $this->db->where('deleted','0');
-    	$query = $this->db->get('crm_diskon');
+        $this->db->select('crm_diskon.id,crm_diskon.barcode,inv_barang.nama_barang,crm_diskon.min_qty,crm_diskon.harga_jual,crm_diskon.deleted,inv_barang.harga_jual as harga_normal');
+        $this->db->where('crm_diskon.deleted','0');
+    	$this->db->from('crm_diskon');
+        $this->db->join('inv_barang','crm_diskon.barcode = inv_barang.barcode');
+        $query = $this->db->get();
+
     	// echo '<pre>'; print_r($query->result());die;
     	if ($query->num_rows > 0) {
     		return $query->result();
     	} else {
     		return array();
     	}
+    }
+
+
+    function get_detail_barang($id) {
+        $this->db->where('barcode',$id);
+        $query = $this->db->get('inv_barang');
+        if ($query->num_rows > 0) {
+            return $query->result_array();
+        } else {
+            return array();
+        }
     }
 
 
@@ -27,6 +42,26 @@ class m_diskon extends CI_Model {
         }
         else {
             return false;
+        }
+    }
+
+    function save_barang_diskon($input) {
+        $ins = $this->db->insert('crm_diskon',$input);
+        if ($ins) {
+            return $this->db->insert_id();
+        } else {
+            return false;
+        }
+    }
+
+
+    function get_barang_no_diskon($id) {
+        $sql = "SELECT * FROM inv_barang i WHERE i.barcode NOT IN (SELECT d.barcode FROM crm_diskon d WHERE d.pelanggan_id = '$id') ";
+        $query = $this->db->query($sql);
+        if ($query->num_rows > 0) {
+            return $query->result_array();
+        } else {
+            return array();
         }
     }
 
