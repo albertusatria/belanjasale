@@ -47,6 +47,9 @@
 		                                        <td><?php echo $result['user_name']; ?></td>
 		                                        <td><?php echo $result['user_st']; ?></td>
 		                                        <td>
+                                                 <a href="<?php echo base_url(); ?>setting/user/edit/<?php echo $result['user_id']; ?>">
+                                                  <i class="fa fa-pencil"></i></a>
+                                                  &nbsp;&nbsp;
 	                                               <a href="<?php echo base_url(); ?>setting/user/edit_profile/<?php echo $result['user_id']; ?>">
 	                                                <i class="fa fa-file"></i></a>
 	                                                &nbsp;&nbsp;

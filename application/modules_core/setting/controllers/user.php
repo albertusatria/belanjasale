@@ -377,4 +377,91 @@ class User extends Admin_base {
 		$data['page_title'] = 'User';
 		$this->session->set_userdata($data);
 	}
+
+	public function edit($user_id = "") {
+		// user_auth
+		$this->check_auth('U');
+
+		$data['message'] = $this->session->flashdata('message');
+		// menu
+		$data['menu'] = $this->menu();
+		// user detail
+		$data['user'] = $this->user;
+		// get user list
+		$data['r_user'] = $this->m_user->get_user_by_id($user_id);
+		$data['r_my_user'] = $this->m_user->get_my_user_by_id($user_id);
+
+		// load template
+		$data['title']	= "Edit User PinapleSAS";
+		$data['main_content'] = "setting/user/edit";
+		$this->load->view('dashboard/admin/template', $data);
+	}
+
+	public function update_profile() {
+        $this->load->helper('date');
+        $datestring = '%Y-%m-%d %h:%i:%s';
+        $time = time();
+        $now = mdate($datestring, $time);
+		// echo '<pre>'; print_r($input); die;
+		foreach ($_POST as $value) {
+			//add here
+			$input = array(
+				'user_id' => $value['user_id'],
+   		    	'ktp' => $value['ktp'],
+		    	'user_full_name' => $value['user_full_name'],
+		    	'user_address' => $value['user_address'],
+		   	 	'user_birthday' => $value['user_birthday'],
+		    	'user_number' => $value['user_number'],
+		    	'tgl_diangkat' => $value['tgl_diangkat'],
+		    	'tgl_berhenti' => $value['tgl_berhenti'],
+		    	'status' => $value['status'],
+				'du' => $now
+				);
+		}
+		// echo '<pre>'; print_r($input); die;
+		$data = $this->m_user->update_user($input);
+		header('Content-Type: application/json');
+		echo json_encode($data);			
+	}
+
+	public function update_account() {
+        $this->load->helper('date');
+        $datestring = '%Y-%m-%d %h:%i:%s';
+        $time = time();
+        $now = mdate($datestring, $time);
+		// echo '<pre>'; print_r($input); die;
+		foreach ($_POST as $value) {
+			//add here
+			$input = array(
+				'user_id' => $value['user_id'],
+   		    	'user_email' => $value['user_email'],
+   		    	'user_st' => $value['user_st'],
+				'du' => $now
+				);
+		}
+		// echo '<pre>'; print_r($input); die;
+		$data = $this->m_user->update_my_user($input);
+		header('Content-Type: application/json');
+		echo json_encode($data);			
+	}
+
+	public function update_password() {
+        $this->load->helper('date');
+        $datestring = '%Y-%m-%d %h:%i:%s';
+        $time = time();
+        $now = mdate($datestring, $time);
+		// echo '<pre>'; print_r($input); die;
+		foreach ($_POST as $value) {
+			//add here
+			$input = array(
+				'user_id' => $value['user_id'],
+   		    	'user_pass' => $value['user_pass'],
+				'du' => $now
+				);
+		}
+		// echo '<pre>'; print_r($input); die;
+		$data = $this->m_user->update_my_user($input);
+		header('Content-Type: application/json');
+		echo json_encode($data);			
+	}
 }
