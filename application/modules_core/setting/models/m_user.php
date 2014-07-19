@@ -12,6 +12,22 @@ class m_user extends CI_Model {
         return $this->db->insert_id();
     }
 
+    function get_user_by_id($id) {
+        return $this->db->get_where('users',array('user_id'=>$id))->row();
+    }
+
+    function update_user($params) {
+        $this->db->update('users',$params,array('user_id'=>$params['user_id']));
+    }
+
+     function get_my_user_by_id($id) {
+        return $this->db->get_where('my_user',array('user_id'=>$id))->row();
+    }
+
+    function update_my_user($params) {
+        $this->db->update('my_user',$params,array('user_id'=>$params['user_id']));
+    }
+
     // get user list
     function get_all_user() {
         $sql = "SELECT a.user_id, a.user_full_name, a.user_address, a.user_birthday, a.user_number, a.user_picture, b.user_name, b.user_pass, b.user_email, b.user_st
