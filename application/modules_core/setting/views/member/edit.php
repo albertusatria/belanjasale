@@ -14,7 +14,7 @@
 	        <div class="tab-content">
 	          <div class="tab-pane active" id="profileMember">	            
 				  	<div class="pane-header">
-				  		<h5 class="text-primary">Edit Barang</h5>
+			  		<h5 class="text-primary"><span id="namaatas">Edit Member : <?php echo $member->nama_lengkap ?></span></h5>
 				  	</div>
 
 			     <?php if ($message != null ) : ?>
@@ -155,11 +155,17 @@
 			          <strong>Well done!</strong>
 			      </div>
 
-
+			      <div>
+		              <a href="#" id="tambahbarangdiskon" class="btn btn-danger" data-toggle="modal" data-target="#addDiscountProduct">
+		                <span class="fa fa-plus"></span> Tambah Harga Diskon &nbsp; 
+		              </a>
+			      </div>
+				<br>
 			  	<div class="pane-content">
 				  	<div class="pane-header-content">
 				  		<a href="#">Discounted Products</a>
-				  	</div>				  			  	
+				  	</div>
+
 			        <div class="panel-body discounted-products">
 			            <div class="table-responsive">
 							<table class="table table-striped mb30 " id="basket-buy">
@@ -168,7 +174,8 @@
 					                <th>Barcode</th>
 					                <th>Nama Barang</th>
 					                <th>Minimal Quantity</th>
-					                <th class="text-right">Discounted Price</th>
+					                <th>Harga Normal</th>
+					                <th class="text-right">Harga Member</th>
 					                <th></th>
 					              </tr>
 					            </thead>
@@ -180,22 +187,28 @@
 
 						              <tr class="products">
 						                <td>
-						                	<label for="product-name"><?php echo $diskon_produks[$i]->barcode++ ; ?></label>
-						                	<input type="hidden" value="<?php echo $diskon_produks[$i]->id++ ; ?>" class="noedit iddiskon"/>
+						                	<label for="product-name"><?php echo $diskon_produks[$i]->barcode; ?></label>
+						                	<input type="hidden" value="<?php echo $diskon_produks[$i]->id; ?>" class="noedit iddiskon"/>
 						                </td>
 						                <td>
-						                	<label for="product-name"><?php echo $diskon_produks[$i]->barcode++ ; ?></label>
+						                	<label for="product-name"><?php echo $diskon_produks[$i]->nama_barang; ?></label>
 						                </td>						                
 						                <td>
-						                	<span for="qty" class="amount"><?php echo $diskon_produks[$i]->min_qty++ ; ?></span>
-						                	<input data-i-zero="deny" type="text" value="<?php echo $diskon_produks[$i]->min_qty++ ; ?>" class="edit-amount qty"/>
+						                	<span for="qty" class="amount qty"><?php echo $diskon_produks[$i]->min_qty; ?></span>
+						                	<input data-i-zero="deny" type="text" value="<?php echo $diskon_produks[$i]->min_qty; ?>" class="edit-amount qty"/>
+						                </td>
+						                <td>
+						                	<span for="qty" class="product-price"><?php echo $diskon_produks[$i]->harga_normal; ?></span>
 						                </td>
 						                <td class="text-right">
-						                	<span class="amount price"><?php echo $diskon_produks[$i]->harga_jual++ ; ?></span>
-						                	<input type="text" class="edit-amount price" value="<?php echo $diskon_produks[$i]->harga_jual++ ; ?>" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>
+						                	<span class="amount price"><?php echo $diskon_produks[$i]->harga_jual; ?></span>
+						                	<input type="text" class="edit-amount price" value="<?php echo $diskon_produks[$i]->harga_jual; ?>" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>
 						                </td>
 						                <td class="table-action">
+						                  <a href="#" class="update-row"><i class="fa fa-pencil"></i></a>
 						                  <a href="#" class="delete-row"><i class="fa fa-times"></i></a>
+						                  <a href="#" class="save-row" style="display:none;"><i class="fa fa-save"></i></a>
+						                  <a href="#" class="cancel-row" style="display:none;"><i class="fa fa-undo"></i></a>
 						                </td>
 						              </tr>
 
@@ -222,6 +235,72 @@
         </div>	  
 	  </div>        
     </div><!-- contentpanel -->
+
+
+<!-- tambah barang -->
+<div class="modal fade" id="addDiscountProduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+  <form id="addBarangDiskonDetail" action="" class="form-horizontal" >
+
+     <input type="hidden" id="tipes" name="tipess" value="">
+     <input type="hidden" id="adduserid" name="user_id" value="<?php echo $user['user_id'] ?>">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title" id="myModalLabel">Tambah Barang Diskon</h4>
+      </div>
+      <div class="modal-body">
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">ID Barang<span class="asterisk">*</span></label>
+              <!-- query saja dari khusus atau tidaknya -->
+              <div class="col-sm-5">
+                <select class="form-control input-sm" name="id" id="addBarang" data-placeholder="Pilih Produk" required>
+                  <option value="">Pilih Produk</option>
+                </select>   
+              </div>
+            </div>     
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Nama Produk<span class="asterisk">*</span></label>
+              <div class="col-sm-8">
+                <input type="text" name="nama" id="addNama" class="form-control" placeholder="Nama Barang" required disabled>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Minimum Qty <span class="asterisk">*</span></label>
+              <div class="col-sm-8">
+                <input type="number" name="minqty" id="addMinQty" class="form-control" placeholder="Rp ... " required disabled>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Harga Normal <span class="asterisk">*</span></label>
+              <div class="col-sm-8">
+                <input type="number" name="harganormal" id="addHargaNormal" class="form-control" placeholder="Rp ... " required disabled>
+              </div>
+            </div>  
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Harga Member <span class="asterisk">*</span></label>
+              <div class="col-sm-8">
+                <input type="number" name="hargadiskon" id="addHargaDiskon" class="form-control" placeholder="Rp ... " required disabled>
+              </div>
+            </div>  
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" type="reset" data-dismiss="modal">Cancel</button>
+        <a href="#" class="btn btn-success" id="saveDetail">Save Pembelian</a>
+      </div>
+    </form>  
+    </div><!-- modal-content -->
+  </div><!-- modal-dialog -->
+</div>
+<!-- end add Member -->
     
 <script src="<?php echo base_url();?>bracket/js/jquery-1.10.2.min.js"></script>
 <script src="<?php echo base_url();?>bracket/js/jquery-migrate-1.2.1.min.js"></script>
@@ -254,51 +333,61 @@ jQuery(document).ready(function() {
   	initProfileField();
 	initasal();
 
+	$j('.edit-amount').numeric();
+
 	//format numeric on edit
-	$j('.edit-amount.price').blur(function() {
-		$j(this).autoNumeric('init');
-	})
-	.keyup(function(e) {
-	var e = window.event || e;
-	var keyUnicode = e.charCode || e.keyCode;
-	if (e !== undefined) {
-		switch (keyUnicode) {
-			case 16: break; // Shift
-			case 17: break; // Ctrl
-			case 18: break; // Alt
-			case 27: this.value = ''; break; // Esc: clear entry
-			case 35: break; // End
-			case 36: break; // Home
-			case 37: break; // cursor left
-			case 38: break; // cursor up
-			case 39: break; // cursor right
-			case 40: break; // cursor down
-			case 78: break; // N (Opera 9.63+ maps the "." from the number key section to the "N" key too!) (See: http://unixpapa.com/js/key.html search for ". Del")
-			case 110: break; // . number block (Opera 9.63+ maps the "." from the number block to the "N" key (78) !!!)
-			case 190: break; // .
-			default: $j(this).autoNumeric('init');
-		}
-	}
+	// $j('.edit-amount.price').blur(function() {
+	// 	$j(this).autoNumeric('init');
+	// })
+	// .keyup(function(e) {
+	// var e = window.event || e;
+	// var keyUnicode = e.charCode || e.keyCode;
+	// if (e !== undefined) {
+	// 	switch (keyUnicode) {
+	// 		case 16: break; // Shift
+	// 		case 17: break; // Ctrl
+	// 		case 18: break; // Alt
+	// 		case 27: this.value = ''; break; // Esc: clear entry
+	// 		case 35: break; // End
+	// 		case 36: break; // Home
+	// 		case 37: break; // cursor left
+	// 		case 38: break; // cursor up
+	// 		case 39: break; // cursor right
+	// 		case 40: break; // cursor down
+	// 		case 78: break; // N (Opera 9.63+ maps the "." from the number key section to the "N" key too!) (See: http://unixpapa.com/js/key.html search for ". Del")
+	// 		case 110: break; // . number block (Opera 9.63+ maps the "." from the number block to the "N" key (78) !!!)
+	// 		case 190: break; // .
+	// 		default: $j(this).autoNumeric('init');
+	// 	}
+	// }
 	
-	});
+	// });
   	
-    $j('#discountedProduct').on('click','tbody tr td span.amount',function () {
-    	$j(this).hide();
-        var editAmount = $j(this).next();
-		editAmount.show().focus();
-	    $j(editAmount).focusout(function() {
-			var valueAmount = $j(this).val();
+  //   $j('#discountedProduct').on('click','tbody tr td span.amount',function () {
+  //   	console.log('ceklik');
+  //   	$j(this).hide();
+  //       var editAmount = $j(this).next();
+		// editAmount.show().focus();
+		// //tampilkan button samping
+	 //    $j(editAmount).focusout(function() {
 
-			if(valueAmount == "")
-				valueAmount = 0;
+		// 	var valueAmount = $j(this).val();
+
+		// 	console.log(valueAmount);
+
+		// 	if(valueAmount == "")
+		// 		valueAmount = 0;
 				
-			editAmount.attr("value",valueAmount).hide();
-	        $j(this).prev().text(valueAmount).show();
+		// 	editAmount.attr("value",valueAmount).hide();
+	 //        $j(this).prev().text(valueAmount).show();
 
-	    });
-    });
+	 //    });
+
+	 //    //update
+  //   });
     
 	  // Basic Form
+
 	  jQuery("#regisMember").validate({
 	    highlight: function(element) {
 	      jQuery(element).closest('.form-group').removeClass('has-success').addClass('has-error');
@@ -363,7 +452,7 @@ jQuery(document).ready(function() {
 		$j('input.qty').numeric();
 		
 		//format price on init
-		$j('span.price').formatCurrency({region: 'id-ID'});		
+		//$j('span.price').formatCurrency({region: 'id-ID'});		
 	}
 
 	function initProfileField(){	
@@ -679,6 +768,288 @@ jQuery(document).ready(function() {
       }
     });	
 
+
+    //update
+    jQuery('a.update-row').live("click", function(e){
+
+        //tampilkan texbox
+    	$j(this).closest('tr').find('td span.qty').hide();
+        var min_qty = $j(this).closest('tr').find('td input.qty');
+		min_qty.val($j(this).closest('tr').find('td span.qty').text());
+		min_qty.show().focus();
+
+    	$j(this).closest('tr').find('td span.price').hide();
+        var harga_jual = $j(this).closest('tr').find('td input.price');
+		harga_jual.val($j(this).closest('tr').find('td span.price').text());
+		harga_jual.show().focus();
+
+    	$j(this).closest('tr').find('td .update-row').hide();
+    	$j(this).closest('tr').find('td .save-row').show();
+    	$j(this).closest('tr').find('td .cancel-row').show();
+    	$j(this).closest('tr').find('td .delete-row').hide();    	
+
+    });	    
+
+    //update
+    jQuery('a.save-row').live("click", function(e){
+	    var spanQty = $j(this).closest('tr').find('td span.qty');
+	    var spanHarga = $j(this).closest('tr').find('td span.price');
+	    var inputQty = $j(this).closest('tr').find('td input.qty');
+	    var inputHarga = $j(this).closest('tr').find('td input.price');
+
+	    var btnUpdate = $j(this).closest('tr').find('td .update-row');
+	    var btnSave = $j(this).closest('tr').find('td .save-row');
+	    var btnCancel = $j(this).closest('tr').find('td .cancel-row');
+	    var btnDelete = $j(this).closest('tr').find('td .delete-row');
+	    // console.log(spanQty.text());
+    	// return false;
+
+        var min_qty = inputQty.val();
+        var harga_jual = inputHarga.val();
+
+        var item = {};
+        var number = 1;
+        item[number] = {};
+        item[number]['id'] = $j(this).closest('tr').find('td input.iddiskon').val();
+        item[number]['min_qty'] = min_qty;
+        item[number]['harga_jual'] = harga_jual;
+
+        //update span
+        jQuery.ajax({
+        type: "POST",
+        url: CI_ROOT+"setting/member/update_diskon_member",
+        data: item,
+         success: function(data)
+         {
+         	//update span
+	        spanQty.text(min_qty);
+	       	spanHarga.text(harga_jual);
+
+	        inputQty.hide();
+	    	spanQty.show();
+	        inputHarga.hide();
+	    	spanHarga.show();
+
+			//tampilkan tombol    	
+	    	btnUpdate.show();
+	    	btnSave.hide();
+	    	btnCancel.hide();
+	    	btnDelete.show();    
+
+	    	//tampilkan pesan
+            jQuery('#pesan2').removeClass('alert-danger').addClass('alert-success');            
+            jQuery('#pesan2').find('strong').text('Data berhasil diupdate');              
+            jQuery('#pesan2').show();
+
+         },
+         error: function (data)
+         {  
+
+	        inputQty.hide();
+	    	spanQty.show();
+	        inputHarga.hide();
+	    	spanQty.show();		
+
+	    	btnUpdate.show();
+	    	btnSave.hide();
+	    	btnCancel.hide();
+	    	btnDelete.show();   
+
+            jQuery('#pesan2').removeClass('alert-success').addClass('alert-danger');          
+            jQuery('#pesan2').find('strong').text('Terjadi kegagalan dalam update');              
+            jQuery('#pesan2').show();
+         }
+
+        });  
+	
+    });	  
+
+
+    //update
+    jQuery('a.cancel-row').live("click", function(e){
+
+    	//hide input
+        //tampilkan texbox
+        $j(this).closest('tr').find('td input.qty').hide();
+    	$j(this).closest('tr').find('td span.qty').show();
+        $j(this).closest('tr').find('td input.price').hide();
+    	$j(this).closest('tr').find('td span.price').show();
+
+    	$j(this).closest('tr').find('td .update-row').show();
+    	$j(this).closest('tr').find('td .save-row').hide();
+    	$j(this).closest('tr').find('td .cancel-row').hide();
+    	$j(this).closest('tr').find('td .delete-row').show();
+    });	  
+
+	function formatNumber(number)
+	{
+	    number = number.toFixed(2) + '';
+	    x = number.split('.');
+	    x1 = x[0];
+	    x2 = x.length > 1 ? '.' + x[1] : '';
+	    var rgx = /(\d+)(\d{3})/;
+	    while (rgx.test(x1)) {
+	        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	    }
+	    return x1 + x2;
+	}
+
+	jQuery("#tambahbarangdiskon").click(function(){
+
+
+        var item = {};
+        var number = 1;
+        item[number] = {};
+        item[number]['id'] = $j("#addid").val();
+		console.log('berhasil '+item[1]['id']);
+		// return false;
+
+        //update span
+        jQuery.ajax({
+        type: "POST",
+        url: CI_ROOT+"setting/member/get_barang_no_diskon",
+        data: item,
+         success: function(data)
+         {
+        	jQuery('#addBarang').find("option").remove();
+            jQuery('#addBarang').append('<option value="">Pilih Produk</option>');
+            var id ; var nama; var harganormal;
+	            for (index = 0; index < data.length; ++index) {
+	                id = data[index]['barcode'];
+	                nama = data[index]['nama_barang'];
+	                harganormal = data[index]['harga_jual'];
+	                jQuery('#addBarang').append('<option value="'+id+'">'+nama+'</option>');
+	            } 
+				jQuery('#addMinQty').val("");
+				jQuery('#addNama').val("");
+				jQuery('#addHargaNormal').val("");		            
+				jQuery('#addHargaDiskon').val("");		        
+         },
+         error: function (data)
+         {  
+
+         }
+
+        });  		
+	});
+
+	jQuery("#addBarang").change(function(){
+		// console.log(jQuery(this).val());
+		if (jQuery(this).val() != "") {
+			jQuery('#addMinQty').removeAttr("disabled");
+			jQuery('#addHargaDiskon').removeAttr("disabled");			
+
+
+	        var item = {};
+	        var number = 1;
+	        item[number] = {};
+
+	        item[number]['id'] = $j("#addBarang").val();
+
+
+	        jQuery.ajax({
+  	         type: "POST",
+	         url: CI_ROOT+"setting/member/get_detail_barang",
+	         data: item,
+	         success: function(data)
+	         {
+	         	console.log(data);
+		            var id ; var nama; var harganormal;
+		            for (index = 0; index < data.length; ++index) {
+		                id = data[index]['barcode'];
+		                nama = data[index]['nama_barang'];
+		                harganormal = data[index]['harga_jual'];
+		            } 
+				jQuery('#addMinQty').val(1);
+				jQuery('#addNama').val(nama);
+				jQuery('#addHargaNormal').val(harganormal);		            
+				jQuery('#addHargaDiskon').val(harganormal);		            
+	         },
+	         error: function (data)
+	         {  
+	         	console.log(data);
+	         }
+
+	        });  	
+
+
+		}
+		else {
+			jQuery('#addMinQty').attr("disabled","");
+			jQuery('#addHargaDiskon').attr("disabled","");						
+		}
+	});
+
+	jQuery("#saveDetail").click(function(){
+		var valid = jQuery("#addBarangDiskonDetail").valid();
+		if (!valid) {
+			console.log('gagal');
+		}
+		else {
+			console.log('berhasil');
+
+	        var item = {};
+	        var number = 1;
+	        item[number] = {};
+
+	        item[number]['barcode'] = $j("#addBarang").val();
+	        item[number]['pelanggan_id'] = $j("#addid").val();
+	        item[number]['min_qty'] = $j("#addMinQty").val();
+	        item[number]['harga_jual'] = $j("#addHargaDiskon").val();
+	        item[number]['petugas_id'] = $j("#adduserid").val();
+
+	        jQuery.ajax({
+  	         type: "POST",
+	         url: CI_ROOT+"setting/member/save_barang_diskon",
+	         data: item,
+	         success: function(data)
+	         {
+
+			      $j('#basket-buy > tbody:first').append(
+		              '<tr class="products">'+
+			                '<td>'+
+			                	'<label for="product-name">'+ $j("#addBarang").val() +'</label>'+
+			                	'<input type="hidden" value="'+ data +'" class="noedit iddiskon"/>'+
+			                '</td>'+
+			                '<td>'+
+			                	'<label for="product-name">'+ $j("#addNama").val() +'</label>'+
+			                '</td>'+						                
+			                '<td>'+
+			                	'<span for="qty" class="amount qty">'+ $j("#addMinQty").val() +'</span>'+
+			                	'<input data-i-zero="deny" type="text" value="'+ $j("#addMinQty").val() +'" class="edit-amount qty"/>'+
+			                '</td>'+
+			                '<td>'+
+			                	'<span for="qty" class="product-price">'+ $j("#addHargaNormal").val() +'</span>'+
+			                '</td>'+
+			                '<td class="text-right">'+
+			                	'<span class="amount price">'+ $j("#addHargaDiskon").val() +'</span>'+
+			                	'<input type="text" class="edit-amount price" value="'+ $j("#addHargaDiskon").val() +'" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
+			                '</td>'+
+			                '<td class="table-action">'+
+			                  '<a href="#" class="update-row"><i class="fa fa-pencil"></i></a>'+
+			                  '<a href="#" class="delete-row"><i class="fa fa-times"></i></a>'+
+			                  '<a href="#" class="save-row" style="display:none;"><i class="fa fa-save"></i></a>'+
+			                  '<a href="#" class="cancel-row" style="display:none;"><i class="fa fa-undo"></i></a>'+
+			                '</td>'+
+			              '</tr>'
+				);
+		        sembunyi();
+				$j('#addDiscountProduct').modal('hide');            
+	         },
+	         error: function (data)
+	         {  
+	         	console.log(data);
+	         }
+
+	        });  	
+
+		}	
+	});
+
+	function sembunyi() {
+	  jQuery('input.qty').hide(); 
+	  jQuery('input.price').hide();    
+	}
 
 });
 </script>

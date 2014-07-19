@@ -52,29 +52,6 @@
 		            </thead>
 		            <tbody>
                     <td colspan="6" class="dataTables_empty">Loading data...</td>
-                    <!-- 
-                    <?php if(isset($barangs)) : foreach ($barangs as $barang) : ?>
-                        <tr>
-                            <td><?php echo $barang->barcode; ?></td>
-                            <td><?php echo $barang->nama_barang; ?></td>
-                            <td><?php echo $barang->stok_total; ?></td>
-                            <td><?php echo $barang->harga_jual; ?></td>
-                            <td>
-                              <?php if ($barang->deleted == '1') : ?>
-                                <span class="text text-danger">DELETED</span>
-                              <?php endif; ?>
-                              <?php if ($barang->deleted == '0') : ?>
-                                <span class="text text-info">ACTIVE</span>
-                              <?php endif; ?>                            
-                            </td>
-                            <td class="table-action">
-                                <a href="<?php echo base_url(); ?>setting/inventory/detail/<?php echo $barang->barcode; ?>"><i class="fa fa-pencil"></i></a>
-                                <a href="<?php echo base_url(); ?>setting/inventory/delete/<?php echo $barang->barcode; ?>" class="delete-row"><i class="fa fa-trash-o"></i></a>
-                            </td>
-                        </tr>
-                    <?php endforeach ; ?>
-                    <?php endif; ?>                    
-                    -->
 		            </tbody>
 		          </table>            
             </div><!-- table-responsive -->
@@ -175,8 +152,6 @@
 
       var c = confirm("Continue delete?");
       if(c) {
-        console.log("delete");
-        return false;
         var item = {};
         var number = 1;
         item[number] = {};
@@ -191,10 +166,7 @@
          success: function(data)
          {
             productTable.fnDraw(true);
-            // jQuery('.clicked').closest('tr').fadeOut(function(){
-            //      jQuery(this).remove();
-            // });
-            // jQuery('.delete-row').removeClass('clicked');
+
             jQuery('#pesan').removeClass('alert-danger').addClass('alert-success');            
             jQuery('#pesan').find('strong').text('Berhasil dihapus');              
             jQuery('#pesan').show();

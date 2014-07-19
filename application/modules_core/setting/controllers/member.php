@@ -164,7 +164,6 @@ class Member extends Admin_base {
 
 
 	public function delete_diskon_member() {
-		$barcode = '';
 		foreach ($_POST as $value) {
 			$id = $value['id'];
 			$input = array(
@@ -176,6 +175,56 @@ class Member extends Admin_base {
 	    echo json_encode($data);			
 	}
 
+	public function update_diskon_member() {
+		foreach ($_POST as $value) {
+			$id = $value['id'];
+			$input = array(
+				'min_qty' => $value['min_qty'],
+				'harga_jual' => $value['harga_jual'],
+				);
+		}
+		$data = $this->m_diskon->delete_diskon_member($id,$input);
+		header('Content-Type: application/json');
+	    echo json_encode($data);			
+	}
+
+	public function get_barang_no_diskon() {
+		//ambil barang yang ga da di tabel
+		foreach ($_POST as $value) {
+			$id = $value['id'];
+		}
+		$data = $this->m_diskon->get_barang_no_diskon($id);
+		header('Content-Type: application/json');
+	    echo json_encode($data);
+	}
+
+	public function get_detail_barang() {
+		//ambil barang yang ga da di tabel
+		foreach ($_POST as $value) {
+			$id = $value['id'];
+		}
+		$data = $this->m_diskon->get_detail_barang($id);
+		header('Content-Type: application/json');
+	    echo json_encode($data);
+	}
+
+	public function save_barang_diskon() {
+		//ambil barang yang ga da di tabel
+
+		foreach ($_POST as $value) {
+			$input = array(
+				'barcode' => $value['barcode'],
+				'pelanggan_id' => $value['pelanggan_id'],
+				'min_qty' => $value['min_qty'],
+				'harga_jual' => $value['harga_jual'],
+				'petugas_id' => $value['petugas_id'],
+				'tgl_diaktifkan' => date('Y-m-d')
+				);
+		}
+		$data = $this->m_diskon->save_barang_diskon($input);
+		header('Content-Type: application/json');
+	    echo json_encode($data);
+	}
 
 	// page title
 	public function page_title() {
