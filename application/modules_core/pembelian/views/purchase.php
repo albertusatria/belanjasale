@@ -112,6 +112,7 @@
 
 <script type="text/javascript">
         CI_ROOT = "<?=base_url() ?>";
+        var editMode = false;
 </script>
 <script type="text/javascript">
 var $j = jQuery.noConflict(); 
@@ -279,10 +280,8 @@ jQuery(document).ready(function() {
 	});
 
     $j('#basket-buy').on('click','tbody tr td span.expired',function () {
-    	var cekEdit = $j('.menu-head').find('input.active');
-    	$j(this).closest('tr:last-child');
-		if(!cekEdit)
-		{
+    	if(editMode)
+    	{
 			$j(this).hide();
 	        var editExp = $j(this).next();
 			editExp.show().focus();		
@@ -332,18 +331,12 @@ jQuery(document).ready(function() {
 				$j(this).attr("value",currVal).hide();
 				$j(this).prev().text(currVal).show();
 			});	
-		}	    
-		else
-		{
-			alert('Mohon selesaikan penginputan barang terlebih dahulu.');	
-			$j('.menu-head').find('input.active').focus();
-			return false;
 		}
     });	
-    
+
     $j('#basket-buy').on('click','tbody tr td span.amount',function () {
-		if(editMode)
-		{
+    	if(editMode)
+    	{
 			qty = Number($j(this).closest("tr").find("td input.qty").val());
 			price = Number($j(this).closest("tr").find("td input.price").val());
 			console.log('qty awal: '+qty);
@@ -386,12 +379,7 @@ jQuery(document).ready(function() {
 				
 				findSubTotals2();
 				});
-	    }
-	    else{
-	    	alert('Mohon selesaikan penginputan barang terlebih dahulu.');
-	    	$j('.menu-head').find('input.active').focus();
-		    return false;
-	    }
+		}
     });
 
 /*
@@ -502,16 +490,34 @@ jQuery(document).ready(function() {
 		         }
 
 		        }); 
-
-
 		}
 	});
+    
+    $j('#basket-buy').on('click','tbody tr:last td span.amount',function () {
+		if(editMode == false)
+		{
+		    alert('Mohon selesaikan proses input barang!');
+		    $j('.menu-head').find('input.active').focus();
+		    return false;			
+		}
+    });     
+    
+    $j('#basket-buy').on('click','tbody tr:last td span.expired',function () {
+		if(editMode == false)
+		{
+		    alert('Mohon selesaikan proses input barang!');
+		    $j('.menu-head').find('input.active').focus();
+		    return false;			
+		}
+    }); 
+    
     
 });
 </script>
 <script type="text/javascript">
 
 function addProduct(id) {
+  editMode = false;
   var item = {};
   var num = 1;
   item[num] = {};
@@ -825,7 +831,7 @@ function addHargabeli(harga) {
 	jQuery("#span_id").show();
 
 	jQuery('.menu-head').find('input').removeClass('active');
-	
+	editMode = true;
 	$j('.add-product').val("");
 	$j('.add-product').focus();
 }
