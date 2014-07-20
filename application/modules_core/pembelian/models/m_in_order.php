@@ -103,8 +103,8 @@ class m_in_order extends CI_Model {
         }
     }
 
-    public function update_inv_persediaan($input) {
-        $update = $this->db->update('inv_persediaan',$input,array('barcode'=>$params['barcode'],'tgl_expired'=>$params['tgl_expired']));
+    public function update_inv_persediaan($params) {
+        $update = $this->db->update('inv_persediaan',$params,array('barcode'=>$params['barcode'],'tgl_expired'=>$params['tgl_expired']));
         if ($update) {
             return true;
         }
@@ -118,7 +118,7 @@ class m_in_order extends CI_Model {
     }
 
     public function update_inv_palet($params) {
-        $this->db->update('inv_palet',$input,array('palet_id'=>$params['palet_id']));
+        $this->db->update('inv_palet',$params,array('palet_id'=>$params['palet_id']));
     }
 
      public function get_inv_barang_by_id($id) {
@@ -127,6 +127,21 @@ class m_in_order extends CI_Model {
 
     public function update_inv_barang($params) {
         $this->db->update('inv_barang',$params,array('barcode'=>$params['barcode']));
+    }
+
+    public function get_all_inv_persediaan_by_id($id) {
+        $sql = "SELECT *
+                FROM inv_persediaan
+                WHERE barcode='$id'
+                ORDER BY ASC tgl_expired";
+        $query = $this->db->query($sql);
+        // echo '<pre>'; print_r($query->result()); die;
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+        else {
+            return array();
+        }
     }
 
 }

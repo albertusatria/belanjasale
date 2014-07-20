@@ -243,6 +243,7 @@ jQuery(document).ready(function() {
 					//update step = terverifikasi bla-bla-bla
 				    console.log('masuk tambah_stok_proses');
 				    console.log(data);
+				    //return false;
 				    var number = 1;
 				    item[number] = {};
 				    item[number]['order_id'] = '<?php echo $list_order->order_id ?>';

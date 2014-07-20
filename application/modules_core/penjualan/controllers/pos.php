@@ -77,7 +77,7 @@ class Pos extends Admin_base {
         $datestring = '%Y-%m-%d %h:%i:%a';
         $time = time();
         $now = mdate($datestring, $time);
-
+        $params = array();
 		foreach ($_POST as $value) {
 			$input = array(
 				'receipt_id' => $value['receipt_id'],
@@ -86,7 +86,32 @@ class Pos extends Admin_base {
 				'harga_jual'	=> $value['harga_jual'],
 				'sub_total'	=> $value['sub_total']
 				);
-		$data = $this->m_penjualan->save_detail_nota($input);
+			$data = $this->m_penjualan->save_detail_nota($input);
+
+			$psdia = $this->m_in_order->get_all_inv_persediaan_by_id($value['barcode']);
+			$sisa = $value['qty'];
+			$params['barcode'] = $value['barcode'];	
+			foreach ($psdia as $vp) {
+				$params['tgl_expired']=$vp->tgl_expired;
+				$stk=$vp->stok;
+				if($stk>=$sisa){
+					if($sisa>0){
+						$params['stok'] = $stk-$sisa;
+						$sisa=0;
+					}else{
+						$params['stok'] = $stk;	
+					}
+				}else{
+					$params['stok'] = 0;
+					$sisa-=$stk;
+				}
+				$upsdia = $this->m_in_order->update_inv_persediaan($params);			
+			}
+
+			$rbrg = $this->m_in_order->get_inv_barang_by_id($value['barcode']);
+			$bb['barcode'] = $value['barcode'];
+			$bb['buffer_stok'] = $rbrg->buffer_stok - $value['qty']; 
+			$this->m_in_order->update_inv_barang($bb);
 		}
 		header('Content-Type: application/json');
 	    echo json_encode($data);		
