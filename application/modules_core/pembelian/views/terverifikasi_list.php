@@ -4,7 +4,7 @@
     $now = date($datestring);
 ?>
     <div class="pageheader">
-      <h2><i class="fa fa-barcode"></i> Verification Order List</h2>
+      <h2><i class="fa fa-barcode"></i> Finished Order List</h2>
       <div class="breadcrumb-wrapper">
         <span class="label">You are here:</span>
         <ol class="breadcrumb">
@@ -83,9 +83,14 @@
                             <td>
                               <?php echo date('d-m-Y | h:i:s',strtotime( $list_order[$i]->tgl_input)) ?>
                             </td>
+                            <td>
+                              <?php echo $list_order[$i]->petugas_verifikasi_name ?>
+                            </td>
+                            <td>
+                              <?php echo date('d-m-Y | h:i:s',strtotime( $list_order[$i]->tgl_verifikasi)) ?>
+                            </td>
                             <td class="table-action">
-                              <a href="<?php echo base_url() ?>pembelian/edit_order/<?php echo $list_order[$i]->order_id ?>" class="update-row"><i class="fa fa-pencil"></i></a>
-                              <a href="<?php echo base_url() ?>pembelian/verifikasi_order/<?php echo $list_order[$i]->order_id ?>" class="update-row"><i class="fa fa-check"></i></a>
+                              <a href="<?php echo base_url() ?>pembelian/view_order/<?php echo $list_order[$i]->order_id ?>" class="update-row"><i class="fa fa-folder-open"></i></a>
                               <!-- <a href="#" class="delete-row"><i class="fa fa-times"></i></a> -->
                               <!-- <a href="#" class="save-row" style="display:none;"><i class="fa fa-save"></i></a> -->
                               <!-- <a href="#" class="cancel-row" style="display:none;"><i class="fa fa-undo"></i></a> -->

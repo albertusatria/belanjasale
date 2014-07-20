@@ -60,7 +60,7 @@
         </div>
 
 		<div class="col-sm-6 col-md-4">
-			<a href="#">
+			<a href="<?php echo base_url()?>pembelian/riwayat">
 			<div class="panel panel-dark panel-alt widget-today">
 	            <div class="panel-heading text-center">
 	              <i class="fa fa-book"></i>
