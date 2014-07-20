@@ -241,6 +241,8 @@ jQuery(document).ready(function() {
 		         success: function(data)
 		         {
 					//update step = terverifikasi bla-bla-bla
+				    console.log('masuk tambah_stok_proses');
+				    console.log(data);
 				    var number = 1;
 				    item[number] = {};
 				    item[number]['order_id'] = '<?php echo $list_order->order_id ?>';
@@ -254,6 +256,7 @@ jQuery(document).ready(function() {
 				        data: item,
 				         success: function(data)
 				         {
+				         	console.log('masuk update_order');
 				            console.log(data);
 				            //redirect
 			                window.location.replace(CI_ROOT + 'pembelian/verifikasi');
