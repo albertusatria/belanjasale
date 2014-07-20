@@ -71,6 +71,11 @@
 	                    <input type="text" id="alamatbaru" name="alamat_tujuan" class="form-control" placeholder="Alamat Baru" style="display:none;" required disabled>
 	                  </div>
 	                </div>	
+					<div class="col-sm-1">
+	                  <div class="form-group">
+	                    <input type="text" id="biayakirim" name="biaya_kirim" class="form-control" placeholder="Biaya Kirim"  required>
+	                  </div>
+	                </div>	
         		</div>
         	</div>
         <div class="panel-heading">
@@ -387,9 +392,92 @@ jQuery(document).ready(function() {
 
 
 	$j("#prosesToVerification").on('click',function(){
-		var x = document.getElementById("basket-buy").rows.length;
-		if (x > 1) {
-			//save to detail nota	
+		if ($j("idmember").val() != "") {
+			var x = document.getElementById("basket-buy").rows.length;
+			if (x > 1) {
+			     var isDropshipping;
+			      if (jQuery('#chkDropShipping').prop('checked')) {
+			        isDropshipping = 1;
+			      } else {
+			        isDropshipping = 0
+			      }
+
+			     var isAlamatBaru;
+			      if (jQuery('#chkAlamat').prop('checked')) {
+			        alamat = jQuery("#alamatbaru").val()
+			      } else {
+			        alamat = jQuery("#alamatdefault").val();
+			      }
+
+			      var item = {};
+			      var number = 1;
+			      item[number] = {}
+			      item[number]['isDropshipping'] = isDropshipping;
+			      item[number]['isPenjualan'] = '1';
+			      item[number]['pelanggan_id'] = jQuery("#idmember").val();
+			      item[number]['sales_id'] = jQuery("#idsales").val();;
+			      item[number]['alamat'] = alamat;
+			      item[number]['petugas_input'] = jQuery("#userid").val();
+			      item[number]['biaya_kirim'] = jQuery("#biayakirim").val();
+			      item[number]['jumlah'] =  jQuery('#grandtotal').val();
+			      // item[number]['tgl_input'] = 'detail';
+
+			      console.log(item[1]);
+			      // return false;
+
+			      //update span
+			      jQuery.ajax({
+			        type: "POST",
+			        url: CI_ROOT+"penjualan/pos/save_nota",
+			        data: item,
+			         success: function(data)
+			         {
+			            console.log(data);
+			            console.log('joss');
+						//save semuanya
+
+						  var items = {};
+					      var num = 1;
+					      items[num] = {};
+
+			             $j("tbody tr").each(function() {
+			              /* get Qty and EA Price */
+			                  console.log(num);
+			                  items[num] = {};
+			                  items[num]['receipt_id'] = data;
+			                  items[num]['barcode'] = $j(this).find("td span.barcode").text();
+			                  items[num]['qty'] = $j(this).find("td input.qty").val();
+			                  items[num]['harga_jual'] = $j(this).find("td input.price").val(); 
+			                  items[num]['sub_total'] = $j(this).find("td input.subtotal-price").val();
+			                  console.log(JSON.stringify(items[num]));                           
+			                  num = num + 1;
+			               });
+					      //update span
+					      jQuery.ajax({
+					        type: "POST",
+					        url: CI_ROOT+"penjualan/pos/save_detail_nota",
+					        data: items,
+					         success: function(data)
+					         {
+					         	console.log('berhasil');
+					         },
+					         error: function (data)
+					         {  
+					            console.log('pait');
+					         }
+					        });        
+
+						//kurangi stok
+
+			         },
+			         error: function (data)
+			         {  
+			            console.log('pait');
+			         }
+
+			        });        
+
+			}			
 		}
 	});
     
