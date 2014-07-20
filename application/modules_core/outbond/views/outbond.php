@@ -16,25 +16,19 @@
 		            <a href="#" class="minimize">−</a>
 		          </div>
 		          <h4 class="panel-title">Barang Outbond </h4>
-					<div class="row">
-					<div class="col-sm-4">
-	                  <div class="form-group">
-	                    <label class="control-label"></label>
-	                    <input type="text" id="keterang" name="keterangan" class="form-control" placeholder="Keterangan Barang Keluar" >
-	                  </div>
-	                </div>	
-					<div class="col-sm-4">
-	                  <div class="form-group">
-	                    <label class="control-label"></label>
-	                    <input type="text" id="alamatdefault" name="alamat_member" class="form-control" placeholder="Alamat" >
-	                  </div>
-	                </div>	
-					<div class="col-sm-2">
-	                  <div class="form-group">
-	                    <label class="control-label"></label>
-	                    <input type="text" id="namasales" name="sales_member" class="form-control" placeholder="Sales" disabled>
-	                  </div>
-	                </div>	
+					<div class="row">	
+						<div class="col-sm-4">
+		                  <div class="form-group">
+		                    <label class="control-label"></label>
+		                    <textarea id="alamatOutbond" class="textarea form-control" placeholder="Alamat Barang Outbond" rows="5" style="height: 90px;"></textarea>
+		                  </div>
+		                </div>
+						<div class="col-sm-8">
+		                  <div class="form-group">
+		                    <label class="control-label"></label>
+		                    <textarea id="keteranganOutbond" class="textarea form-control" placeholder="Keterangan Barang Outbond" rows="5" style="height: 90px;"></textarea>
+		                  </div>
+		                </div>	                	
 		            </div>
 	        	</div>
 	        <div class="panel-heading">
@@ -101,6 +95,7 @@
 	
 	<script src="<?php echo base_url()?>bracket/js/jquery.datatables.min.js"></script>
 	<script src="<?php echo base_url()?>bracket/js/chosen.jquery.min.js"></script>
+	<script src="<?php echo base_url()?>bracket/js/jquery.autogrow-textarea.js"></script>	
 	<script src="<?php echo base_url()?>bracket/js/jquery.validate.min.js"></script>
 	<script src="<?php echo base_url();?>bracket/js/jquery.formatCurrency-1.4.0.min.js"></script>
 	<script src="<?php echo base_url();?>bracket/js/jquery.formatCurrency.id-ID.js"></script>
@@ -114,7 +109,7 @@
 	<script type="text/javascript">
 	var $j = jQuery.noConflict(); 
 	jQuery(document).ready(function() {
-	  
+	  	$j('.textarea').autogrow();
 	  	var searchProductChosen = "";
 		// Chosen Select
 		$j(".chosen-select").chosen({'width':'100%','white-space':'nowrap'});
