@@ -9,6 +9,7 @@ class Pos extends Admin_base {
 		$this->load->model('m_user');
 		$this->load->model('m_role');
 		$this->load->model('m_member');
+		$this->load->model('m_penjualan');
 		// load user
 		$this->load->helper('text');
 		// page title
@@ -41,6 +42,55 @@ class Pos extends Admin_base {
 		header('Content-Type: application/json');
 	    echo json_encode($data);		
 	}
+
+	// page title
+	public function save_nota() {		
+
+        $this->load->helper('date');
+        $datestring = '%Y-%m-%d %h:%i:%a';
+        $time = time();
+        $now = mdate($datestring, $time);
+
+		foreach ($_POST as $value) {
+			$input = array(
+				'tgl_transaksi' => $now,
+				'is_Dropshipping' => $value['isDropshipping'],
+				'is_Penjualan'	=> $value['isPenjualan'],
+				'pelanggan_id'	=> $value['pelanggan_id'],
+				'sales_id'	=> $value['sales_id'],
+				'alamat' => $value['alamat'],
+				'petugas_input' => $value['petugas_input'],
+				'biaya_kirim'	=> $value['biaya_kirim'],
+				'tgl_input'	=> $now,
+				'jumlah' => $value['jumlah']
+				);
+		}
+		$data = $this->m_penjualan->save_nota($input);
+		header('Content-Type: application/json');
+	    echo json_encode($data);		
+	}	
+
+	// page title
+	public function save_detail_nota() {		
+
+        $this->load->helper('date');
+        $datestring = '%Y-%m-%d %h:%i:%a';
+        $time = time();
+        $now = mdate($datestring, $time);
+
+		foreach ($_POST as $value) {
+			$input = array(
+				'receipt_id' => $value['receipt_id'],
+				'barcode' => $value['barcode'],
+				'qty'	=> $value['qty'],
+				'harga_jual'	=> $value['harga_jual'],
+				'sub_total'	=> $value['sub_total']
+				);
+		$data = $this->m_penjualan->save_detail_nota($input);
+		}
+		header('Content-Type: application/json');
+	    echo json_encode($data);		
+	}	
 
 
 	// page title

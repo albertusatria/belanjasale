@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require_once( APPPATH . 'modules_core/base/controllers/admin_base.php' );
 
-class Penjualan extends Admin_base {
+class Outbound extends Admin_base {
 	public function __construct() {
 		// call the controller construct
 		parent::__construct();
@@ -34,7 +34,7 @@ class Penjualan extends Admin_base {
 
 	// page title
 	public function page_title() {
-		$data['page_title'] = 'POS Sales';
+		$data['page_title'] = 'Outbound';
 		$this->session->set_userdata($data);
 	}
 }
