@@ -152,7 +152,7 @@ var $j = jQuery.noConflict();
 jQuery(document).ready(function() {
 
 	startTime();
-  
+	$j('input[name=product_id]').attr('disabled',"");
   	var searchProductChosen = "";
 	// Chosen Select
 	$j(".chosen-select").chosen({'width':'100%','white-space':'nowrap'});
@@ -554,6 +554,7 @@ function addProduct(id) {
 	
 			initBasket();
 			$j('#idpelanggan').attr('disabled',"");
+
 			//hidden product
 			jQuery(".add-product").hide();
 			jQuery("#span_id").hide();
@@ -721,7 +722,7 @@ function selectMember(id)
 			$j('#namasales').val(sales);
 			$j('#idmember').val(id);
 			$j('#idsales').val(sales_id);
-
+			$j('input[name=product_id]').removeAttr('disabled');
 	     	console.log('ditemukan');
 	     	return false;
 
