@@ -41,6 +41,7 @@
                       <thead>
                         <tr>
                           <th>#Order</th>
+                          <th>Step</th>
                           <th>Tgl transaksi</th>
                           <th>Keterangan</th>
                           <th>Order oleh : </th>
@@ -59,28 +60,31 @@
                               <?php echo $list_order[$i]->order_id ?>
                             </td>
                             <td>
-                              <?php echo $list_order[$i]->tgl_transaksi ?>
+                              <span class="label label-info"><?php echo $list_order[$i]->step ?></span>
+                            </td>
+                            <td>
+                              <?php echo date('d-m-Y',strtotime($list_order[$i]->tgl_transaksi)) ?>
                             </td>                           
                             <td>
                               <?php if ($list_order[$i]->is_pembelian == '1') : ?>
-                                PEMBELIAN <br>
-                                <?php echo $list_order[$i]->remarks ?>
+                                <span class="text text-danger">PEMBELIAN</span>     
                               <?php else : ?>
-                                LAINNYA : <br>
-                                <?php echo $list_order[$i]->remarks ?>
+                                <span class="text text-info">LAINNYA : </span>
                               <?php endif; ?>
+                                  <span title="" data-placement="right" data-toggle="tooltip" class="fa fa-exclamation-circle tooltips" 
+                                  data-original-title="<?php echo $list_order[$i]->remarks ?>"></span>                                
                             </td>
                             <td>
-                              <?php echo $list_order[$i]->petugas_order ?>
+                              <?php echo $list_order[$i]->petugas_order_name ?>
                             </td>
-                            <td class="text-right">
-                              <?php echo $list_order[$i]->tgl_order ?>
+                            <td>
+                              <?php echo date('d-m-Y | h:i:s',strtotime( $list_order[$i]->tgl_order)) ?>
                             </td>
                             <td class="table-action">
-                              <a href="#" class="update-row"><i class="fa fa-pencil"></i></a>
-                              <a href="#" class="delete-row"><i class="fa fa-times"></i></a>
-                              <a href="#" class="save-row" style="display:none;"><i class="fa fa-save"></i></a>
-                              <a href="#" class="cancel-row" style="display:none;"><i class="fa fa-undo"></i></a>
+                              <a href="<?php echo base_url() ?>pembelian/input_order/<?php echo $list_order[$i]->order_id ?>" class="update-row"><i class="fa fa-pencil"></i></a>
+                              <!-- <a href="#" class="delete-row"><i class="fa fa-times"></i></a> -->
+                              <!-- <a href="#" class="save-row" style="display:none;"><i class="fa fa-save"></i></a> -->
+                              <!-- <a href="#" class="cancel-row" style="display:none;"><i class="fa fa-undo"></i></a> -->
                             </td>
                           </tr>
                         <?php $i++; ?>

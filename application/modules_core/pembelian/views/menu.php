@@ -20,7 +20,7 @@
       
       <div class="row">
 
-		<div class="col-sm-6 col-md-3">
+		<div class="col-sm-6 col-md-4">
 			<a href="<?php echo base_url()?>pembelian/order">
 			<div class="panel panel-info panel-alt widget-today">
 	            <div class="panel-heading text-center">
@@ -33,7 +33,7 @@
 			</a>
         </div>
         
-		<div class="col-sm-6 col-md-3">
+<!-- 		<div class="col-sm-6 col-md-3">
 			<a href="#">		
 			<div class="panel panel-warning panel-alt widget-today">
 	            <div class="panel-heading text-center">
@@ -41,13 +41,13 @@
 	            </div>
 	            <div class="panel-body text-center">
 	              <h3 class="today">Purchasing Point</h3>
-	            </div><!-- panel-body -->
+	            </div>
 	        </div>
 			</a>
         </div>
-
-		<div class="col-sm-6 col-md-3">
-			<a href="#">
+ -->
+		<div class="col-sm-6 col-md-4">
+			<a href="<?php echo base_url()?>pembelian/verifikasi">
 			<div class="panel panel-success panel-alt widget-today">
 	            <div class="panel-heading text-center">
 	              <i class="fa fa-check-square"></i>
@@ -59,7 +59,7 @@
 			</a>
         </div>
 
-		<div class="col-sm-6 col-md-3">
+		<div class="col-sm-6 col-md-4">
 			<a href="#">
 			<div class="panel panel-dark panel-alt widget-today">
 	            <div class="panel-heading text-center">
