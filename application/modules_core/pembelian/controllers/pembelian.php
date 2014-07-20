@@ -200,6 +200,7 @@ class Pembelian extends Admin_base {
 		$data = $this->m_in_order->create_in_order($input);
 		header('Content-Type: application/json');
 	    echo json_encode($data);
+	    //echo "<script type='text/javascript'>window.close();window.opener.top.location.reload();</script>";
 	}
 
 	public function update_order() 
@@ -263,20 +264,59 @@ class Pembelian extends Admin_base {
 	    echo json_encode($data);		
 	}
 
-	public function jigur()
+	public function tambah_stok_proses()
 	{
+		$this->load->helper('date');
+        $datestring = '%Y-%m-%d %h:%i:%a';
+        $time = time();
+        $now = mdate($datestring, $time);
 		//ambil barang yang ga da di tabel
-		foreach ($_POST as $value) {
-			$order_id = $value['order_id'];		
+		foreach ($_POST as $value){
+			$order_id = $value['order_id'];
+			//$step = $value['step'];
+			//$petugas_verifikasi = $value['petugas_verifikasi'];
+		}
+		$rspo = $this->m_in_order->get_detail_order_by_id($order_id);
+
+		//if(){
+		foreach ($rspo as $rpo) {
+			# code...
+			$bc = $rpo->barcode;
+			$st = $rpo->qty;
+			$ed = $rpo->exp_date;
+			$hb = $rpo->harga_beli;
+			$kr = $rpo->kode_rak;
+
+			$input = array(		
+				'barcode' => $bc,
+				'stok' => $st,
+				'tgl_expired' => $ed,
+				'tgl_msk_gudang' => $now,
+				'harga_beli' => $hb,
+				'dc' => $now,
+				'du' => $now
+			);
+
+			if($kr=='Palet'){
+				$allpalet = $this->m_in_order->get_all_inv_palet();
+				$input['palet_id']= rand(1,17);
+			}
+			else{
+				$input['rak_id']=$kr;
+			}
+			$data = $this->m_in_order->insert_inv_persediaan($input);
+
+			$rbrg = $this->m_in_order->get_inv_barang_by_id($bc);
+			$bb['barcode'] = $bc;
+			$bb['buffer_stok'] = $rbrg->buffer_stok + $st; 
+			$this->m_in_order->update_inv_barang($bb);
 		}
 		//untuk setiap yang di detail ditambahkan ke stok yang sudah ada
 			//cek apakah yg barcode + expnya sama
 			//untuk palet diisi berdasarkan quota
-		$data = $this->m_in_order->save_detail_order($input);
 		header('Content-Type: application/json');
-	    echo json_encode($data);		
+	    echo json_encode(true);		
 	}
-
 
 	// page title
 	public function page_title() {

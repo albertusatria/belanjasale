@@ -93,5 +93,40 @@ class m_in_order extends CI_Model {
     	}
     }
 
+    public function insert_inv_persediaan($input) {
+        $insert = $this->db->insert('inv_persediaan',$input);
+        if ($insert) {
+            return $this->db->insert_id();
+        }
+        else {
+            return false;
+        }
+    }
+
+    public function update_inv_persediaan($input) {
+        $update = $this->db->update('inv_persediaan',$input,array('barcode'=>$params['barcode'],'tgl_expired'=>$params['tgl_expired']));
+        if ($update) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public function get_all_inv_palet() {
+        return $this->db->get('inv_palet')->result();
+    }
+
+    public function update_inv_palet($params) {
+        $this->db->update('inv_palet',$input,array('palet_id'=>$params['palet_id']));
+    }
+
+     public function get_inv_barang_by_id($id) {
+        return $this->db->get_where('inv_barang',array('barcode'=>$id))->row();
+    }
+
+    public function update_inv_barang($params) {
+        $this->db->update('inv_barang',$params,array('barcode'=>$params['barcode']));
+    }
 
 }

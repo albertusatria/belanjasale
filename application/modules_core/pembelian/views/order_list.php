@@ -226,7 +226,8 @@ jQuery(document).ready(function(){
             console.log(data);
             console.log('joss');
             //redirect
-
+            window.close();
+            window.opener.top.location.reload();
          },
          error: function (data)
          {  
