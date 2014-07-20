@@ -1,4 +1,7 @@
 /* CSS Custom / Overrride */
+code{
+	font-size: 12px;
+}
 .clear-space, /submit-form-regis{
 	clear: both;
 	margin: 30px 0;
