@@ -188,7 +188,6 @@ class Pembelian extends Admin_base {
 		foreach ($_POST as $value) {
 		$tgltransaksi = DateTime::createFromFormat('d/m/Y', $value['tanggal'])->format('Y-m-d');
 
-
 			$input = array(
 				'is_pembelian' => $value['isPembelian'],
 				'remarks' => $value['remarks'],
