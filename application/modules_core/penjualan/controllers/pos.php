@@ -8,6 +8,7 @@ class Pos extends Admin_base {
 		// load model
 		$this->load->model('m_user');
 		$this->load->model('m_role');
+		$this->load->model('m_member');
 		// load user
 		$this->load->helper('text');
 		// page title
@@ -29,6 +30,18 @@ class Pos extends Admin_base {
 		$data['main_content'] = "pos";
 		$this->load->view('dashboard/admin/template', $data);
 	}
+
+
+	// page title
+	public function get_member() {		
+		foreach ($_POST as $value) {
+			$pelanggan_id = $value['pelanggan_id'];
+		}
+		$data = $this->m_member->get_member($pelanggan_id);
+		header('Content-Type: application/json');
+	    echo json_encode($data);		
+	}
+
 
 	// page title
 	public function page_title() {

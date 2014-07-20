@@ -16,10 +16,63 @@
 	            <a href="#" class="panel-close">×</a>
 	            <a href="#" class="minimize">−</a>
 	          </div>
-	          <h4 class="panel-title">POINT OF SALE</h4>
-	          <p>
-	          	</p>
-	        </div>
+	          <h4 class="panel-title">POINT OF SALE <code>[<?php echo date('d-m-Y'); ?> <span id="jamweker"></span>]</code></h4>
+				<div class="row">
+				<div class="col-sm-2">
+                  <div class="form-group">
+                    <label class="control-label"></label>
+                    <input type="text" id="idpelanggan" name="pelanggan_id" class="add-pelanggan form-control" placeholder="ID Member">
+                  </div>
+                <label for="pelanggan_id" name="error-notfound-pelanggan_id" class="error not-found pelanggan">Member not found!</label>
+                <label for="pelanggan_id" name="error-empty-pelanggan_id" class="error cannot-empty pelanggan">Field above cannot empty!</label>
+                </div>	
+				<div class="col-sm-3">
+                  <div class="form-group">
+                    <label class="control-label"></label>
+                    <input type="text" id="namamember" name="nama_member" class="form-control" placeholder="Nama Pelanggan" disabled>
+                    <input type="hidden" id="idmember" name="id_member" class="form-control" placeholder="Nama Pelanggan" disabled>
+                    <input type="hidden" id="idsales" name="id_sales" class="form-control" placeholder="Nama Pelanggan" disabled>
+                  </div>
+                </div>	
+				<div class="col-sm-4">
+                  <div class="form-group">
+                    <label class="control-label"></label>
+                    <input type="text" id="alamatdefault" name="alamat_member" class="form-control" placeholder="Alamat" disabled>
+                  </div>
+                </div>	
+				<div class="col-sm-2">
+                  <div class="form-group">
+                    <label class="control-label"></label>
+                    <input type="text" id="namasales" name="sales_member" class="form-control" placeholder="Sales" disabled>
+                  </div>
+                </div>	
+	            </div>
+	            <div class="row">
+					<div class="col-sm-2">
+				        <div class="form-group">
+				            <div class="checkbox">
+				                <label>
+				                  <input type="checkbox" id="chkDropShipping"> Dropshipping?
+				                </label>
+				            </div>          
+				        </div>
+			    	</div>
+					<div class="col-sm-3">
+				        <div class="form-group">
+				            <div class="checkbox pull-right">
+				                <label>
+				                  <input type="checkbox" id="chkAlamat"> Alamat Berbeda?
+			    	            </label>
+			        	    </div>          
+			        	</div>
+			     	</div>
+					<div class="col-sm-4">
+	                  <div class="form-group">
+	                    <input type="text" id="alamatbaru" name="alamat_tujuan" class="form-control" placeholder="Alamat Baru" style="display:none;" required disabled>
+	                  </div>
+	                </div>	
+        		</div>
+        	</div>
         <div class="panel-heading">
         	<div class="menu-head">
 				<div class="input-group input-group-lg col-sm-12">
@@ -98,6 +151,7 @@
 var $j = jQuery.noConflict(); 
 jQuery(document).ready(function() {
 
+	startTime();
   
   	var searchProductChosen = "";
 	// Chosen Select
@@ -119,6 +173,35 @@ jQuery(document).ready(function() {
 	});	
 
 	initBasket();
+
+	$j('#idpelanggan').blur(function() {
+		$j(this).numeric();
+	})
+	.keyup(function(e) {
+	var e = window.event || e;
+	var keyUnicode = e.charCode || e.keyCode;
+	if (e !== undefined) {
+		switch (keyUnicode) {
+			case 16: break; // Shift
+			case 17: break; // Ctrl
+			case 18: break; // Alt
+			case 27: this.value = ''; break; // Esc: clear entry
+			case 35: break; // End
+			case 36: break; // Home
+			case 37: break; // cursor left
+			case 38: break; // cursor up
+			case 39: break; // cursor right
+			case 40: break; // cursor down
+			case 78: break; // N (Opera 9.63+ maps the "." from the number key section to the "N" key too!) (See: http://unixpapa.com/js/key.html search for ". Del")
+			case 110: break; // . number block (Opera 9.63+ maps the "." from the number block to the "N" key (78) !!!)
+			case 190: break; // .
+			case 13: selectMember($j('#idpelanggan').val()); // Enter			
+			default: $j(this).numeric();
+		}
+	}
+	
+	});	
+
 	$j('.add-product').blur(function() {
 		$j(this).numeric();
 	})
@@ -344,7 +427,7 @@ function addProduct(id) {
             for (index = 0; index < data.length; ++index) {
                 id = data[index]['barcode'];
                 nama = data[index]['nama_barang'];
-                harga = data[index]['harga_jual']
+                harga = data[index]['harga_jual'];
                 if (data[index]['kode_rak'] == "") {
                 	rak = 'Palet';
                 } else {
@@ -430,6 +513,20 @@ function addProduct(id) {
 	return false;
 }
 
+  jQuery("#chkAlamat").on('click',function(){
+    // console.log(jQuery('#chkAlamat').prop('checked'));
+    if (jQuery('#chkAlamat').prop('checked'))
+    {
+      jQuery("#alamatbaru").show();
+      jQuery("#alamatbaru").removeAttr("disabled");
+    } else {
+      jQuery("#alamatbaru").hide();
+      jQuery("#alamatbaru").attr("disabled","");
+      // jQuery("#labelketerangan").text("Keterangan");
+      // jQuery("#keterangan").attr("placeholder","Berikan keterangan misalnya : barang retur, barang hadiah, dll");
+    }
+  });
+
 function initBasket(){
 	$j('label.not-found').hide();
 	$j('label.cannot-empty').hide();	
@@ -473,13 +570,6 @@ function addHargabeli(harga) {
 	jQuery('#basket-buy tr:last').find('td input.price').val(harga);
 
 	var price = jQuery('#basket-buy tr:last').find('td input.price');
-	// console.log(price.val());
- 	//    if(price.hasClass('price'))
- 	//    {
- 	//    	price.formatCurrency({region: 'id-ID'});
-	// }	
- 	//    price.autoNumeric('init');
-	// console.log(price.val());
         
 	qty = Number(jQuery('#basket-buy tr:last').find("td input.qty").val());
 	Subtotal = qty * Number(harga);
@@ -502,6 +592,80 @@ function addHargabeli(harga) {
 
 	$j('.add-product').val("");
 	$j('.add-product').focus();
+}
+
+function selectMember(id)
+{
+  var item = {};
+  var num = 1;
+  item[num] = {};
+  item[num]['pelanggan_id'] = id;
+
+  jQuery.ajax({
+    type: "POST",
+    url: CI_ROOT+"penjualan/pos/get_member",
+    data: item,
+     success: function(data)
+     {
+     	//jika kosong
+		if(id =="")
+		{
+	     	console.log('kosong');
+			$j('label.not-found.pelanggan').hide();	
+			$j('label.cannot-empty.pelanggan').show();
+			$j('.add-pelanggan').closest('div').addClass('has-error');	
+			return false;
+		}
+		
+		//jika tidak ketemu
+		if(data.length > 0)
+		{
+
+			var nama; var alamat; var sales;
+            for (index = 0; index < data.length; ++index) {
+                nama = data[index]['nama_lengkap'];
+                alamat = data[index]['alamat'] + ' ' +data[index]['nama'];
+                sales_id = data[index]['sales_id'];
+                sales = data[index]['username'];
+            } 
+			console.log(nama + alamat + sales_id+ sales);
+			//hidden semua span
+			$j('label[name=pelanggan_id]').hide();			
+			$j('.add-pelanggan').closest('div').removeClass('has-error');
+			$j('label.not-found.pelanggan').hide();	
+			$j('label.cannot-empty,pelanggan').hide();
+
+			$j('#namamember').val(nama);
+			$j('#alamatdefault').val(alamat);
+			$j('#namasales').val(sales);
+			$j('#idmember').val(id);
+			$j('#idsales').val(sales_id);
+
+	     	console.log('ditemukan');
+	     	return false;
+
+			//tambah baris
+	
+			initBasket();
+		}
+		else {
+
+			console.log('tidak ketemu');
+			$j('label.cannot-empty.pelanggan').hide();
+			$j('label.not-found.pelanggan').show();
+			$j('.add-pelanggan').closest('div').addClass('has-error');
+		}
+		return false;
+
+     },
+     error: function (data)
+     {
+     	console.log(data);
+     }
+  	});  	
+
+	//tambah baris
+	return false;
 }
 
 function findSubTotals() {
@@ -550,6 +714,22 @@ function findSubTotals2() {
         console.log($j('#grandtotal').val());
     });
 	
+}
+
+function startTime() {
+    var today=new Date();
+    var h=today.getHours();
+    var m=today.getMinutes();
+    var s=today.getSeconds();
+    m = checkTime(m);
+    s = checkTime(s);
+    document.getElementById('jamweker').innerHTML = h+":"+m+":"+s;
+    var t = setTimeout(function(){startTime()},500);
+}
+
+function checkTime(i) {
+    if (i<10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
 }
 
 </script>

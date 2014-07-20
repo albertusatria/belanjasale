@@ -40,6 +40,66 @@ class Admin_base extends CI_Controller {
 		return $html;
 	}
 
+	public function menu2() {
+		// id portal
+		$this->portal_id = $this->config->item('portal_operator');
+		// page active
+		$active = $this->session->userdata('page_title');
+		//echo $active;die;
+		$parent_active = $this->session->userdata('parent_active');
+		$child_active = $this->session->userdata('child_active');
+		//echo $parent_active;die;
+		$html = "<ul id='leftsidePanel' class='nav nav-pills nav-stacked nav-bracket'>";
+		// load menu
+		$data['parent_menu'] = $this->m_base->get_parent_menu(array($this->portal_id, $this->user['role_id']));
+		//echo '<pre>'; print_r($data['parent_menu']) ; die;
+
+		foreach ($data['parent_menu'] as $value_parent) {
+			if ($value_parent['read'] == 'true') {
+				//jika bisa read maka tampilkan
+				if ($data['child_menu'] = $this->m_base->get_child_menu(array($value_parent['menu_id'], $this->user['role_id']))) {
+					// echo "punya anak";
+					$html .= "<li class='nav-parent ";
+					//echo $parent_active; echo $value_parent['menu_slug'];die;
+					if ($parent_active == $value_parent['menu_slug']) {
+						$html .= "nav-active active";
+					}
+					$html .= "'> <a href='#'> <i class='fa fa-" . $value_parent['menu_icon'] . "'></i> <span>" . $value_parent['menu_name'] . "</span></a>";
+					$html .= "<ul class='children'";
+					foreach ($data['child_menu'] as $value_child) {
+						if ($child_active == $value_child['menu_slug']) {
+							$html .=  "style='display: block;'";
+						}						
+					}					 
+					$html .= ">";
+					foreach ($data['child_menu'] as $value_child) {
+						if ($value_child['read'] == 'true') {
+							$html .= "<li class='";
+							if ($child_active == $value_child['menu_slug']) {
+								$html .= "active";
+							}
+							$html .= "'> <a href='" . base_url() . $value_child['menu_url'] . "'> <i class='fa fa-" . $value_child['menu_icon'] . "'></i> <span>" . $value_child['menu_name'] . "</span></a></li>";
+						}
+					}					
+					$html .= "</ul></li>";				
+
+				}
+				else {
+					// echo "tidak punya anak"
+					$html .= "<li class='";
+					if ($parent_active == $value_parent['menu_slug']) {
+						$html .= "active";
+					}
+					$html .= "'> <a href='" . base_url() . $value_parent['menu_url'] . "'> <i class='fa fa-" . $value_parent['menu_icon'] . "'></i> <span>" . $value_parent['menu_name'] . "</span></a></li>";			
+				}
+			}
+			else {
+			}
+		}
+		$html .= "</ul>"; 
+		return $html;		
+	}	
+
 	// get user login
 	protected function get_user_login() {
 		// get user login
