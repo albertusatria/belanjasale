@@ -44,11 +44,11 @@
               </div>
             </div>
 
-            <div class="form-group">
-              <label class="col-sm-3 control-label">Birthday Date *</label>
-              <div class="col-sm-7">
-                <input name="user_birthday" class="form-control" maxlength="100" type="text" value="<?php echo $this->session->flashdata('user_birthday'); ?>" />
-                <!-- <span class="help-block">A block of help text that breaks onto a new line and may extend beyond one line.</span> -->
+           <div class="form-group">
+              <label class="col-sm-3 control-label">Tanggal Lahir <span class="asterisk">*</span></label>
+              <div class="col-sm-3">
+                <input type="text" id="datepicker-birthday" class="form-control num" placeholder="Masukkan tanggal lahir..." value="<?php //echo date("d-m-Y",strtotime(@$this->session->flashdata('user_birthday'))); ?>" required="">
+                <input type="hidden" name="user_birthday" id="addbirthday" value="">
               </div>
             </div>
 
@@ -57,6 +57,41 @@
               <div class="col-sm-7">
                 <input name="user_contact" class="form-control" maxlength="12" type="text" value="<?php echo $this->session->flashdata('user_contact'); ?>" />
                 <!-- <span class="help-block">A block of help text that breaks onto a new line and may extend beyond one line.</span> -->
+              </div>
+            </div>
+
+          <div class="form-group">
+            <label class="col-sm-3 control-label">No. KTP <span class="asterisk">*</span></label>
+            <div class="col-sm-5">
+              <input type="text" id="addktp" name="ktp" class="form-control" placeholder="Masukkan No. KTP.." value="<?php echo $this->session->flashdata('ktp'); ?>" required="">
+            </div>
+          </div>
+
+           <div class="form-group">
+              <label class="col-sm-3 control-label">Tanggal Diangkat<span class="asterisk">*</span></label>
+              <div class="col-sm-3">
+                <input type="text" id="datepicker-mulai" class="form-control num" placeholder="Masukkan tgl mulai kerja.." value="<?php //echo date("d-m-Y",strtotime(@$this->session->flashdata('tgl_diangkat'))); ?>">
+                <input type="hidden" name="tgl_diangkat" id="adddiangkat" value="">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Tanggal Berhenti</label>
+              <div class="col-sm-3">
+                <input type="text" id="datepicker-akhir" class="form-control num" placeholder="Masukkan tgl keluar kerja.." value="<?php //echo date("d-m-Y",strtotime(@$this->session->flashdata('tgl_berhenti'))); ?>">
+                <input type="hidden" name="tgl_berhenti" id="addberhenti" value="">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Status <span class="asterisk">*</span></label>
+              <div class="col-sm-2">
+              <select id="addstatus" name="status" class="form-control input-sm" required="">
+                <option value=""> Pilih Sales </option>
+                <option value="SALES" <?php if ($this->session->flashdata('status') == "SALES") : ?> selected <?php endif; ?>> SALES </option>
+                <option value="GUDANG" <?php if ($this->session->flashdata('status') == "GUDANG") : ?> selected <?php endif; ?>> GUDANG </option>
+                <option value="DIREKTUR" <?php if ($this->session->flashdata('status') == "DIREKTUR") : ?> selected <?php endif; ?>> DIREKTUR </option>
+              </select>
               </div>
             </div>
 
@@ -195,6 +230,22 @@ jQuery("#sasPanel").validate({
 <script>
 jQuery(document).ready(function(){
     
+  jQuery('#datepicker-birthday').datepicker({ 
+      dateFormat: 'dd-mm-yy',
+      altField: '#addbirthday' ,
+      altFormat: 'yy-mm-dd'
+    });
+  jQuery('#datepicker-mulai').datepicker({ 
+      dateFormat: 'dd-mm-yy',
+      altField: '#adddiangkat' ,
+      altFormat: 'yy-mm-dd'
+    });
+  jQuery('#datepicker-akhir').datepicker({ 
+        dateFormat: 'dd-mm-yy',
+        altField: '#addberhenti' ,
+        altFormat: 'yy-mm-dd'
+  });
+
   // Chosen Select
   jQuery(".chosen-select").chosen({'width':'100%','white-space':'nowrap'});
   
