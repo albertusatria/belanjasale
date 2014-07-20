@@ -28,6 +28,18 @@ class m_inventory extends CI_Model {
         }
     }
 
+
+    function get_inventory_array($barcode) {
+        $this->db->where('barcode',$barcode);
+        $query = $this->db->get('inv_barang');
+        //echo '<pre>'; print_r($query->row());die;
+        if ($query->num_rows > 0) {
+            return $query->result();
+        } else {
+            return array();
+        }
+    }
+
     function update_barcode($barcode,$input) {
         $this->db->where('barcode',$barcode);
         $updt = $this->db->update('inv_barang',$input);

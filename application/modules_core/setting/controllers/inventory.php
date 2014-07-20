@@ -183,6 +183,16 @@ class Inventory extends Admin_base {
 	    echo json_encode($data);			
 	}
 
+	public function get_detail_barang() {
+		//ambil barang yang ga da di tabel
+		foreach ($_POST as $value) {
+			$barcode = $value['barcode'];
+		}
+		$data = $this->m_inventory->get_inventory_array($barcode);
+		header('Content-Type: application/json');
+	    echo json_encode($data);
+	}
+
 	// page title
 	public function page_title() {
 		$data['page_title'] = 'Inventory';
