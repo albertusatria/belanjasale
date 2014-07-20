@@ -27,8 +27,9 @@ class m_in_order extends CI_Model {
     }
 
     public function get_detail_order_by_id($order_id) {
-    	$sql = "SELECT p.order_id,p.barcode,b.nama_barang,p.qty,p.harga_beli,p.exp_date,p.sub_total,p.kode_rak FROM purcs_order_detail p 
-    			LEFT JOIN inv_barang b ON p.barcode = b.barcode AND p.order_id = '$order_id'";
+    	$sql = "SELECT p.order_id,p.barcode,b.nama_barang,p.qty,p.harga_beli,p.exp_date,p.sub_total,p.kode_rak FROM
+                (SELECT * FROM purcs_order_detail o WHERE o.order_id = '$order_id') p
+    			LEFT JOIN inv_barang b ON p.barcode = b.barcode";
     	$query = $this->db->query($sql);
     	// echo '<pre>'; print_r($query->result()); die;
     	if ($query->num_rows() > 0) {

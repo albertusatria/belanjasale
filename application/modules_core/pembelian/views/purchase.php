@@ -454,7 +454,6 @@ jQuery(document).ready(function() {
                   console.log(JSON.stringify(items[num]));                           
                   num = num + 1;
                });
-
 		      //update span
 		      jQuery.ajax({
 		        type: "POST",

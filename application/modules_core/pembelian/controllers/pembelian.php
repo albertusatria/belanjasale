@@ -256,8 +256,9 @@ class Pembelian extends Admin_base {
 				'sub_total' => $value['sub_total'],
 				'kode_rak' => $value['kode_rak']
 				);
+
+			$data = $this->m_in_order->save_detail_order($input);
 		}
-		$data = $this->m_in_order->save_detail_order($input);
 		header('Content-Type: application/json');
 	    echo json_encode($data);		
 	}
