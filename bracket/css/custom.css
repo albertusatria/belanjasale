@@ -43,6 +43,9 @@
 	width: 180px;
 	margin: 5px 0;
 }
+.button-head a{
+	float: right;
+}
 button .fa-plus{
 	margin: 0 5px;
 }
@@ -90,7 +93,7 @@ button .fa-plus{
 	vertical-align: middle;
 	border-top: none;
 	border-color: transparent;
-	background: #fff;
+/* 	background: #fff; */
 }
 .pos table tr td:nth-child(1){
 	width: 80px;

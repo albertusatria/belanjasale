@@ -37,7 +37,7 @@
                   <input type="text" placeholder="barcode input.." name="product_id" class="add-product form-control">
 				  <!-- expired -->
                   <span class="input-group-addon" style="display:none;" id="span_expired"><i class="fa fa-calendar"></i></span>
-                  <input type="text" placeholder="tanggal kadaluwarsa" name="expired_product" class="add-expired form-control" style="display:none;">
+                  <input type="text" placeholder="tanggal kadaluwarsa" name="expired_product" id="date" class="add-expired form-control" style="display:none;">
 				  <!-- qty -->
                   <span class="input-group-addon" style="display:none;" id="span_qty"><i class="fa fa-shopping-cart"></i></span>
                   <input type="text" placeholder="jumlah barang.." name="qty_product" class="add-qty form-control" style="display:none;">
@@ -45,23 +45,26 @@
                   <span class="input-group-addon" style="display:none;" id="span_hargabeli"><i class="fa fa-money"></i></span>
                   <input type="text" placeholder="harga beli.." name="price_product" class="add-hargabeli form-control" style="display:none;">
                 </div>
+                <label for="date" name="error-notfound-date" class="error date-wrong-format">Wrong format for Expired Date!</label>                                
+                <label for="date" name="error-empty-date" class="error date-cannot-empty">Expired Date cannot empty!</label>                
                 <label for="product_id" name="error-notfound-productid" class="error not-found">Product not found!</label>
                 <label for="product_id" name="error-empty-productid" class="error cannot-empty">Field above cannot empty!</label>
         	</div>
+        
 			<div class="total-amount pull-right">
 				<h4 class="text-warning">Grand Total</h4>
 				<h1 class="text-warning">
 	            	<span class="amount grandtotal-price">0</span>
 					<input type="text" id="grandtotal" class="edit-amount grandtotal-price" value="0" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>
 				</h1>
-			</div>        	
+			</div> 	
         </div>
         <div class="panel-body pos">
             <div class="table-responsive">
 				<table class="table mb30" id="basket-buy">
 		            <thead>
 		              <tr>
-		                <th colspan="2">Nama Produk</th>
+		                <th colspan="2">Produk</th>
 		                <th>Tanggal Kadaluwarsa</th>
 		                <th>Kuantitas</th>
 		                <th>Disimpan di</th>		                
@@ -81,7 +84,7 @@
 		 <div class="row">
 			<div class="col-sm-3 col-sm-offset-9">
 			  <a class="btn btn-default">Cancel</a>&nbsp;		
-			  <a class="btn btn-danger" id="prosesToVerification">Checkin</a>
+			  <a class="btn btn-danger" id="prosesToVerification">Check-In</a>
 			</div>
 		 </div>
 	  </div>             
@@ -104,10 +107,12 @@
 <script src="<?php echo base_url();?>bracket/js/jquery.formatCurrency.id-ID.js"></script>
 <script src="<?php echo base_url();?>bracket/js/autoNumeric.js"></script>
 <script src="<?php echo base_url();?>bracket/js/jquery.numeric.js"></script>
+<script src="<?php echo base_url();?>bracket/js/jquery.maskedinput.min.js"></script>
 <script src="<?php echo base_url();?>bracket/js/custom.js"></script>
 
 <script type="text/javascript">
         CI_ROOT = "<?=base_url() ?>";
+        var editMode = false;
 </script>
 <script type="text/javascript">
 var $j = jQuery.noConflict(); 
@@ -274,51 +279,116 @@ jQuery(document).ready(function() {
 	
 	});
 
-	
+    $j('#basket-buy').on('click','tbody tr td span.expired',function () {
+		if(editMode)
+		{
+			$j(this).hide();
+	        var editExp = $j(this).next();
+			editExp.show().focus();		
+			$j(editExp).focusout(function() {
+			    var currVal = $j(this).val();
+			    if(currVal == '')
+			    {
+					//$j('label.date-cannot-empty').show();
+					return false;
+			    }
+			    
+			    var rxDatePattern = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/; //Declare Regex
+			    var dtArray = currVal.match(rxDatePattern); // is format OK?
+			    
+			    if (dtArray == null) 
+			        return false;
+			    
+			    //Checks for dd/mm/yyyy format.
+				dtDay = dtArray[1];
+			    dtMonth= dtArray[3];
+			    dtYear = dtArray[5];         
+			    
+			    if (dtMonth < 1 || dtMonth > 12) 
+			    {
+					//$j('label.date-wrong-format').show();
+				    return false;
+			    }
+			    else if (dtDay < 1 || dtDay> 31) 
+			    {
+					//$j('label.date-wrong-format').show();
+					return false;   
+			    }
+			    else if ((dtMonth==4 || dtMonth==6 || dtMonth==9 || dtMonth==11) && dtDay ==31) 
+			    {
+					//$j('label.date-wrong-format').show();
+					return false;
+			    }
+			    else if (dtMonth == 2) 
+			    {
+			        var isleap = (dtYear % 4 == 0 && (dtYear % 100 != 0 || dtYear % 400 == 0));
+			        if (dtDay> 29 || (dtDay ==29 && !isleap)) 
+			        {
+						//$j('label.date-wrong-format').show();
+						return false;
+			        }
+			    }
+				$j(this).attr("value",currVal).hide();
+				$j(this).prev().text(currVal).show();
+			});	
+		}	    
+		else
+		{
+			alert('Mohon selesaikan penginputan barang terlebih dahulu.');	
+			return false;
+		}
+    });	
+    
     $j('#basket-buy').on('click','tbody tr td span.amount',function () {
-
-		qty = Number($j(this).closest("tr").find("td input.qty").val());
-		price = Number($j(this).closest("tr").find("td input.price").val());
-		console.log('qty awal: '+qty);
-		console.log('price awal : '+price);
-
-    	$j(this).hide();
-        var editAmount = $j(this).next();
-		editAmount.show().focus();
-	    $j(editAmount).focusout(function() {
-			var valueAmount = $j(this).val();
-
-			if(valueAmount == "")
-				valueAmount = 0;
-
-	        //format number after edit
-	  //       if($j(this).hasClass('price'))
-	  //       {
-	  //       	//bila yang diedit price
-	  //       	$j(this).formatCurrency({region: 'id-ID'});
-			// }
-	  //       $j(this).autoNumeric('init');
-			
-			console.log(valueAmount);
-
-	        // $j(this).attr("value",$j(this).autoNumeric('get')).hide();
-	        $j(this).attr("value",valueAmount).hide();
-	        $j(this).prev().text(valueAmount).show();
-
+		if(editMode)
+		{
 			qty = Number($j(this).closest("tr").find("td input.qty").val());
 			price = Number($j(this).closest("tr").find("td input.price").val());
-
-			console.log('nilai input price : ' + $j(this).closest("tr").find("td input.price").val())
-			console.log('qty : '+qty);
-			console.log('price : '+price);
-
-			Subtotal = qty * price;
-	        $j(this).closest("tr").find("td span.subtotal-price").text(Subtotal).formatCurrency({region: 'id-ID'});
-	        $j(this).closest("tr").find("td input.subtotal-price").val(Subtotal);
-			$j('#basket-buy tbody td .product-price').formatCurrency({region: 'id-ID'});
-			
-			findSubTotals2();
-	    });
+			console.log('qty awal: '+qty);
+			console.log('price awal : '+price);
+	
+	    	$j(this).hide();
+	        var editAmount = $j(this).next();
+			editAmount.show().focus();
+		    $j(editAmount).focusout(function() {
+				var valueAmount = $j(this).val();
+				
+				if(valueAmount == "")
+					valueAmount = 0;
+				
+				//format number after edit
+				//       if($j(this).hasClass('price'))
+				//       {
+				//       	//bila yang diedit price
+				//       	$j(this).formatCurrency({region: 'id-ID'});
+				// }
+				//       $j(this).autoNumeric('init');
+				
+				console.log(valueAmount);
+				
+				// $j(this).attr("value",$j(this).autoNumeric('get')).hide();
+				$j(this).attr("value",valueAmount).hide();
+				$j(this).prev().text(valueAmount).show();
+				
+				qty = Number($j(this).closest("tr").find("td input.qty").val());
+				price = Number($j(this).closest("tr").find("td input.price").val());
+				
+				console.log('nilai input price : ' + $j(this).closest("tr").find("td input.price").val())
+				console.log('qty : '+qty);
+				console.log('price : '+price);
+				
+				Subtotal = qty * price;
+				$j(this).closest("tr").find("td span.subtotal-price").text(Subtotal).formatCurrency({region: 'id-ID'});
+				$j(this).closest("tr").find("td input.subtotal-price").val(Subtotal);
+				$j('#basket-buy tbody td .product-price').formatCurrency({region: 'id-ID'});
+				
+				findSubTotals2();
+				});
+	    }
+	    else{
+	    	alert('Mohon selesaikan penginputan barang terlebih dahulu.');
+		    return false;
+	    }
     });
 
 /*
@@ -492,7 +562,7 @@ function addProduct(id) {
 							'<strong><label for="product-name">'+nama+'</label></strong>'+
 						'</td>'+
 						'<td>'+
-							'<span class="product expired">dd/mm/yyyy</span><br>'+
+							'<span class="product expired">dd/mm/yyyy</span>'+
 							'<input type="text" class="product expired" value="dd/mm/yyyy">'+
 						'</td>'+
 			            '<td>'+
@@ -522,7 +592,8 @@ function addProduct(id) {
 			jQuery(".add-product").hide();
 			jQuery("#span_id").hide();
 			//show tanggal
-			jQuery(".add-expired").show();
+			jQuery('.menu-head').children('input').removeClass('active');
+			jQuery(".add-expired").addClass('active').show();
 			jQuery("#span_expired").show();
 
 			$j('.add-expired').val('');
@@ -626,28 +697,76 @@ function addProduct(id) {
 }
 
 function initBasket(){
-	$j('label.not-found').hide();
-	$j('label.cannot-empty').hide();	
+	$j('label.error').hide();
 	$j('input.price').hide();
 	$j('input.qty').hide();	
 	$j('select.store-select').hide();	
 	$j('input.subtotal-price').hide();		
 	$j('input.grandtotal-price').hide();	
 	$j('input.expired').hide();	
-
+	$j("#date").mask("99/99/9999");
+	$j("input.expired").mask("99/99/9999");
+	
 	//format price on init
 	$j('span.subtotal-price').formatCurrency({region: 'id-ID'});		
 	$j('span.product-price').formatCurrency({region: 'id-ID'});		
 }
 
 function addExpired(exp) {
+    var currVal = exp;
+    if(currVal == '')
+    {
+		$j('label.date-cannot-empty').show();
+		return false;
+    }
+    
+    var rxDatePattern = /^(\d{1,2})(\/|-)(\d{1,2})(\/|-)(\d{4})$/; //Declare Regex
+    var dtArray = currVal.match(rxDatePattern); // is format OK?
+    
+    if (dtArray == null) 
+        return false;
+    
+    //Checks for dd/mm/yyyy format.
+	dtDay = dtArray[1];
+    dtMonth= dtArray[3];
+    dtYear = dtArray[5];         
+    
+    if (dtMonth < 1 || dtMonth > 12) 
+    {
+		$j('label.date-wrong-format').show();
+	    return false;
+    }
+    else if (dtDay < 1 || dtDay> 31) 
+    {
+		$j('label.date-wrong-format').show();
+		 return false;   
+    }
+    else if ((dtMonth==4 || dtMonth==6 || dtMonth==9 || dtMonth==11) && dtDay ==31) 
+    {
+		$j('label.date-wrong-format').show();
+		return false;
+    }
+    else if (dtMonth == 2) 
+    {
+        var isleap = (dtYear % 4 == 0 && (dtYear % 100 != 0 || dtYear % 400 == 0));
+        if (dtDay> 29 || (dtDay ==29 && !isleap)) 
+        {
+			$j('label.date-wrong-format').show();
+			return false;
+        }
+    }
+	$j('label.date-cannot-empty').hide();
+	$j('label.date-wrong-format').hide();
+
+
 	jQuery('#basket-buy tr:last').find('td span.expired').text(exp);
 	jQuery('#basket-buy tr:last').find('td input.expired').val(exp);
 	//hidden tanggal
 	jQuery(".add-expired").hide();
 	jQuery("#span_expired").hide();
 	//show qty
-	jQuery(".add-qty").show();
+	jQuery('.menu-head').children('input').removeClass('active');
+	jQuery(".add-qty").addClass('active').show();
 	jQuery("#span_qty").show();
 
 	$j('.add-qty').val(1);
@@ -703,6 +822,7 @@ function addHargabeli(harga) {
 
 	$j('.add-product').val("");
 	$j('.add-product').focus();
+	editMode = true;
 }
 
 function findSubTotals() {
