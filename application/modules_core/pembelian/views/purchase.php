@@ -112,7 +112,6 @@
 
 <script type="text/javascript">
         CI_ROOT = "<?=base_url() ?>";
-        var editMode = false;
 </script>
 <script type="text/javascript">
 var $j = jQuery.noConflict(); 
@@ -280,7 +279,9 @@ jQuery(document).ready(function() {
 	});
 
     $j('#basket-buy').on('click','tbody tr td span.expired',function () {
-		if(editMode)
+    	var cekEdit = $j('.menu-head').find('input.active');
+    	$j(this).closest('tr:last-child');
+		if(!cekEdit)
 		{
 			$j(this).hide();
 	        var editExp = $j(this).next();
@@ -335,6 +336,7 @@ jQuery(document).ready(function() {
 		else
 		{
 			alert('Mohon selesaikan penginputan barang terlebih dahulu.');	
+			$j('.menu-head').find('input.active').focus();
 			return false;
 		}
     });	
@@ -387,6 +389,7 @@ jQuery(document).ready(function() {
 	    }
 	    else{
 	    	alert('Mohon selesaikan penginputan barang terlebih dahulu.');
+	    	$j('.menu-head').find('input.active').focus();
 		    return false;
 	    }
     });
@@ -574,11 +577,11 @@ function addProduct(id) {
 		                '</td>'+
 						'<td class="text-right">'+
 			            	'<span class="amount product-price">0</span>'+
-			            	'<input type="text" class="edit-amount price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
+			            	'<input type="text" class="edit-amount price" value="0" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
 			            '</td>'+
 			            '<td class="text-right">'+
 			            	'<span class="amount subtotal-price">0</span>'+
-							'<input type="text" class="edit-amount subtotal-price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
+							'<input type="text" class="edit-amount subtotal-price" value="0" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
 			            '</td>'+
 			            '<td class="table-action">'+
 			              '<a href="#" class="delete-row"><i class="fa fa-times"></i></a>'+
@@ -674,12 +677,12 @@ function addProduct(id) {
 	                	'<span for="store-place" class="store-label">'+store+'</span>'+
 	                '</td>'+
 					'<td class="text-right">'+
-		            	'<span class="amount product-price">20000</span>'+
-		            	'<input type="text" class="edit-amount price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
+		            	'<span class="amount product-price">0</span>'+
+		            	'<input type="text" class="edit-amount price" value="0" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
 		            '</td>'+
 		            '<td class="text-right">'+
-		            	'<span class="amount subtotal-price">20000</span>'+
-						'<input type="text" class="edit-amount subtotal-price" value="20000" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
+		            	'<span class="amount subtotal-price">0</span>'+
+						'<input type="text" class="edit-amount subtotal-price" value="0" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
 		            '</td>'+
 		            '<td class="table-action">'+
 		              '<a href="#" class="delete-row"><i class="fa fa-times"></i></a>'+
@@ -765,7 +768,7 @@ function addExpired(exp) {
 	jQuery(".add-expired").hide();
 	jQuery("#span_expired").hide();
 	//show qty
-	jQuery('.menu-head').children('input').removeClass('active');
+	jQuery('.menu-head').find('input').removeClass('active');
 	jQuery(".add-qty").addClass('active').show();
 	jQuery("#span_qty").show();
 
@@ -784,6 +787,8 @@ function addQty(qty) {
 	jQuery(".add-hargabeli").show();
 	jQuery("#span_hargabeli").show();
 
+	jQuery('.menu-head').find('input').removeClass('active');
+	jQuery(".add-hargabeli").addClass('active').show();
 	$j('.add-hargabeli').val(1);
 	$j('.add-hargabeli').focus();
 }
@@ -820,9 +825,10 @@ function addHargabeli(harga) {
 	jQuery(".add-product").show();
 	jQuery("#span_id").show();
 
+	jQuery('.menu-head').find('input').removeClass('active');
+	
 	$j('.add-product').val("");
 	$j('.add-product').focus();
-	editMode = true;
 }
 
 function findSubTotals() {
