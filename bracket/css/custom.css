@@ -122,8 +122,8 @@ button .fa-plus{
 
 
 /* POS Sales */
-#posJual > .panel-heading{
-	min-height: 210px;
+#posJual .form-group{
+	margin-bottom: 12px;
 }
 .menu-head.pos-sales{
 	margin: 0;

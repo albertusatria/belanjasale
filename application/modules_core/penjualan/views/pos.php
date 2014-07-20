@@ -8,12 +8,11 @@
         </div>
       <?php endif ; ?>     
     
-      <div class="panel panel-default" id="posBeli">
+      <div class="panel panel-default" id="posJual">
             <input type="hidden" id="userid" name="syalala" class="form-control" value="<?php echo $user['user_id'] ?>">
 
 	        <div class="panel-heading">
 	          <div class="panel-btns">
-	            <a href="#" class="panel-close">×</a>
 	            <a href="#" class="minimize">−</a>
 	          </div>
 	          <h4 class="panel-title">POINT OF SALE <code>[<?php echo date('d-m-Y'); ?> <span id="jamweker"></span>]</code></h4>
@@ -33,21 +32,31 @@
                     <input type="hidden" id="idmember" name="id_member" class="form-control" placeholder="Nama Pelanggan" disabled>
                     <input type="hidden" id="idsales" name="id_sales" class="form-control" placeholder="Nama Pelanggan" disabled>
                   </div>
-                </div>	
-				<div class="col-sm-4">
-                  <div class="form-group">
-                    <label class="control-label"></label>
-                    <input type="text" id="alamatdefault" name="alamat_member" class="form-control" placeholder="Alamat" disabled>
-                  </div>
-                </div>	
-				<div class="col-sm-2">
+                </div>		
+				<div class="col-sm-2 pull-right">
                   <div class="form-group">
                     <label class="control-label"></label>
                     <input type="text" id="namasales" name="sales_member" class="form-control" placeholder="Sales" disabled>
                   </div>
                 </div>	
 	            </div>
-	            <div class="row">
+        		<div class="row">
+					<div class="col-sm-5">
+	                  <div class="form-group">
+	                    <input type="text" id="alamatdefault" name="alamat_member" class="form-control" placeholder="Alamat" disabled>
+	                  </div>
+	                </div>
+        		</div>
+        		<div class="row">
+					<div class="col-sm-3">
+				        <div class="form-group">
+				            <div class="checkbox">
+				                <label>
+				                  <input type="checkbox" id="chkAlamat"> Alamat Baru
+			    	            </label>
+			        	    </div>          
+			        	</div>
+			     	</div>
 					<div class="col-sm-2">
 				        <div class="form-group">
 				            <div class="checkbox">
@@ -56,26 +65,7 @@
 				                </label>
 				            </div>          
 				        </div>
-			    	</div>
-					<div class="col-sm-3">
-				        <div class="form-group">
-				            <div class="checkbox pull-right">
-				                <label>
-				                  <input type="checkbox" id="chkAlamat"> Alamat Berbeda?
-			    	            </label>
-			        	    </div>          
-			        	</div>
-			     	</div>
-					<div class="col-sm-4">
-	                  <div class="form-group">
-	                    <input type="text" id="alamatbaru" name="alamat_tujuan" class="form-control" placeholder="Alamat Baru" style="display:none;" required disabled>
-	                  </div>
-	                </div>	
-					<div class="col-sm-1">
-	                  <div class="form-group">
-	                    <input type="text" id="biayakirim" name="biaya_kirim" class="form-control" placeholder="Biaya Kirim"  required>
-	                  </div>
-	                </div>	
+			    	</div>        					     	        		
         		</div>
         	</div>
         <div class="panel-heading">
@@ -122,7 +112,12 @@
         </div><!-- panel-body -->	 
 		<div class="panel-footer"><!-- panel-footer -->
 		 <div class="row">
-			<div class="col-sm-3 col-sm-offset-9">
+			<div class="col-sm-3">
+              <div class="form-group">
+                <input type="text" id="biayakirim" name="biaya_kirim" class="form-control" placeholder="Biaya Kirim"  required>
+              </div>
+            </div>			 
+			<div class="col-sm-3 col-sm-offset-6">
 			  <a class="btn btn-default">Cancel</a>&nbsp;		
 			  <a class="btn btn-danger" id="prosesToVerification">Checkin</a>
 			</div>
@@ -404,7 +399,7 @@ jQuery(document).ready(function() {
 
 			     var isAlamatBaru;
 			      if (jQuery('#chkAlamat').prop('checked')) {
-			        alamat = jQuery("#alamatbaru").val()
+			        alamat = jQuery("#alamatdefault").val()
 			      } else {
 			        alamat = jQuery("#alamatdefault").val();
 			      }
@@ -558,7 +553,7 @@ function addProduct(id) {
 			);
 	
 			initBasket();
-
+			$j('#idpelanggan').attr('disabled',"");
 			//hidden product
 			jQuery(".add-product").hide();
 			jQuery("#span_id").hide();
@@ -605,11 +600,9 @@ function addProduct(id) {
     // console.log(jQuery('#chkAlamat').prop('checked'));
     if (jQuery('#chkAlamat').prop('checked'))
     {
-      jQuery("#alamatbaru").show();
-      jQuery("#alamatbaru").removeAttr("disabled");
+      jQuery("#alamatdefault").removeAttr("disabled").focus();
     } else {
-      jQuery("#alamatbaru").hide();
-      jQuery("#alamatbaru").attr("disabled","");
+      jQuery("#alamatdefault").attr("disabled","");
       // jQuery("#labelketerangan").text("Keterangan");
       // jQuery("#keterangan").attr("placeholder","Berikan keterangan misalnya : barang retur, barang hadiah, dll");
     }
