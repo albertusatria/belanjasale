@@ -280,7 +280,7 @@ class Pembelian extends Admin_base {
 
 	// page title
 	public function page_title() {
-		$data['page_title'] = 'Purchasing';
+		$data['page_title'] = 'Pembelian';
 		$this->session->set_userdata($data);
 	}
 }

@@ -30,14 +30,14 @@
             <p class="text-muted">List of all receipt order on purchasing.</p>      
             </div>
             <div class="button-head pull-right">
-                <a href="" data-title="Add Purchasing Receipt Order" class="btn btn-danger" style="margin-right:50px;" data-toggle="modal" data-target="#purchasingOrder">
+                <a href="" data-title="Add Purchasing Receipt Order" class="btn btn-danger" data-toggle="modal" data-target="#purchasingOrder">
                   <i class="fa fa-plus"></i> &nbsp; New Order &nbsp;
                 </a>
             </div>          
           </div>	 
 	        <div class="panel-body">
 	          <div class="table-responsive">
-              <table class="table table-striped mb30 " id="listOrder">
+              <table class="dataTable table" id="listOrder">
                       <thead>
                         <tr>
                           <th>#Order</th>
@@ -46,7 +46,7 @@
                           <th>Keterangan</th>
                           <th>Order oleh : </th>
                           <th>Tgl order</th>
-                          <th></th>
+                          <th class="editable"></th>
                         </tr>
                       </thead>
                       <tbody>
@@ -114,7 +114,18 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label class="col-sm-3 control-label">Tanggal<span class="asterisk">*</span></label>
+          <label class="col-sm-3 control-label">Nota Pembelian</label>
+          <div class="col-sm-6">
+            <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="chkpembelian" checked> 
+                </label>
+            </div>          
+          </div>          
+        </div>
+      
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Tanggal <span class="asterisk">*</span></label>
           <div class="input-group col-sm-6">
             <input type="text" class="form-control" name="date" id="datepicker" placeholder="mm/dd/yyyy"  value="<?php echo $now ?>" required>
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
@@ -123,18 +134,8 @@
        <input type="hidden" id="userid" name="user_id" value="<?php echo $user['user_id'] ?>">
 
         <div class="form-group">
-          <label class="col-sm-3 control-label"></label>
-          <div class="col-sm-6">
-            <div class="checkbox">
-                <label>
-                  <input type="checkbox" id="chkpembelian" checked> Pembelian?
-                </label>
-            </div>          
-          </div>          
-        </div>
-        <div class="form-group">
           <label class="col-sm-3 control-label" id="labelketerangan">No Nota</label>
-          <div class="col-sm-6">
+          <div class="input-group col-sm-6">
             <textarea rows="5" id="keterangan" class="form-control" placeholder="Masukkan no nota untuk konfirmasi / tujuan bila bukan nota" required></textarea>
           </div>
         </div>
@@ -164,9 +165,7 @@
 <script src="<?php echo base_url();?>bracket/js/jquery.validate.min.js"></script>
 <script src="<?php echo base_url()?>bracket/js/jquery.datatables.min.js"></script>
 <script src="<?php echo base_url()?>bracket/js/chosen.jquery.min.js"></script>
-
-<script src="<?php echo base_url();?>bracket/js/custom.js"></script>
-
+<script src="<?php echo base_url()?>bracket/js/belanjasale.js"></script>
 <script type="text/javascript">
         CI_ROOT = "<?=base_url() ?>";
 </script>

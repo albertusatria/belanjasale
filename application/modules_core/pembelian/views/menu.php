@@ -1,10 +1,10 @@
     <div class="pageheader">
-      <h2><i class="fa fa-table"></i> Purchasing</h2>
+      <h2><i class="fa fa-table"></i> Pembelian</h2>
       <div class="breadcrumb-wrapper">
         <span class="label">You are here:</span>
         <ol class="breadcrumb">
           <li><a href="<?php echo base_url()?>dashboard/admin">Belanjasale</a></li>
-          <li class="active">Purchasing</li>
+          <li class="active">Pembelian</li>
         </ol>
       </div>
     </div>
