@@ -62,14 +62,26 @@ class User extends Admin_base {
 
 		if ($this->form_validation->run() == TRUE) {
 			// insert
-			$params = array($this->input->post('user_full_name'), $this->input->post('user_address'), $this->input->post('user_birthday'), $this->input->post('user_contact'), $this->input->post('user_id'));
-
+			$params = array($this->input->post('user_full_name'), 
+				$this->input->post('user_address'), 
+				$this->input->post('user_birthday'), 
+				$this->input->post('user_contact'), 
+				$this->input->post('user_id'),
+				$this->input->post('ktp'),
+				$this->input->post('tgl_diangkat'),
+				$this->input->post('tgl_berhenti'),
+				$this->input->post('status'));
 
 			if ($this->m_user->add_user_profile($params)) {
 				// get last inserted id
 				$last_id = $this->m_user->get_last_inserted_id();
 				// insert account
-				$params = array($last_id, $this->input->post('user_name'), $this->input->post('user_pass'), $this->input->post('user_email'), $this->input->post('user_st'), $this->input->post('user_id'));
+				$params = array($last_id, 
+					$this->input->post('user_name'), 
+					$this->input->post('user_pass'), 
+					$this->input->post('user_email'), 
+					$this->input->post('user_st'), 
+					$this->input->post('user_id'));
 				$this->m_user->add_user($params);
 				// insert role user
 				$this->m_user->add_role_user(array($this->input->post('role_id'), $last_id));
@@ -117,6 +129,10 @@ class User extends Admin_base {
 				'user_name'			=> $this->input->post('user_name'),
 				'user_pass'			=> $this->input->post('user_pass'),
 				'user_email'		=> $this->input->post('user_email'),
+				'ktp'				=> $this->input->post('ktp'),
+				'tgl_diangkat'		=> $this->input->post('tgl_diangkat'),
+				'tgl_berhenti'		=> $this->input->post('tgl_berhenti'),
+				'status'			=> $this->input->post('status'),
 				'user_st'			=> $this->input->post('user_st')
 			);
 		}
@@ -388,6 +404,7 @@ class User extends Admin_base {
 		// user detail
 		$data['user'] = $this->user;
 		// get user list
+		$data['rs_role'] = $this->m_role->get_all_role();
 		$data['r_user'] = $this->m_user->get_user_by_id($user_id);
 		$data['r_my_user'] = $this->m_user->get_my_user_by_id($user_id);
 
@@ -438,8 +455,13 @@ class User extends Admin_base {
    		    	'user_st' => $value['user_st'],
 				'du' => $now
 				);
+			$input_role = array(
+				'user_id' => $value['user_id'],
+   		    	'role_id' => $value['role_id']
+  				);
 		}
 		// echo '<pre>'; print_r($input); die;
+		$data_role = $this->m_user->update_role_user($input_role);
 		$data = $this->m_user->update_my_user($input);
 		header('Content-Type: application/json');
 		echo json_encode($data);			

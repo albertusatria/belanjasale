@@ -20,11 +20,27 @@ class m_user extends CI_Model {
         $this->db->update('users',$params,array('user_id'=>$params['user_id']));
     }
 
-     function get_my_user_by_id($id) {
-        return $this->db->get_where('my_user',array('user_id'=>$id))->row();
+    function update_role_user($params) {
+        $this->db->update('my_role_user',$params,array('user_id'=>$params['user_id']));
+    }
+
+    function get_my_user_by_id($id) {
+        //return $this->db->get_where('my_user',array('user_id'=>$id))->row();
+        $sql = "SELECT mu.*,ru.role_id AS user_role
+            FROM my_user mu
+            LEFT JOIN my_role_user ru ON ru.user_id = mu.user_id
+            WHERE mu.user_id = ".$id." ";
+        $query = $this->db->query($sql);
+        if ($query->num_rows() > 0) {
+            return $query->row();
+        } else {
+            return array();
+        }
     }
 
     function update_my_user($params) {
+        if(isset($params['user_pass']))
+            $params['user_pass']=sha1($params['user_pass']);
         $this->db->update('my_user',$params,array('user_id'=>$params['user_id']));
     }
 
@@ -110,13 +126,15 @@ class m_user extends CI_Model {
 
     // add
     function add_user_profile($params) {
-        $sql = "INSERT INTO users(user_full_name, user_address, user_birthday, user_number, creator, dc) VALUES(?,?,?,?,?,NOW())";
+        $sql = "INSERT INTO users(user_full_name, user_address, user_birthday, user_number, creator, dc, ktp, tgl_diangkat, tgl_berhenti, status) 
+                VALUES(?,?,?,?,?,NOW(),?,?,?,?)";
         return $this->db->query($sql, $params);
     }
 
     // add
     function add_user($params) {
-        $sql = "INSERT INTO my_user(user_id, user_name, user_pass, user_email, user_st, creator, dc) VALUES(?,?,?,?,?,?,NOW())";
+        $sql = "INSERT INTO my_user(user_id, user_name, user_pass, user_email, user_st, creator, dc) 
+                VALUES(?,?,?,?,?,?,NOW())";
         return $this->db->query($sql, $params);
     }
 

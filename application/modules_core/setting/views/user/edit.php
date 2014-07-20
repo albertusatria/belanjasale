@@ -53,6 +53,18 @@
 				              </div>
 				            </div>
 
+				             <div class="form-group">
+				              <label class="col-sm-2 control-label">Role <span class="asterisk">*</span></label>
+				              <div class="col-sm-3">
+					            <select id="adduserole" name="user_role" class="form-control input-sm" required="">
+                                	<option value=""> Pilih role </option>
+				                <?php foreach ($rs_role as $role): ?>
+				               	    <option value="<?php echo @$role['role_id'] ?>" <?php if (@$r_my_user->user_role == @$role['role_id']) : ?> selected <?php endif; ?>> <?php echo @$role['role_name'] ?> </option>
+				                <?php endforeach; ?>
+					            </select>
+				              </div>
+				            </div>
+
 				            <div class="form-group">
 				              <label class="col-sm-2 control-label">Status <span class="asterisk">*</span></label>
 				              <div class="col-sm-2">
@@ -349,6 +361,7 @@ jQuery(document).ready(function() {
 		    //item[number]['user_name'] = jQuery('#addusername').val();
    		    item[number]['user_email'] = jQuery('#addemail').val();
 		    item[number]['user_st'] = jQuery('#adduserst').val();
+		    item[number]['role_id'] = jQuery('#adduserole').val();
 		   		    
 		      jQuery.ajax({
 		        type: "POST",
@@ -417,7 +430,7 @@ jQuery(document).ready(function() {
 		    var number = 1;
 		    item[number] = {};
 		    item[number]['user_id'] = jQuery('#addid').val();
-   		    //item[number]['user_pass'] = jQuery('#addpassword').val();
+   		    item[number]['user_pass'] = jQuery('#addpassword').val();
 		   
 		      jQuery.ajax({
 		        type: "POST",
