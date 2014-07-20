@@ -26,7 +26,7 @@
 	          	Petugas Input : <code><?php if(isset($list_order->petugas_input_name)) : echo $list_order->petugas_order_name; else : echo "-"; endif; ?></code> , 
 	          	Tgl Input : <code><?php if(isset($list_order->tgl_input)) : echo date('d-m-Y h:i:s',strtotime($list_order->tgl_input)); else : echo "-"; endif; ?></code> <br>
 	          	Petugas Verifikasi : <code><?php if(isset($list_order->petugas_verifikasi_name)) : echo $list_order->petugas_order_name; else : echo "-"; endif; ?></code> , 
-	          	Tgl Verifikasi : <code><?php if(isset($list_order->tgl_input)) : echo date('d-m-Y h:i:s',strtotime($list_order->tgl_verifikasi)); else : echo "-"; endif; ?></code>
+	          	Tgl Verifikasi : <code><?php if(isset($list_order->tgl_verifikasi)) : echo date('d-m-Y h:i:s',strtotime($list_order->tgl_verifikasi)); else : echo "-"; endif; ?></code>
 	          	</p>
 	        </div>
         <div class="panel-heading">

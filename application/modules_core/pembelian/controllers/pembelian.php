@@ -67,6 +67,91 @@ class Pembelian extends Admin_base {
 		$this->load->view('dashboard/admin/template', $data);
 	}
 
+	public function riwayat()
+	{
+		// user_auth
+		$this->check_auth('R');
+
+		// menu
+		$data['menu'] = $this->menu();
+		// user detail
+		$data['user'] = $this->user;
+		// load template
+		$data['message'] = $this->session->flashdata('message');
+		$step = 'terverifikasi';
+		$data['list_order'] = $this->m_in_order->get_list_order_by_step($step);
+		$data['title']		  = "Receipt Purchasing Pinaple SI";
+		$data['main_content'] = "terverifikasi_list";
+		$this->load->view('dashboard/admin/template', $data);
+	}
+
+	//hanya bisa dilakukan apabila ordernya ketemu + stepnya 'verifikasi' , petugas input terisi
+	public function verifikasi_order($order_id = null)
+	{
+		// user_auth
+		$this->check_auth('R');
+
+		// menu
+		$data['menu'] = $this->menu();
+		// user detail
+		$data['user'] = $this->user;
+		// load template
+		$data['list_order'] = $this->m_in_order->get_list_order_by_id($order_id);
+		if ($data['list_order']->step != 'verifikasi' OR $data['list_order']->petugas_input == ""  OR $data['list_order']->petugas_input == null) {
+			echo "tidak bisa akses";
+			die;
+		}
+		$data['order_detail'] = $this->m_in_order->get_detail_order_by_id($order_id);
+		$data['message'] = $this->session->flashdata('message');
+		$data['title']		  = "Pembelian Inventory Pinaple SI";
+		// jika list order is Pembelian = 1 
+		$data['main_content'] = "verifikasi_form";
+		$this->load->view('dashboard/admin/template', $data);
+	}
+
+	public function view_order($order_id = null)
+	{
+		// user_auth
+		$this->check_auth('R');
+
+		// menu
+		$data['menu'] = $this->menu();
+		// user detail
+		$data['user'] = $this->user;
+		// load template
+		$data['list_order'] = $this->m_in_order->get_list_order_by_id($order_id);
+		$data['order_detail'] = $this->m_in_order->get_detail_order_by_id($order_id);
+		$data['message'] = $this->session->flashdata('message');
+		$data['title']		  = "Pembelian Inventory Pinaple SI";
+		// jika list order is Pembelian = 1 
+		$data['main_content'] = "order_view";
+		$this->load->view('dashboard/admin/template', $data);
+	}
+
+	//hanya bisa dilakukan apabila ordernya ketemu + stepnya 'verifikasi', petugas input terisi
+	public function edit_order($order_id = null)
+	{
+		// user_auth
+		$this->check_auth('R');
+		// menu
+		$data['menu'] = $this->menu();
+		// user detail
+		$data['user'] = $this->user;
+		// load template
+		$data['list_order'] = $this->m_in_order->get_list_order_by_id($order_id);
+		if ($data['list_order']->step != 'verifikasi') {
+			echo "tidak bisa akses";
+			die;
+		}
+		$data['order_detail'] = $this->m_in_order->get_detail_order_by_id($order_id);
+		$data['message'] = $this->session->flashdata('message');
+		$data['title']		  = "Pembelian Inventory Pinaple SI";
+		// jika list order is Pembelian = 1 
+		$data['main_content'] = "order_edit";
+		$this->load->view('dashboard/admin/template', $data);
+	}
+
+	//hanya bisa dilakukan apabila ordernya ketemu + stepnya 'verifikasi', petugas input terisi
 	public function input_order($order_id = null)
 	{
 		// user_auth
@@ -77,8 +162,12 @@ class Pembelian extends Admin_base {
 		// user detail
 		$data['user'] = $this->user;
 		// load template
-		$data['list_order'] = $this->m_in_order->get_list_order_by_id($order_id)
-		;
+		$data['list_order'] = $this->m_in_order->get_list_order_by_id($order_id);
+		if ($data['list_order']->step != 'detail') {
+			echo "tidak bisa akses";
+			die;
+		}
+
 		$data['message'] = $this->session->flashdata('message');
 		$data['title']		  = "Pembelian Inventory Pinaple SI";
 		// jika list order is Pembelian = 1 
@@ -126,13 +215,27 @@ class Pembelian extends Admin_base {
 		//ambil barang yang ga da di tabel
 		foreach ($_POST as $value) {
 
-			$order_id = $value['order_id'];			
+			$order_id = $value['order_id'];		
+
+			if ($value['step'] == 'verifikasi')
+			{
+				$input = array(
+					'petugas_input' => $value['petugas_input'],
+					'tgl_input' => $now,
+					'step' => $value['step'],
+					'jumlah' => $value['jumlah']
+					);				
+			}
+			elseif ($value['step'] == 'terverifikasi')
+			{
 			$input = array(
-				'petugas_input' => $value['petugas_input'],
-				'tgl_input' => $now,
-				'step' => $value['step'],
-				'jumlah' => $value['jumlah']
+				'petugas_verifikasi' => $value['petugas_verifikasi'],
+				'tgl_verifikasi' => $now,
+				'step' => $value['step']
 				);
+
+			}
+
 		}
 		$data = $this->m_in_order->update_order($order_id,$input);
 		header('Content-Type: application/json');
@@ -159,6 +262,21 @@ class Pembelian extends Admin_base {
 		header('Content-Type: application/json');
 	    echo json_encode($data);		
 	}
+
+	public function jigur()
+	{
+		//ambil barang yang ga da di tabel
+		foreach ($_POST as $value) {
+			$order_id = $value['order_id'];		
+		}
+		//untuk setiap yang di detail ditambahkan ke stok yang sudah ada
+			//cek apakah yg barcode + expnya sama
+			//untuk palet diisi berdasarkan quota
+		$data = $this->m_in_order->save_detail_order($input);
+		header('Content-Type: application/json');
+	    echo json_encode($data);		
+	}
+
 
 	// page title
 	public function page_title() {
