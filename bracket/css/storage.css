@@ -1,0 +1,45 @@
+.storage-product, .rack{
+	border: 2px solid #428BCA;
+	margin-bottom: 15px;
+	padding: 6px 10px;
+	color: #357EBD;
+	font-size: 10px;
+	font-family: 'LatoBold';
+	font-weight: 400;
+	text-transform: uppercase;
+	vertical-align: middle;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+.storage-product span{
+	border-color: #357EBD;
+	border-bottom: none;
+	border-right: none;
+	background: none;
+}
+.storage-product:hover, .rack:hover{
+	cursor: pointer;
+	cursor: hand;
+}
+.storage-product.active, .storage-product.active label{
+	color: #fff;
+}
+.storage-product.active{
+	background-color: #357EBD;
+}
+.storage-product.active span{
+	border-color: #fff;
+}
+
+.row{
+	margin-bottom: 16px;
+	width: 100%;	
+}
+.rack{
+	text-align: center;
+	margin: 0 8px;
+}
+.row > .rack:nth-child(5){
+	margin-right: 0;
+}
