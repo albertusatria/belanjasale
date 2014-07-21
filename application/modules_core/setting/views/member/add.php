@@ -129,8 +129,8 @@
 						            <select id="addsales" name="sales" class="form-control input-sm" required="">
                                     <option value=""> Pilih Sales </option>
 					                <?php foreach ($saless as $sales) : ?>
-					                  <option value="<?php echo $sales->kary_id ?>" <?php if ($member->sales_id == $sales->kary_id) : ?> selected <?php endif; ?>
-					                  	> <?php echo $sales->username?> </option>
+					                  <option value="<?php echo $sales->user_id ?>" <?php if (@$member->sales_id == $sales->user_id) : ?> selected <?php endif; ?>
+					                  	> <?php echo $sales->user_full_name?> </option>
 					                <?php endforeach; ?>
 						            </select>
 					              </div>
@@ -423,12 +423,13 @@ jQuery(document).ready(function() {
 	        data: item,
 	         success: function(data)
 	         {
-	            jQuery('#addkel').find("option").remove();
+	            jQuery('#addkel').find("option").remove();	            
 	            for (index = 0; index < data.length; ++index) {
 	                id = data[index]['id'];
 	                nama = data[index]['nama'];
 	                jQuery('#addkel').append('<option value="'+id+'">'+nama+'</option>');
-	            } 
+	            }
+	            jQuery('#addkel').append('<option value=""></option>'); 
 	         },
 	         error: function (data)
 	         {

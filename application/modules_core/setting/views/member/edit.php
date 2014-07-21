@@ -542,7 +542,8 @@ jQuery(document).ready(function() {
 	                id = data[index]['id'];
 	                nama = data[index]['nama'];
 	                jQuery('#addkel').append('<option value="'+id+'">'+nama+'</option>');
-	            } 
+	            }
+	            jQuery('#addkel').append('<option value=""></option>'); 
 	         },
 	         error: function (data)
 	         {
@@ -697,7 +698,8 @@ jQuery(document).ready(function() {
 				                    {
 						                jQuery('#addkel').append('<option value="'+id+'">'+nama+'</option>');
 				                    }
-					            } 
+								}
+								jQuery('#addkel').append('<option value=""></option>');
 					         },
 					         error: function (data)
 					         {

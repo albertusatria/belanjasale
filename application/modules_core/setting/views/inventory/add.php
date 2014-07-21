@@ -88,6 +88,14 @@
               </div>
             </div>
 
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Volume *</label>
+              <div class="col-sm-3">
+                <input name="volume" id="volume" class="form-control" maxlength="25" type="text" value="" required/>
+                <!-- <span class="help-block">A block of help text that breaks onto a new line and may extend beyond one line.</span> -->
+              </div>
+            </div>
+
            <div class="form-group">
               <label class="col-sm-3 control-label">Konversi dari parent </label>
               <div class="col-sm-3">
@@ -270,6 +278,7 @@ jQuery(document).ready(function(){
         item[number]['harga_jual'] = jQuery('#harga_jual').val();
         item[number]['satuan'] = jQuery('#satuan').val();
         item[number]['berat'] = jQuery('#berat').val();
+        item[number]['volume'] = jQuery('#volume').val();
         item[number]['konversi'] = jQuery('#konversi').val();
         item[number]['kode_rak'] = jQuery('#kode_rak').val();
         item[number]['petugas_id'] = jQuery('#user_id').val();
