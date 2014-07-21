@@ -9,7 +9,7 @@ class m_karyawan extends CI_Model {
 
     function get_sales() {
         $this->db->where('status','SALES');
-    	$query = $this->db->get('sdm_users');
+    	$query = $this->db->get('users');
     	// echo '<pre>'; print_r($query->result());die;
     	if ($query->num_rows > 0) {
     		return $query->result();

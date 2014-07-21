@@ -80,6 +80,7 @@ class Inventory extends Admin_base {
 					'satuan'		=> $value['satuan'],
 					'harga_jual'	=> $value['harga_jual'],
 					'berat'			=> $value['berat'],
+					'volume'		=> $value['volume'],
 					'petugas_id'	=> $value['petugas_id'],
 					'dc'			=> $now
 					);
@@ -94,6 +95,7 @@ class Inventory extends Admin_base {
 					'harga_jual'	=> $value['harga_jual'],
 					'kode_rak'		=> $value['kode_rak'],
 					'berat'			=> $value['berat'],
+					'volume'		=> $value['volume'],
 					'barcode_parent'=> $value['barcode_parent'],
 					'petugas_id'	=> $value['petugas_id'],
 					'dc'			=> $now
@@ -128,6 +130,7 @@ class Inventory extends Admin_base {
 					'satuan'		=> $value['satuan'],
 					'harga_jual'	=> $value['harga_jual'],
 					'berat'			=> $value['berat'],
+					'volume'		=> $value['volume'],
 					'petugas_id'	=> $value['petugas_id'],
 					'du'			=> $now
 					);
@@ -141,6 +144,7 @@ class Inventory extends Admin_base {
 					'harga_jual'	=> $value['harga_jual'],
 					'kode_rak'		=> $value['kode_rak'],
 					'berat'			=> $value['berat'],
+					'volume'		=> $value['volume'],
 					'barcode_parent'=> $value['barcode_parent'],
 					'petugas_id'	=> $value['petugas_id'],
 					'du'			=> $now
