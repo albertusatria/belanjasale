@@ -226,8 +226,11 @@ jQuery(document).ready(function(){
             console.log(data);
             console.log('joss');
             //redirect
-            window.close();
-            window.opener.top.location.reload();
+            jQuery("purchasingOrder").modal("hide");
+            window.location.replace(CI_ROOT + 'pembelian/order');
+
+            // window.close();
+            // window.opener.top.location.reload();
          },
          error: function (data)
          {  

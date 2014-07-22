@@ -191,8 +191,9 @@ class Inventory extends Admin_base {
 		//ambil barang yang ga da di tabel
 		foreach ($_POST as $value) {
 			$barcode = $value['barcode'];
+			$pelanggan_id = $value['pelanggan_id'];
 		}
-		$data = $this->m_inventory->get_inventory_array($barcode);
+		$data = $this->m_inventory->get_inventory_array($pelanggan_id,$barcode);
 		header('Content-Type: application/json');
 	    echo json_encode($data);
 	}

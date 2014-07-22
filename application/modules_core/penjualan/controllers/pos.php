@@ -10,6 +10,7 @@ class Pos extends Admin_base {
 		$this->load->model('m_role');
 		$this->load->model('m_member');
 		$this->load->model('m_penjualan');
+		$this->load->model('pembelian/m_in_order');
 		// load user
 		$this->load->helper('text');
 		// page title
@@ -27,6 +28,7 @@ class Pos extends Admin_base {
 		$data['user'] = $this->user;
 		// load template
 		$data['message'] = $this->session->flashdata('message');
+
 		$data['title']		  = "POS Sales Pinaple SI";
 		$data['main_content'] = "pos";
 		$this->load->view('dashboard/admin/template', $data);
@@ -87,31 +89,47 @@ class Pos extends Admin_base {
 				'sub_total'	=> $value['sub_total']
 				);
 			$data = $this->m_penjualan->save_detail_nota($input);
+			$sisa = $value['qty'];
+
+
 
 			$psdia = $this->m_in_order->get_all_inv_persediaan_by_id($value['barcode']);
-			$sisa = $value['qty'];
-			$params['barcode'] = $value['barcode'];	
+
+			//update data di persediaan
 			foreach ($psdia as $vp) {
-				$params['tgl_expired']=$vp->tgl_expired;
-				$stk=$vp->stok;
-				if($stk>=$sisa){
-					if($sisa>0){
-						$params['stok'] = $stk-$sisa;
-						$sisa=0;
-					}else{
+
+				$params['barcode'] = $value['barcode'];	
+				$params['tgl_expired'] = $vp->tgl_expired;
+
+				$stk = $vp->stok;
+				
+				if($stk >= $sisa)
+				{
+					if($sisa > 0)
+					{
+						$params['stok'] = $stk - $sisa;
+						$sisa = 0;
+					}
+					else
+					{
 						$params['stok'] = $stk;	
 					}
 				}else{
 					$params['stok'] = 0;
-					$sisa-=$stk;
+					$sisa = $sisa - $stk;
 				}
+
 				$upsdia = $this->m_in_order->update_inv_persediaan($params);			
+
 			}
 
+			//delete
 			$rbrg = $this->m_in_order->get_inv_barang_by_id($value['barcode']);
 			$bb['barcode'] = $value['barcode'];
-			$bb['buffer_stok'] = $rbrg->buffer_stok - $value['qty']; 
+			$bb['stok_total'] = $rbrg->stok_total - $value['qty']; 
 			$this->m_in_order->update_inv_barang($bb);
+
+
 		}
 		header('Content-Type: application/json');
 	    echo json_encode($data);		

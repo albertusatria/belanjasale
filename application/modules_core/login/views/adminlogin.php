@@ -35,12 +35,12 @@
                 
                 <div class="signin-info">
                     <div class="logopanel">
-                        <h1><span>[</span> Pinaple SI <span>]</span></h1>
+                        <h1><span>[</span> Pinaple SI 0.6.ver<span>]</span></h1>
                     </div><!-- logopanel -->
                 
                     <div class="mb20"></div>
                 
-                    <h5><strong>Registered for Belanjasale - Yogyakarta</strong></h5>
+                    <h5><strong>Registered for Belanjasale - Yogyakarta </strong></h5>
                     <ul>
                         <li><i class="fa fa-arrow-circle-o-right mr5"></i> Jl. ... Yogyakarta</li>
                         <li><i class="fa fa-arrow-circle-o-right mr5"></i> 0274 xxx xxx</li>
