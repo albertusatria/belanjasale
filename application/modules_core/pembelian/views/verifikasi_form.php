@@ -58,7 +58,7 @@
 	            	<?php $max = count($order_detail); ?>
 	            	<?php if($max != 0) : while ($i < $max) : ?>
 
-			        '<tr class="products">
+			        <tr class="products">
 			            <td>
 			            	<img src="<?php echo base_url()?>bracket/images/photos/media3.png" alt="">
 			            </td>
@@ -219,14 +219,15 @@ jQuery(document).ready(function() {
 	   //      $j("h1 span.grandtotal-price").text(0).formatCurrency({region: 'id-ID'});
 	   //      $j(".grandtotal-price",this).val(0);					  
 		  // }
-		  
     //     });
     //     return false;
     // });
 
 	$j("#verify").on('click',function(){
-		console.log('simpan ke gudang');
 
+		// console.log('simpan ke gudang');
+      var c = confirm("Once you verified this, you can't cancel the process, proceed?");
+      if(c) {
 		//tambah stok ke gudang
 		    var item = {};
 		    var num = 1;
@@ -240,10 +241,10 @@ jQuery(document).ready(function() {
 		        data: item,
 		         success: function(data)
 		         {
-					//update step = terverifikasi bla-bla-bla
-				    console.log('masuk tambah_stok_proses');
-				    console.log(data);
-				    //return false;
+				    // console.log('masuk tambah_stok_proses');
+				    // console.log(data);
+				    // return false;
+
 				    var number = 1;
 				    item[number] = {};
 				    item[number]['order_id'] = '<?php echo $list_order->order_id ?>';
@@ -257,8 +258,8 @@ jQuery(document).ready(function() {
 				        data: item,
 				         success: function(data)
 				         {
-				         	console.log('masuk update_order');
 				            console.log(data);
+				         	console.log('masuk update_order');
 				            //redirect
 			                window.location.replace(CI_ROOT + 'pembelian/verifikasi');
 				         },
@@ -275,6 +276,7 @@ jQuery(document).ready(function() {
 		         }
 
 		        }); 
+      }
 
 
 	});

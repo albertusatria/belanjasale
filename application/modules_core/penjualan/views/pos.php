@@ -1,4 +1,4 @@
-        
+
     <div class="contentpanel">
 
       <?php if ($message != null ) : ?>
@@ -44,6 +44,7 @@
 					<div class="col-sm-5">
 	                  <div class="form-group">
 	                    <input type="text" id="alamatdefault" name="alamat_member" class="form-control" placeholder="Alamat" disabled>
+	                    <input type="text" id="alamatbaru" name="alamat_member_baru" class="form-control" placeholder="Alamat" style="display:none;" disabled required>
 	                  </div>
 	                </div>
         		</div>
@@ -72,8 +73,8 @@
         	<div class="menu-head">
 				<div class="input-group input-group-lg col-sm-12">
 				  <!-- barcode -->
-                  <span class="input-group-addon" id="span_id"><i class="fa fa-barcode"></i></span>
-                  <input type="text" placeholder="barcode input.." name="product_id" class="add-product form-control">
+                  <span class="input-group-addon" id="span_id" ><i class="fa fa-barcode"></i></span>
+                  <input type="text" placeholder="barcode input.." name="product_id" class="add-product form-control" disabled>
 				  <!-- qty -->
                   <span class="input-group-addon" style="display:none;" id="span_qty"><i class="fa fa-shopping-cart"></i></span>
                   <input type="text" placeholder="jumlah barang.." name="qty_product" class="add-qty form-control" style="display:none;">
@@ -81,8 +82,8 @@
                   <span class="input-group-addon" style="display:none;" id="span_hargabeli"><i class="fa fa-money"></i></span>
                   <input type="text" placeholder="harga beli.." name="price_product" class="add-hargabeli form-control" style="display:none;">
                 </div>
-                <label for="product_id" name="error-notfound-productid" class="error not-found">Product not found!</label>
-                <label for="product_id" name="error-empty-productid" class="error cannot-empty">Field above cannot empty!</label>
+                <label for="product_id" name="error-notfound-productid" class="error not-found product">Product not found!</label>
+                <label for="product_id" name="error-empty-productid" class="error cannot-empty product">Field above cannot empty!</label>
         	</div>
 			<div class="total-amount pull-right">
 				<h4 class="text-warning">Grand Total</h4>
@@ -397,11 +398,12 @@ jQuery(document).ready(function() {
 			        isDropshipping = 0
 			      }
 
+			     //ora iso ngunu
 			     var isAlamatBaru;
 			      if (jQuery('#chkAlamat').prop('checked')) {
 			        alamat = jQuery("#alamatdefault").val()
 			      } else {
-			        alamat = jQuery("#alamatdefault").val();
+			        alamat = jQuery("#alamatbaru").val();
 			      }
 
 			      var item = {};
@@ -481,10 +483,16 @@ jQuery(document).ready(function() {
 <script type="text/javascript">
 
 function addProduct(id) {
+
+	//harus cek stok
+	//dan harga member 
+
   var item = {};
   var num = 1;
   item[num] = {};
   item[num]['barcode'] = id;
+  item[num]['pelanggan_id'] = jQuery('#idmember').val();
+
   // console.log(id);
   // return false;
   //ajax cari barang
@@ -497,8 +505,8 @@ function addProduct(id) {
      	//jika kosong
 		if(id =="")
 		{
-			$j('label.not-found').hide();	
-			$j('label.cannot-empty').show();
+			$j('label.not-found.product').hide();	
+			$j('label.cannot-empty.product').show();
 			$j('.add-product').closest('div').addClass('has-error');	
 			return false;
 		}
@@ -506,18 +514,37 @@ function addProduct(id) {
 		//jika tidak ketemu
 		if(data.length > 0)
 		{
-			var id; var nama; var rak; var harga;
+			var id; var nama; var rak; var harga; var harga_member; var min_qty; var member;
             for (index = 0; index < data.length; ++index) {
                 id = data[index]['barcode'];
                 nama = data[index]['nama_barang'];
                 harga = data[index]['harga_jual'];
+                harga_member = data[index]['harga_member'];
+                min_qty = data[index]['min_qty'];
+                if (harga_member == null) {
+                	harga_member = harga;
+                	min_qty = 1;
+                	member = 'tidak ada harga khusus';
+                }
+                else {
+                	member = 'harga khusus';
+                }
+
                 if (data[index]['kode_rak'] == "") {
                 	rak = 'Palet';
                 } else {
                 	rak = data[index]['kode_rak'];
                 }
             } 
+
+            if (min_qty == 1) {
+            	harga = harga_member;
+            }
+
 			console.log(id + nama + rak);
+			console.log('member : ' + member);
+			console.log('harga member : ' + harga_member);
+			console.log('harga biasa : ' + harga);
 			//hidden semua span
 			$j('label[name=product_id]').hide();			
 			$j('.add-product').closest('div').removeClass('has-error');
@@ -537,10 +564,12 @@ function addProduct(id) {
 			            '<td>'+
 			            	'<span for="qty" class="amount qty">1</span>'+
 			            	'<input data-l-zero="deny" type="text" value="1" class="edit-amount qty" />'+
+			            	'<input data-l-zero="deny" type="text" value="'+min_qty+'" class="edit-amount min-qty" />'+
 			            '</td>'+
 						'<td class="text-right">'+
 			            	'<span class="amount product-price">'+harga+'</span>'+
 			            	'<input type="text" class="edit-amount price" value="'+harga+'" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
+			            	'<input type="text" class="edit-amount price-member" value="'+harga_member+'" data-a-sign="Rp " data-a-dec="," data-a-sep="."/>'+
 			            '</td>'+
 			            '<td class="text-right">'+
 			            	'<span class="amount subtotal-price">'+harga+'</span>'+
@@ -578,8 +607,8 @@ function addProduct(id) {
 		}
 		else {
 			console.log('tidak ketemu');
-			$j('label.cannot-empty').hide();
-			$j('label.not-found').show();
+			$j('label.cannot-empty.product').hide();
+			$j('label.not-found.product').show();
 			$j('.add-product').closest('div').addClass('has-error');
 		}
 		return false;
@@ -601,9 +630,15 @@ function addProduct(id) {
     // console.log(jQuery('#chkAlamat').prop('checked'));
     if (jQuery('#chkAlamat').prop('checked'))
     {
-      jQuery("#alamatdefault").removeAttr("disabled").focus();
+      jQuery("#alamatdefault").hide();
+      jQuery("#alamatbaru").show();
+      jQuery("#alamatbaru").removeAttr("disabled").focus();
+      // jQuery("#alamatdefault").removeAttr("disabled").focus();
     } else {
-      jQuery("#alamatdefault").attr("disabled","");
+      jQuery("#alamatbaru").attr("disabled","");
+      jQuery("#alamatbaru").hide();
+      jQuery("#alamatdefault").show();
+      // jQuery("#alamatbaru").remove("disabled").focus();
       // jQuery("#labelketerangan").text("Keterangan");
       // jQuery("#keterangan").attr("placeholder","Berikan keterangan misalnya : barang retur, barang hadiah, dll");
     }
@@ -618,13 +653,15 @@ function initBasket(){
 	$j('input.subtotal-price').hide();		
 	$j('input.grandtotal-price').hide();	
 	$j('input.expired').hide();	
+	$j('input.min-qty').hide();	
+	$j('input.price-member').hide();	
 
 	//format price on init
 	$j('span.subtotal-price').formatCurrency({region: 'id-ID'});		
 	$j('span.product-price').formatCurrency({region: 'id-ID'});		
 }
 
-function addQty(qty) {
+function addQty(qty) {	
 	jQuery('#basket-buy tr:last').find('td span.qty').text(qty);
 	jQuery('#basket-buy tr:last').find('td input.qty').val(qty);
 	//hidden qty
@@ -636,12 +673,29 @@ function addQty(qty) {
 
 	$j('.add-hargabeli').focus();
 
-	qty = Number($j(this).closest("tr").find("td input.qty").val());
-	price = Number($j(this).closest("tr").find("td input.price").val());
+	var hrg_member = jQuery('#basket-buy tr:last').find("td input.price-member").val();
+	console.log('harga member : ' + hrg_member);
+	console.log('harga biasa  : ' + jQuery('#basket-buy tr:last').find("td input.price").val());
+
+	var min = jQuery('#basket-buy tr:last').find("td input.min-qty").val();
+
+	if (Number(qty) >= Number(min) ) {
+		// console.log('dapat harga member');
+		jQuery('#basket-buy tr:last').find("td span.product-price").text(hrg_member);
+		jQuery('#basket-buy tr:last').find("td input.price").val(hrg_member);
+		jQuery('.add-hargabeli').val(hrg_member);
+	}
+
+	// console.log('qty' + qty);
+	// console.log('min_qty' + jQuery('#basket-buy tr:last').find("td input.min-qty").val());
+	// console.log('harga setelah member   : ' + jQuery('#basket-buy tr:last').find("td input.price").val());
+
+	qty = Number(jQuery('#basket-buy tr:last').find("td input.qty").val());
+	price = Number(jQuery('#basket-buy tr:last').find("td input.price").val());
 
 	Subtotal = qty * price;
-    $j(this).closest("tr").find("td span.subtotal-price").text(Subtotal).formatCurrency({region: 'id-ID'});
-    $j(this).closest("tr").find("td input.subtotal-price").val(Subtotal);
+    jQuery('#basket-buy tr:last').find("td span.subtotal-price").text(Subtotal).formatCurrency({region: 'id-ID'});
+    jQuery('#basket-buy tr:last').find("td input.subtotal-price").val(Subtotal);
 	$j('#basket-buy tbody td .product-price').formatCurrency({region: 'id-ID'});
 
 	findSubTotals2();
@@ -723,7 +777,11 @@ function selectMember(id)
 			$j('#idmember').val(id);
 			$j('#idsales').val(sales_id);
 			$j('input[name=product_id]').removeAttr('disabled');
-	     	console.log('ditemukan');
+			$j('input.add-product').removeAttr('disabled');
+
+	     	// console.log('ditemukan');
+
+			$j('.add-product').focus();
 	     	return false;
 
 			//tambah baris
@@ -733,6 +791,7 @@ function selectMember(id)
 		else {
 
 			console.log('tidak ketemu');
+			$j('#idpelanggan').val('');
 			$j('label.cannot-empty.pelanggan').hide();
 			$j('label.not-found.pelanggan').show();
 			$j('.add-pelanggan').closest('div').addClass('has-error');

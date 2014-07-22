@@ -29,9 +29,11 @@ class m_inventory extends CI_Model {
     }
 
 
-    function get_inventory_array($barcode) {
-        $this->db->where('barcode',$barcode);
-        $query = $this->db->get('inv_barang');
+    function get_inventory_array($pelanggan_id,$barcode) {
+        $sql = "SELECT b.barcode,b.nama_barang,b.harga_jual,d.harga_jual as harga_member,d.min_qty,b.kode_rak
+                FROM (SELECT * FROM inv_barang i WHERE i.barcode = '$barcode') b
+                LEFT JOIN (SELECT * FROM crm_diskon c WHERE c.pelanggan_id = '$pelanggan_id') d ON b.barcode = d.barcode ";
+        $query = $this->db->query($sql);
         //echo '<pre>'; print_r($query->row());die;
         if ($query->num_rows > 0) {
             return $query->result();

@@ -84,7 +84,7 @@
                               <?php echo date('d-m-Y | h:i:s',strtotime( $list_order[$i]->tgl_input)) ?>
                             </td>
                             <td class="table-action">
-                              <a href="<?php echo base_url() ?>pembelian/edit_order/<?php echo $list_order[$i]->order_id ?>" class="update-row"><i class="fa fa-pencil"></i></a>
+                              <!-- <a href="<?php echo base_url() ?>pembelian/edit_order/<?php echo $list_order[$i]->order_id ?>" class="update-row"><i class="fa fa-pencil"></i></a> -->
                               <a href="<?php echo base_url() ?>pembelian/verifikasi_order/<?php echo $list_order[$i]->order_id ?>" class="update-row"><i class="fa fa-check"></i></a>
                               <!-- <a href="#" class="delete-row"><i class="fa fa-times"></i></a> -->
                               <!-- <a href="#" class="save-row" style="display:none;"><i class="fa fa-save"></i></a> -->

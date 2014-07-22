@@ -270,12 +270,14 @@ class Pembelian extends Admin_base {
         $datestring = '%Y-%m-%d %h:%i:%a';
         $time = time();
         $now = mdate($datestring, $time);
+
 		//ambil barang yang ga da di tabel
 		foreach ($_POST as $value){
 			$order_id = $value['order_id'];
 			//$step = $value['step'];
 			//$petugas_verifikasi = $value['petugas_verifikasi'];
 		}
+
 		$rspo = $this->m_in_order->get_detail_order_by_id($order_id);
 
 		//if(){
@@ -297,23 +299,22 @@ class Pembelian extends Admin_base {
 				'du' => $now
 			);
 
-			if($kr=='Palet'){
+			if($kr=='Palet')
+			{
 				$allpalet = $this->m_in_order->get_all_inv_palet();
 				$input['palet_id']= rand(1,17);
 			}
-			else{
+			else
+			{
 				$input['rak_id']=$kr;
 			}
 			$data = $this->m_in_order->insert_inv_persediaan($input);
 
 			$rbrg = $this->m_in_order->get_inv_barang_by_id($bc);
 			$bb['barcode'] = $bc;
-			$bb['buffer_stok'] = $rbrg->buffer_stok + $st; 
-			$this->m_in_order->update_inv_barang($bb);
+			$bb['stok_total'] = $rbrg->stok_total + $st; 
+			$data = $this->m_in_order->update_inv_barang($bb);
 		}
-		//untuk setiap yang di detail ditambahkan ke stok yang sudah ada
-			//cek apakah yg barcode + expnya sama
-			//untuk palet diisi berdasarkan quota
 		header('Content-Type: application/json');
 	    echo json_encode(true);		
 	}

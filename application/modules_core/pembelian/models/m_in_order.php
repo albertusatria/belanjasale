@@ -126,14 +126,20 @@ class m_in_order extends CI_Model {
     }
 
     public function update_inv_barang($params) {
-        $this->db->update('inv_barang',$params,array('barcode'=>$params['barcode']));
+        $update = $this->db->update('inv_barang',$params,array('barcode'=>$params['barcode']));
+        if ($update) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public function get_all_inv_persediaan_by_id($id) {
         $sql = "SELECT *
                 FROM inv_persediaan
                 WHERE barcode='$id'
-                ORDER BY ASC tgl_expired";
+                ORDER BY tgl_expired ASC";
         $query = $this->db->query($sql);
         // echo '<pre>'; print_r($query->result()); die;
         if ($query->num_rows() > 0) {
