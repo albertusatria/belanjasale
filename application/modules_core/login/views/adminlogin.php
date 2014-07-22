@@ -35,7 +35,7 @@
                 
                 <div class="signin-info">
                     <div class="logopanel">
-                        <h1><span>[</span> Pinaple SI 0.6.ver<span>]</span></h1>
+                        <h1><span>[</span> Pinaple SI 0.6a.ver<span>]</span></h1>
                     </div><!-- logopanel -->
                 
                     <div class="mb20"></div>
