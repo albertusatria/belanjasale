@@ -27,7 +27,7 @@
 		                <div class='storage-product' id="prod1">
 		                	<span class="product-name">Product 1</span>
 							<span class="input-group-addon">
-								<label class="qty">100</label>
+								<label class="qty">320</label>
 								<label class="separator">/</label>
 								<label class="unalocate text-success">0</label>
 							</span>
@@ -76,38 +76,48 @@
 		            <div class="panel-body">
 		              <div id='storage-list'>
 		              	<div class="row">
-			                <div class="rack col-md-2" maximum="300">
-								A1
+			                <div class="rack col-md-2" data-maximum="300" data-storable="300">
+								<label class="rack-title empty">A1</label>
+								<div id="capacity" class="lots" style="height:0;"></div>
 			                </div>
-			                <div class="rack col-md-2" maximum="300">
-								A2
+			                <div class="rack col-md-2" data-maximum="300" data-storable="300">
+								<label class="rack-title empty">A2</label>
+								<div id="capacity" class="lots" style="height:0;"></div>
 			                </div>
-			                <div class="rack col-md-2" maximum="300">
-								A3
+			                <div class="rack col-md-2" data-maximum="300" data-storable="300">
+								<label class="rack-title empty">A3</label>
+								<div id="capacity" class="lots" style="height:0;"></div>
 			                </div>
-			                <div class="rack col-md-2" maximum="300">
-								A4
+			                <div class="rack col-md-2" data-maximum="300" data-storable="300">
+								<label class="rack-title empty">A4</label>
+								<div id="capacity" class="lots" style="height:0;"></div>
 			                </div>
-			                <div class="rack col-md-2" maximum="300">
-								A5
-			                </div>	
+			                <div class="rack col-md-2" data-maximum="300" data-storable="300">
+								<label class="rack-title empty">A5</label>
+								<div id="capacity" class="lots" style="height:0;"></div>
+			                </div>			                			                			                	
 		              	</div>
 		              	<div class="row">
-			                <div class="rack col-md-2" maximum="300">
-								A6
+			                <div class="rack col-md-2" data-maximum="300" data-storable="300">
+								<label class="rack-title empty">A6</label>
+								<div id="capacity" class="lots" style="height:0;"></div>
 			                </div>
-			                <div class="rack col-md-2" maximum="300">
-								A7
+			                <div class="rack col-md-2" data-maximum="300" data-storable="300">
+								<label class="rack-title empty">A7</label>
+								<div id="capacity" class="lots" style="height:0;"></div>
 			                </div>
-			                <div class="rack col-md-2" maximum="300">
-								A8
+			                <div class="rack col-md-2" data-maximum="300" data-storable="300">
+								<label class="rack-title empty">A8</label>
+								<div id="capacity" class="lots" style="height:0;"></div>
 			                </div>
-			                <div class="rack col-md-2" maximum="300">
-								A9
+			                <div class="rack col-md-2" data-maximum="300" data-storable="300">
+								<label class="rack-title empty">A9</label>
+								<div id="capacity" class="lots" style="height:0;"></div>
 			                </div>
-			                <div class="rack col-md-2" maximum="300">
-								A10
-			                </div>	
+			                <div class="rack col-md-2" data-maximum="300" data-storable="300">
+								<label class="rack-title empty">A10</label>
+								<div id="capacity" class="lots" style="height:0;"></div>
+			                </div>			                			                			                			                
 		              	</div>		              	
 		              </div>
 		            </div>
@@ -154,7 +164,7 @@
 	jQuery(document).ready(function() {
 		
 		var qtySelected = 0;
-		var productSelected = "", maxRack = 0, newMax = 0;	
+		var productSelected = "", productName="", maxRack = 0, newMax = 0;	
 		
 	    // clicked product
 	    $j('#product-list').on('click','.storage-product',function(){
@@ -162,6 +172,8 @@
 			if($j(this).hasClass('active'))
 			{
 				$j(this).removeClass('active');
+				qtySelected = 0; productSelected = ""; productName=""; maxRack = 0; newMax = 0;				
+				startAlocation();				
 			}
 			else
 			{
@@ -169,16 +181,18 @@
 				{
 					$j(this).addClass('active');
 					productSelected = $j(this).attr("id");
-					qtySelected = Number($j(this).find('label.qty').text());
+					productName = $j(this).find('span.product-name').text();
+					qtySelected = parseInt($j(this).find('label.qty').text());
 				}
 				else
 				{
-					alert('Proses pengalokasian hanya dapat dilakukan per barang!');
-					return false;
+					alert('Proses pengalokasian hanya dapat dilakukan per barang!');				
+					startAlocation();
 				}
 			}
 	        return false;
 	    });
+
 
 	    // clicked storage
 	    $j('#storage-list').on('click','.rack',function(){
@@ -186,30 +200,84 @@
 			if($j(this).hasClass('active'))
 			{
 				$j(this).removeClass('active');
+				qtySelected = 0; productSelected = ""; productName=""; maxRack = 0; newMax = 0;
+				startAlocation();				
 			}
 			else
 			{
-				maxRack = Number($j(this).attr("maximum"));
-
-				if(maxRack > 0)
+				if($j('#product-list').children('div').hasClass('active'))
 				{
-					$j(this).addClass('active');
-					
-					newMax = maxRack - qtySelected;
-					$j(this).attr("maximum", newMax);
-					if(newMax >= 0)
+					maxRack = parseInt($j(this).attr("data-storable"));
+					var initMax = parseInt($j(this).attr("data-maximum"));
+					if(maxRack > 0 )
 					{
-						$j('#'+ productSelected).find('label.qty').text(0);
-						$j('#'+ productSelected).find('label.unalocate').text(qtySelected);	
+						$j(this).addClass('active');
+						
+						/* calculation */
+						newMax = maxRack - qtySelected;
+						/* animation */
+						capacity = $j(this).find('#capacity');
 
-						qtySelected = 0; productSelected = ""; maxRack = 0; newMax = 0;
+						/* update product storability */
+						if(newMax >= 0)
+						{
+							$j('#'+ productSelected).find('label.qty').text(0);
+							$j('#'+ productSelected).find('label.unalocate').text(qtySelected);	
+							
+							$j(this).attr("data-storable", newMax);
+							$j(this).append(
+							'<input type="hidden" data-product-id="'+productSelected+
+							'" data-product-name="'+productName+'" data-product-qty="'+qtySelected+'">');
+													
+							var heightAnimation = parseFloat((qtySelected/initMax)*100);	
+						}
+						else
+						{
+							var surplus = newMax * -1;
+							$j('#'+ productSelected).find('label.qty').text(surplus);
+							$j('#'+ productSelected).find('label.unalocate').text(maxRack);
+							
+							$j(this).attr("data-storable", 0);
+							$j(this).append(
+							'<input type="hidden" data-product-id="'+productSelected+
+							'" data-product-name="'+productName+'" data-product-qty="'+maxRack+'">');		
+
+							var heightAnimation = parseFloat((maxRack/initMax)*100);
+						}	
+						
+						/* animation continue*/
+						var heightCapacity = parseFloat(capacity.css('height')) + heightAnimation;
+
+						if(heightCapacity > 50 && heightCapacity < 50)
+						{
+							capacity.attr('class','').addClass('lots');
+						}						
+						
+						if(heightCapacity > 50 && heightCapacity <= 75)
+						{
+							capacity.prev().removeClass('empty').addClass('warning');
+							capacity.attr('class','').addClass('warning');
+						}
+						
+						if(heightCapacity >= 80)
+						{
+							capacity.prev().removeClass('empty').addClass('warning');						
+							capacity.attr('class','').addClass('full');
+						}
+						
+						capacity.css('height', heightCapacity+'%');
+						qtySelected = 0; productSelected = ""; productName=""; maxRack = 0; newMax = 0;
+						startAlocation();													
+					}
+					else
+					{
+						alert('Tidak ada tempat tersisa di Rak yang Anda pilih!');
 						startAlocation();
 					}					
 				}
 				else
 				{
-					alert('Tidak ada tempat tersisa di Rak yang Anda pilih!');
-					startAlocation();
+					
 				}
 			
 			}
@@ -222,6 +290,7 @@
 	<script type="text/javascript">
 		function startAlocation()
 		{	
+			qtySelected = 0; productSelected = ""; productName=""; maxRack = 0; newMax = 0;	
 			$j('.storage-product').removeClass('active');
 			$j('.rack').removeClass('active');		
 		}
